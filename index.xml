@@ -5,16 +5,6 @@
     <link>https://owenqing.github.io/</link>
     <description>Recent content on owenqing</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-CN</language>
-    <lastBuildDate>Sat, 28 Oct 2023 11:16:24 +0800</lastBuildDate><atom:link href="https://owenqing.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>大数据导论</title>
-      <link>https://owenqing.github.io/post/%E5%A4%A7%E6%95%B0%E6%8D%AE/</link>
-      <pubDate>Sat, 28 Oct 2023 11:16:24 +0800</pubDate>
-      
-      <guid>https://owenqing.github.io/post/%E5%A4%A7%E6%95%B0%E6%8D%AE/</guid>
-      <description>mermaid: true #是否开启mermaid 欲穷千里目，更上一层楼 #添加下面代码 mindmap root((mindmap)) Origins Long history ::icon(fa fa-book) Popularisation British popular psychology author Tony Buzan Research On effectivenessand features On Automatic creation Uses Creative techniques Strategic planning Argument mapping Tools Pen and paper Mermaid</description>
-    </item>
-    
+    <language>en-CN</language><atom:link href="https://owenqing.github.io/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
