@@ -51,12 +51,13 @@ weight = 50
 [[menu.main]]
 identifier = "github"
 name = "Github"
-url = "https://github.com/roninro/hugo-theme-puppet/"
+# url = "https://github.com/roninro/hugo-theme-puppet/"
+url = "https://github.com"
 weight = 100
 
 [params]
 author = "owenqing"
-description = "a tech web"
+description = ""
 keywords = "blog,developer,personal"
 # img_home = "img/home-bg.jpg"
 img_home = "img/bg.jpg"
@@ -73,4 +74,4 @@ enable = true
 gravatarEmail = ""
 # Overwritten by your gravatar image if `gravatarEmail` is filled
 # avatar = "img/home-bg.jpg"
-bio = "Just a coder"
+bio = "不可避免的走向庸俗"
