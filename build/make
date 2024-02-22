@@ -1,5 +1,5 @@
 cd ..
-ls | grep -v build | grep -v README.md | rm -rf
+rm -rf `ls | grep -v build | grep -v README.md`
 cd build
 hugo --theme=hugo-theme-puppet 
 mv ./public/* ../
