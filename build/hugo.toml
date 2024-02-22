@@ -20,9 +20,9 @@ home = ["HTML", "JSON", "RSS"]
 noClasses = true
 codeFences = true
 guessSyntax = true
-lineNos = true
+lineNos = false
 lineNumbersInTable = false
-style = "dracula"
+style = "algol_nu"
 
 [markup.goldmark.renderer]
 unsafe = true

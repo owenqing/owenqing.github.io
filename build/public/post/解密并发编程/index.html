@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  
+    
+  <title>解密并发编程 | owenqing</title>
+  <meta name="author" content="owenqing">
+  <meta name="description" content="并发的本质应用程序利用多线程、多进程，通过操作系统调度到不同 CPU 核心上并行执行，提升程序性能。 为了发挥机器性能，计算机硬件与软件的设计上平衡了">
+  <meta name="keywords" content="blog,developer,personal">
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="解密并发编程"/>
+<meta name="twitter:description" content="并发的本质应用程序利用多线程、多进程，通过操作系统调度到不同 CPU 核心上并行执行，提升程序性能。 为了发挥机器性能，计算机硬件与软件的设计上平衡了"/>
+
+  <meta property="og:title" content="解密并发编程" />
+<meta property="og:description" content="并发的本质应用程序利用多线程、多进程，通过操作系统调度到不同 CPU 核心上并行执行，提升程序性能。 为了发挥机器性能，计算机硬件与软件的设计上平衡了" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://owenqing.github.io/post/%E8%A7%A3%E5%AF%86%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2024-02-22T22:18:21+08:00" />
+<meta property="article:modified_time" content="2024-02-22T22:18:21+08:00" />
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css"  crossorigin="anonymous">
+  
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="/sass/main.css">
+
+  <link rel="stylesheet" href="/zoomjs/zoom.min.css">
+
+  <script src=/js/lazysizes.min.js></script>
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  
+
+</head>
+
+
+
+<body ontouchstart="">
+  <nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+  <div class="container-fluid">
+    
+    <div class="navbar-header page-scroll">
+      <button type="button" class="navbar-toggle">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://owenqing.github.io/">owenqing</a>
+    </div>
+    
+    <div id="huxblog_navbar">
+      <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li><a href="/" title="Home">Home</a></li>
+          
+          <li><a href="/archive/" title="Archive">Archive</a></li>
+          
+          <li><a href="/series/themes-guide/" title="Guide">Guide</a></li>
+          
+          <li><a href="/about/" title="About">About</a></li>
+          
+          <li><a href="https://github.com" title="Github">Github</a></li>
+          
+
+          <li class="search-icon">
+            <a href="javascript:void(0)">
+              <i class="fa fa-search"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+  </div>
+  
+</nav>
+<script>
+  
+  
+  
+  var $body = document.body;
+  var $toggle = document.querySelector(".navbar-toggle");
+  var $navbar = document.querySelector("#huxblog_navbar");
+  var $collapse = document.querySelector(".navbar-collapse");
+
+  var __HuxNav__ = {
+    close: function () {
+      $navbar.className = " ";
+      
+      setTimeout(function () {
+        
+        if ($navbar.className.indexOf("in") < 0) {
+          $collapse.style.height = "0px";
+        }
+      }, 400);
+    },
+    open: function () {
+      $collapse.style.height = "auto";
+      $navbar.className += " in";
+    },
+  };
+
+  
+  $toggle.addEventListener("click", function (e) {
+    if ($navbar.className.indexOf("in") > 0) {
+      __HuxNav__.close();
+    } else {
+      __HuxNav__.open();
+    }
+  });
+
+  
+
+  document.addEventListener("click", function (e) {
+    if (e.target == $toggle) return;
+    if (e.target.className == "icon-bar") return;
+    __HuxNav__.close();
+  });
+</script>
+  
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+  
+
+
+<style type="text/css">
+  header.intro-header {
+    position: relative;
+    background-image: url('');
+  }
+</style>
+
+<header class="intro-header style-text">
+
+  <div class="header-mask"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-heading">
+          <div class="tags">
+            
+          </div>
+          <h1>解密并发编程</h1>
+          <h2 class="subheading"></h2>
+          <span class="meta">
+            Posted by  owenqing 
+            on Thu, Feb 22, 2024
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+  
+
+
+<article>
+  <div class="container">
+    <div class="row">
+
+      
+      <div class="
+              col-lg-8 col-lg-offset-2
+              col-md-10 col-md-offset-1
+              post-container">
+        <h2 id="并发的本质">并发的本质<a class="anchorjs-link" href="#%e5%b9%b6%e5%8f%91%e7%9a%84%e6%9c%ac%e8%b4%a8"></a></h2><p>应用程序利用多线程、多进程，通过操作系统调度到不同 CPU 核心上并行执行，提升程序性能。</p>
+<p>为了发挥机器性能，计算机硬件与软件的设计上平衡了 CPU、内存、I/O 三者的速度差异，同时也产生了并发编程的三个问题(<strong>可见性、有序性、原子性</strong>)</p>
+<ul>
+<li>平衡 CPU 与 内存的差异，CPU 设计了多级缓存。CPU 中的数据不会实时写回内存，产生了可见性问题。</li>
+<li>平衡 CPU 与 I/O 设备之间的差异，操作系统增加了能时分复用 CPU 资源的进程、线程。同时也产生了原子性问题。</li>
+<li>为了获取更高的性能，编译器会进行指令优化，产生了有序性的问题。</li>
+</ul>
+<p>为了解决上述三个问题，需要在应用程序中加入同步原语。这些同步原语底层依赖着硬件的特性。</p>
+<ul>
+<li>内存屏障解决 CPU 指令重排问题产生的有序性问题</li>
+<li>缓存一致性协议解决 CPU 缓存导致的可见性问题</li>
+<li>锁机制解决多线程产生的原子性问题</li>
+</ul>
+<p>单例对象示例:</p>
+<ul>
+<li><code>volatile</code> 同步原语保证了有序性与可见性</li>
+<li><code>synchronized</code> 同步原语同时保证了有序性、可见性、原子性</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">class</span> <span style="color:#666;font-weight:bold;font-style:italic">Person</span> {
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;font-style:italic">private</span> <span style="font-weight:bold;font-style:italic">static</span> <span style="font-weight:bold;font-style:italic">volatile</span> Person INSTANCE;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;font-style:italic">private</span> <span style="color:#666;font-weight:bold;font-style:italic">Person</span>() {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;font-style:italic">public</span> <span style="font-weight:bold;font-style:italic">static</span> Person <span style="color:#666;font-weight:bold;font-style:italic">getInstance</span>() {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span> (INSTANCE == <span style="font-weight:bold">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;font-style:italic">synchronized</span> (Person.class) {
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold">if</span> (INSTANCE == <span style="font-weight:bold">null</span>) {
+</span></span><span style="display:flex;"><span>                    INSTANCE = <span style="font-weight:bold">new</span> Person();
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">return</span> INSTANCE;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>} 
+</span></span></code></pre></div><h2 id="并发编程模型">并发编程模型<a class="anchorjs-link" href="#%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8b%e6%a8%a1%e5%9e%8b"></a></h2>
+
+        <hr style="visibility: hidden;" />
+        <ul class="pager">
+          
+          
+        </ul>
+        <hr style="visibility: hidden;" />
+
+        
+        
+
+
+
+
+
+
+      </div>
+
+      
+      
+      
+      
+      <div class="
+              col-lg-8 col-lg-offset-2
+              col-md-10 col-md-offset-1
+              sidebar-container">
+
+        
+        
+        <section>
+  
+  
+  <hr class="hidden-sm hidden-xs">
+  
+  <h5>FEATURED TAGS</h5>
+  <div class="tags">
+    
+  </div>
+</section>
+
+        
+        
+
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+  
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        
+        <ul class="list-inline text-center"></ul>
+
+        <p class="copyright text-muted">
+          Copyright &copy; owenqing 2024
+          <br>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src=/js/jquery.min.js></script>
+<script src=/js/bootstrap.min.js crossorigin="anonymous"></script>
+
+
+
+<script src="/js/hux-blog.min.c4ea77041cd3edbfc8b2622cd887a9a5d8760a4162d14489e36d2a3fa4c90172.js"></script>
+
+
+<script src=/js/simple-jekyll-search.min.js></script>
+
+
+<script src="/js/search.min.53bce5da475b4d362500e5ce5dddfa22e20e1b9018777411d2020b4b839c9310.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/zoomjs/zoom.min.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+
+</html>
