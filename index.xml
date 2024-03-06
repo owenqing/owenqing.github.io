@@ -6,7 +6,16 @@
     <description>Recent content on owenqing</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-CN</language>
-    <lastBuildDate>Thu, 22 Feb 2024 22:18:21 +0800</lastBuildDate><atom:link href="https://owenqing.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 06 Mar 2024 21:48:30 +0800</lastBuildDate><atom:link href="https://owenqing.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>对 MYSQL 提问</title>
+      <link>https://owenqing.github.io/post/%E5%AF%B9mysql%E6%8F%90%E9%97%AE/</link>
+      <pubDate>Wed, 06 Mar 2024 21:48:30 +0800</pubDate>
+      
+      <guid>https://owenqing.github.io/post/%E5%AF%B9mysql%E6%8F%90%E9%97%AE/</guid>
+      <description>点击答案开关 1. 索引 1. 索引类型？ 数据结构: B+ Tree, Hash, Full Text 2. B+ Tree 数据结构与 hash，B Tree， Binary Tree 对比？ Binary Tree: 树更高磁盘 I/O 次数多 Hash: 只适合等值查询，不</description>
+    </item>
+    
     <item>
       <title>解密并发编程</title>
       <link>https://owenqing.github.io/post/%E8%A7%A3%E5%AF%86%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</link>
