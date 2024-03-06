@@ -6,6 +6,20 @@ draft = false
 +++
 
 <style>
+
+#toggle {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    height: 50px;
+    border: 1px solid #2fa54e;
+    background-color: white;
+}
+
+#toggle:hover {
+    background-color: #2fa54e; 
+    color: white;
+}
+
 .answer {
     background-color: #f3f3d1;
     border-radius: 5px;
@@ -51,11 +65,13 @@ ul {
 </script>
 
 <div>
+    <div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1472862669&auto=1&height=66"></iframe>
+    </div>
     <button id="toggle">点击答案开关</button>
 </div>
 
 ## 1. 索引
-
 
 <div class="question">
     <div>
