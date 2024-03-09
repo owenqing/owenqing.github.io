@@ -378,3 +378,52 @@ ul {
         </ul>
     </div>
 </div>
+
+<div class="question">
+    <div>4. MYSQL 主从复制有哪些模型</div>
+    <div class="answer">
+        <ul>
+            <li>同步复制: 主库提交事务需要所有从库都成功接收。这种方式性能较差，生产环境一般不会选择</li>
+            <li>异步复制: 主题提交的事务，不会等待 binlog 同步到从库。主库宕机可能会丢失数据</li>
+            <li>半同步复制: 主库提交事务至少有一个从库接收。主库宕机至少有一个从库有完整数据，不存在数据丢失的风险</li>
+        </ul>
+    </div>
+</div>
+
+<div class="question">
+    <div>5. 为什么需要两阶段提交</div>
+    <img src="https://mermaid.ink/svg/pako:eNqFkstOwkAUhl9lMmt4gS5IKGUHicrOdDOhIzbSTh2KCSEkXqIihEsCGFwZTI24kLBQFwXfhhl0xSs4YSiCos6qmf87X8-cnCJMEwNDBebwYR7baayZKEORBYBuA3EcRF0zbTrIdkEUoBzQIfPb03Z_2q8yv6HDTaAqwWQhtZ0AKUyPMN0MxiS4gw0CEiSzGdIkpJp29jckvujsqctO-2zc4a16AEo4Go5EVAWw8TF7qE78Kqv0gkgVUUxEFzfs_B4ErczG5S2KxT8w-Oi-8sHLbHwVVMTC0jbtDd4H3qJwxaYtbbLnv1zaP664AnijOfE92TQrD1cfKcwxYlmm-1McXxNLx5dYZFEFSKfMeLnJKrerM8sS4gD2_Mj9M35yx7xaEKxMbTKqL0cGJMU7Q14bfGc1ycqBrJHiSSJhfouXr5l3ORm9BbXYNmAIWphayDTEihbnvUF3H1tYh4r4NBA90KFulwSH8i5JFew0VFyaxyGYdwzkBuscXGLDdAlNypWfb34Iig3aJUQgeyibw6VPMgdAmA"></img>
+    <div class="answer">
+        <ul>
+            <li>事务提交时，需要将 redo log 与 binlog 持久化到磁盘，而这两者的逻辑又是独立的。如果不做任何协调，就可能导致半成功转态，最终导致两份日志之间逻辑不一致</li>
+            <li>Prepare 阶段: 将 XID (内部 XA 事务 ID) 写入到 redo log, 同时将 redo log 对应的事务状态设置为 prepare</li>
+            <li>Commit 阶段: 把 XID 写入到 binlog, 然后将 binlog 持久化到磁盘，接着调佣引擎提交事务的接口，将 redo log 转态设置为 commit。此时该转态并不需要持久化到磁盘，只需要 write 到文件系统的 page cache，因为只要 binlog 写磁盘成功，就算是 redo log 的状态还是 prepare 也没有关系，一样会被认为事务执行成功</li>
+        </ul>
+    </div>
+</div>
+
+<div class="question">
+    <div>5. 两阶段提交有什么性能问题？</div>
+    <div class="answer">
+        <ul>
+            <li><strong>磁盘 I/O 次数高</strong>。如果将 innodb_flush_log_at_trx_commit, sync_binlog 都设置为 1。每个事务提交都会有两次刷盘。</li>
+            <li><strong>锁竞争激烈</strong>。两阶段提交虽然能保证单事务两个日志内容一致。但是在多事务场景下，确不能保证两者的提交顺序一致。因此，在两阶段提交的基础上需要加一个锁来保证提交的原子性，从而保证多事务的情况下，两个日志的提交顺序一致。</li>
+        </ul>
+    </div>
+</div>
+
+<div class="question">
+    <div>6. MYSQL 如何优化两阶段提交？</div>
+    <div class="answer">
+        <ul>
+            <li><strong>binlog 组提交</strong>。分为三个阶段，为了保证顺序，每个阶段都有队列与锁的保护。
+                <ul>
+                    <li><strong>flush 阶段</strong>:多个事务按顺序将 binlog 写入到 cache。</li>
+                    <li><strong>sync 阶段</strong>: 对多个事务的 binlog 合并刷盘</li>
+                    <li><strong>commit 阶段</strong>: 各个事务按顺序做 InnoDB commit 操作。</li>
+                </ul> 
+            </li>
+            <li>MYSQL 在 5.7 只有加上了组提交。在 prepare 阶段 redo log 不在执行刷盘操作，而是延迟到flush 阶段。通过延迟稍安，对 redo log 做了一次组提交</li>
+        </ul>
+    </div>
+</div>
