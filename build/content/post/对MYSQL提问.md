@@ -65,9 +65,6 @@ ul {
 </script>
 
 <div>
-    <div>
-        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1472862669&auto=1&height=66"></iframe>
-    </div>
     <button id="toggle">点击答案开关</button>
 </div>
 
@@ -424,6 +421,21 @@ ul {
                 </ul> 
             </li>
             <li>MYSQL 在 5.7 只有加上了组提交。在 prepare 阶段 redo log 不在执行刷盘操作，而是延迟到flush 阶段。通过延迟稍安，对 redo log 做了一次组提交</li>
+        </ul>
+    </div>
+</div>
+
+## 5. Buffer Pool
+![](https://mermaid.ink/svg/pako:eNptkcFKAzEURX8lvHW_YHaOVTcWlOpG4yJOMnZgJhnSZFFKwQqiC0WwLbit4EbQulAQKfgzZur8hW8MsxDnrcI99-aFmyFEigsI4ESzvEf2QkKoJDh9e-yltUMKnUF3d5uENo6FJjtKpRSOvK0enmgRmURJvOIvCTG_er13y1k5f_uXW0dazF6K62dP6_X1tJHvS65IU3ijCt_cuvOH1XLinu4a8pto-b54LE_P3MfUTS7d-5V_TIN3C73ldPz1OS_Gi4p7LCQn0IJM6IwlHKsaVjoF0xOZoBDgkYuY2dRQoHKEVmaN6g5kBIHRVrTA5pwZ0U4YNppBELO0j6rgiVG64-v__YUW5EweKFV7Rj8_1I1l)
+
+<div class="question">
+    <div>1. 如何理解缓存预读失效与缓存污染？如何解决?</div>
+    <img src="https://mermaid.ink/svg/pako:eNp9k0FrwyAUx7-K2MsG6aERms7DoGWHHToGXXfYZgkumkZmNKSGrZR-972atJhQGhDl997f9_wbDzizQmKKtzWvCrRcIcRMOxDaNd8tnn8x_GEbs71brt7vGd60caFqmTllDVovzprTV0gu0Hj8iCYhnXgUhyj2iITIcaVbykyghQYmULcnBhYPGAFGPBu0A_wZpkH6qRhE1jAFEWnEVRcWkPqqRd-DWz6kFyOmIZ56lIQo8WjWE1-c6OHeRtDQdHCkBFgyYDNgswFLO1fSK7aknS_pbWNIeLTOK7fXEs1RrrSmo_whj3autj-Sjggh3Xr8q4QraFz99VWLTpVlt1U4wqWsS64E_LYHXxu7QpaSYQpLIXPeaMcwM0dI5Y2zb3uTYerqRka4qQR38klxuNMS05zrHVAplLP1S_sU_IuIcMXNp7XnnOM_zJTWOQ" />
+    <div class="answer">
+        <ul>
+            <li><strong>预读失效</strong>: 预读了冗余的数据，但实际上没有被访问</li>
+            <li><strong>缓存污染</strong>: 由于查询缓存了大量数据，但是不是热点数据</li>
+            <li>将缓存区域划分成 old 与 young 两个区域。一个 page，只有同时满足<strong>被访问</strong>与在 old 区域停<strong>留超过 1s </strong>才会被插入 young 区域的头部</li>
         </ul>
     </div>
 </div>
