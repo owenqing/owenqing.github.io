@@ -6,7 +6,16 @@
     <description>Recent content on owenqing</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-CN</language>
-    <lastBuildDate>Wed, 06 Mar 2024 21:48:30 +0800</lastBuildDate><atom:link href="https://owenqing.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 10 Mar 2024 13:49:19 +0800</lastBuildDate><atom:link href="https://owenqing.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>对 Redis 提问</title>
+      <link>https://owenqing.github.io/post/%E5%AF%B9redis%E6%8F%90%E9%97%AE/</link>
+      <pubDate>Sun, 10 Mar 2024 13:49:19 +0800</pubDate>
+      
+      <guid>https://owenqing.github.io/post/%E5%AF%B9redis%E6%8F%90%E9%97%AE/</guid>
+      <description>点击答案开关 1. 数据结构 1. 说一下 Redis 常见数据结构以及底层实现？ String: 底层实现了动态字符串 SDS(Simple Dynamic String) List: ziplist 与 双向链表实现。超过 3.2 的版本的由 quicklist 实现 Hash: ziplist 与 hash 实现</description>
+    </item>
+    
     <item>
       <title>对 MYSQL 提问</title>
       <link>https://owenqing.github.io/post/%E5%AF%B9mysql%E6%8F%90%E9%97%AE/</link>
