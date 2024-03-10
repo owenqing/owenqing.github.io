@@ -135,4 +135,105 @@ ul {
 
 ## 3. 高可用
 
+### 3.1 主从复制
+
+<div class="mermaid"> 
+flowchart TB  
+A[Master Node]  
+B[Slave Node 1]  
+C[Slave Node 2]  
+D[Slave Node 3]  
+E[Client]  
+A -->|Replication| B  
+A -->|Replication| C  
+A -->|Replication| D  
+E -->|Read/Write| A  
+E -->|Read Only| B  
+E -->|Read Only| C  
+E -->|Read Only| D  
+style A fill:#f9f,stroke:#333,stroke-width:2px  
+style B fill:#ccf,stroke:#f66,stroke-width:2px  
+style C fill:#ccf,stroke:#f66,stroke-width:2px  
+style D fill:#ccf,stroke:#f66,stroke-width:2px  
+style E fill:#ccf,stroke:#333,stroke-width:2px
+</div>
+
+- **读操作**: 主库、从库都可以接受
+- **写操作**: 首先到主库执行，然后，主库将写操作同步给从库
+- **读写分离的原因**: 保障数据一致性
+
+### 3.2 哨兵模式
+
+<div class="mermaid">
+graph TB
+subgraph Sentinel Cluster
+    S1(Sentinel 1) -->|监控| master
+    S2(Sentinel 2) -->|监控| master
+    S3(Sentinel 3) -->|监控| master
+    S1 -->|监控| slave1
+    S2 -->|监控| slave1
+    S3 -->|监控| slave1
+    S1 -->|监控| slave2
+    S2 -->|监控| slave2
+    S3 -->|监控| slave2
+end
+subgraph Redis Cluster
+    master(Redis Master) -->|复制| slave1
+    master -->|复制| slave2
+end
+%% 通信
+S1 <-->|通信| S2
+S2 <-->|通信| S3
+S3 <-->|通信| S1
+%% 文档链接
+click master "http://redis.io/topics/sentinel" "Redis Sentinel Documentation"
+click slave1 "http://redis.io/topics/sentinel" "Redis Sentinel Documentation"
+click slave2 "http://redis.io/topics/sentinel" "Redis Sentinel Documentation"
+click S1 "http://redis.io/topics/sentinel" "Redis Sentinel Documentation"
+click S2 "http://redis.io/topics/sentinel" "Redis Sentinel Documentation"
+click S3 "http://redis.io/topics/sentinel" "Redis Sentinel Documentation"
+%% 应用风格
+style master fill:#f9f,stroke:#f66,stroke-width:2px;
+style slave1 fill:#ccf,stroke:#f66,stroke-width:2px;
+style slave2 fill:#ccf,stroke:#f66,stroke-width:2px;
+style S1 fill:#ccf,stroke:#333,stroke-width:2px;
+style S2 fill:#ccf,stroke:#333,stroke-width:2px;
+style S3 fill:#ccf,stroke:#333,stroke-width:2px;
+</div>
+
+### 3.3 切片集群
+
+<div class="mermaid">
+graph LR
+subgraph "Client"
+C(Client)
+end
+C --> |"Key 1"| R1M
+C --> |"Key 2"| R2M
+C --> |"Key N"| R3M
+subgraph "Shard 1"
+R1M(Master 1) --> R1S1(Slave 1-1)
+R1M --> R1S2(Slave 1-2)
+end
+subgraph "Shard 2"
+R2M(Master 2) --> R2S1(Slave 2-1)
+R2M --> R2S2(Slave 2-2)
+end
+subgraph "Shard 3"
+R3M(Master 3) --> R3S1(Slave 3-1)
+R3M --> R3S2(Slave 3-2)
+end
+%% 应用风格
+style C fill:#ccf,stroke:#333,stroke-width:2px;
+style R1M fill:#f9f,stroke:#f66,stroke-width:2px;
+style R2M fill:#f9f,stroke:#f66,stroke-width:2px;
+style R3M fill:#f9f,stroke:#f66,stroke-width:2px;
+style R1S1 fill:#ccf,stroke:#f66,stroke-width:2px;
+style R1S2 fill:#ccf,stroke:#f66,stroke-width:2px;
+style R2S1 fill:#ccf,stroke:#f66,stroke-width:2px;
+style R2S2 fill:#ccf,stroke:#f66,stroke-width:2px;
+style R3S1 fill:#ccf,stroke:#f66,stroke-width:2px;
+style R3S2 fill:#ccf,stroke:#f66,stroke-width:2px;
+</div>
+
 ## 4. 缓存应用
