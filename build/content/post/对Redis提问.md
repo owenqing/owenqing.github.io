@@ -201,39 +201,107 @@ style S2 fill:#ccf,stroke:#333,stroke-width:2px;
 style S3 fill:#ccf,stroke:#333,stroke-width:2px;
 </div>
 
+- 哨兵是运行在特定模式下的 Redis 实例，只不过它并不服务请求操作，只是完成监控、选主和通知任务。
+- 哨兵进程会使用 PING 命令检测自己与主、从节点的网络连接情况，用来判断实例的状态。如果哨兵发现主库或从库对 PING 命令的响应超时了，那么，哨兵就会先把它标记为主观下线.
+    - 如果检测的时从库，哨兵简单标记未主观下线就行了，因为从库的影响一般不太大。
+    - 如果检测的时主库，需要多个哨兵节点进行投票判断是否客观下线(最少要有 N/2 + 1 个实例判断主观下线才下线)
+
+<div class="question">
+    <div>1. 说一说哨兵模式的故障转移过程？</div>
+    <div class="answer">
+        <ul>
+            <li>第一轮投票: 判断 Master 是否下线</li>
+            <li>第二轮投票: 选出哨兵 Leader (quorum 设置为哨兵个数的 N/2 + 1)</li>
+            <li>由哨兵 Leader 执行故障转移</li>
+        </ul>
+    </div>
+</div>
+
+<div class="question">
+    <div>2. 选主原则是什么?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>排除已下线的从库</strong>: 并检查从库的网络连接状态(down-after-milliseconds 主从断连的超时时间。考察断连次数，如果超过 10 次，直接踢出)</li>
+            <li><strong>评分</strong>: 按从库优先级、从库复制进度、从库 ID 号进行三次赛选
+                <ul>
+                    <li>从库优先级高的胜出</li>
+                    <li>复制进度靠前的胜出</li>
+                    <li>ID 号小的优先</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
 ### 3.3 切片集群
 
 <div class="mermaid">
 graph LR
-subgraph "Client"
-C(Client)
-end
-C --> |"Key 1"| R1M
-C --> |"Key 2"| R2M
-C --> |"Key N"| R3M
-subgraph "Shard 1"
-R1M(Master 1) --> R1S1(Slave 1-1)
-R1M --> R1S2(Slave 1-2)
-end
-subgraph "Shard 2"
-R2M(Master 2) --> R2S1(Slave 2-1)
-R2M --> R2S2(Slave 2-2)
-end
-subgraph "Shard 3"
-R3M(Master 3) --> R3S1(Slave 3-1)
-R3M --> R3S2(Slave 3-2)
-end
-%% 应用风格
-style C fill:#ccf,stroke:#333,stroke-width:2px;
-style R1M fill:#f9f,stroke:#f66,stroke-width:2px;
-style R2M fill:#f9f,stroke:#f66,stroke-width:2px;
-style R3M fill:#f9f,stroke:#f66,stroke-width:2px;
-style R1S1 fill:#ccf,stroke:#f66,stroke-width:2px;
-style R1S2 fill:#ccf,stroke:#f66,stroke-width:2px;
-style R2S1 fill:#ccf,stroke:#f66,stroke-width:2px;
-style R2S2 fill:#ccf,stroke:#f66,stroke-width:2px;
-style R3S1 fill:#ccf,stroke:#f66,stroke-width:2px;
-style R3S2 fill:#ccf,stroke:#f66,stroke-width:2px;
+    subgraph "Redis Cluster"
+        direction TB
+        subgraph "Node A (Shard 1)"
+            A_Master((Master A))
+            A_Slave1((Slave A-1))
+            A_Slave2((Slave A-2))
+            A_Master -->|Replication| A_Slave1
+            A_Master -->|Replication| A_Slave2
+        end
+        subgraph "Node B (Shard 2)"
+            B_Master((Master B))
+            B_Slave1((Slave B-1))
+            B_Master -->|Replication| B_Slave1
+        end
+        subgraph "Node C (Shard 3)"
+            C_Master((Master C))
+            C_Slave1((Slave C-1))
+            C_Master -->|Replication| C_Slave1
+        end
+    end
+    subgraph "Client Request Flow"
+        Client(Client) -->|GET key1| A_Master
+        A_Master -.->|MOVED redirect| B_Master
+        Client -.->|Redirected to B| B_Master
+        B_Master -.->|ASK redirect| C_Master
+        Client -.->|Redirected to C ASKING| C_Master
+        Client -->|Finally GET key1 from C| C_Master
+    end
+    %% Styling for nodes
+    classDef master fill:#f9f,stroke:#333,stroke-width:4px;
+    classDef slave fill:#ccf,stroke:#333,stroke-width:2px;
+    classDef client fill:#f9c,stroke:#333,stroke-width:4px;
+    classDef redirect fill:#fdd,stroke:#333,stroke-width:2px;
+    classDef dashedLine stroke:#333,stroke-dasharray: 5,5;
+    %% Apply styles
+    class A_Master,B_Master,C_Master master;
+    class A_Slave1,A_Slave2,B_Slave1,C_Slave1 slave;
+    class Client client;
+    class MR,AR redirect;
+    linkStyle 4 stroke:#f66,stroke-width:2px,stroke-dasharray: 5,5;
+    linkStyle 5 stroke:#f66,stroke-width:2px,stroke-dasharray: 5,5;
+    linkStyle 6 stroke:#66f,stroke-width:2px,stroke-dasharray: 5,5;
+    linkStyle 7 stroke:#66f,stroke-width:2px,stroke-dasharray: 5,5;
+</div>
+
+- Hash Slot: redis 集群没有使用一致性 hash 而是使用的 Slot 机制。集群一共定义了 16384 个 slot
+  - 每个key通过CRC16校验后对16383取模来决定放置哪个槽
+- Keys Hash Tag 
+  - 可以根据 hash tag 将数据 key by 到某一个节点 set testkey{tag1} val
+  - multi-key 操作的基础
+- Cluster Bus: gossip 协议通信，用来故障检测、配置更新、故障转移
+- Moved重定向: 去中心化，请求 Moved 重定向
+- Ask重定向: 扩缩容，slot 迁移，请求如果遇到正在迁移的 slot,并且没有找到数据，可以 Ask 重定向到新的机器上去找
+- 故障转移: Master 投票，进行故障转移
+- 节点握手：meet ping pong 新加入节点
+
+<div class="question">
+    <div>1. 为什么 Redis Cluster 一共 16384 个 Hash Slot?</div>
+    <div class="answer">
+        <ul>
+            <li>保证负载均衡的同时避免更多的通信开销。</li>
+        </ul>
+    </div>
 </div>
 
 ## 4. 缓存应用
