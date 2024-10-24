@@ -1,85 +1,98 @@
 .article-entry pre,
 .article-entry .highlight {
-  background: #2d2d2d;
+  background: #fff;
+  /* White background */
   margin: 0 -20px;
   padding: 15px 20px;
   border-style: solid;
-  border-color: color-border;
+  border-color: #ddd;
+  /* Light gray border */
   border-width: 1px 0;
   overflow: auto;
-  color: #ccc;
-  line-height: 22.400000000000002px
+  color: #333;
+  /* Dark text color */
+  line-height: 22.400000000000002px;
 }
 
 .article-entry .highlight .gutter pre,
 .article-entry .gist .gist-file .gist-data .line-numbers {
-  color: #666;
-  font-size: .85em
+  color: #999;
+  /* Grayish gutter numbers */
+  font-size: .85em;
 }
 
 .article-entry pre,
 .article-entry code {
-  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace
+  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
 }
 
 .article-entry code {
-  background: color-background;
-  text-shadow: 0 1px #fff;
-  padding: 0 .3em
+  background: #f8f8f8;
+  /* Slightly lighter background for inline code */
+  text-shadow: none;
+  padding: 0 .3em;
+  border: 1px solid #ddd;
+  /* Light gray border */
+  border-radius: 3px;
 }
 
 .article-entry pre code {
   background: none;
   text-shadow: none;
-  padding: 0
+  padding: 0;
+  border: none;
 }
 
 .article-entry .highlight pre {
   border: none;
   margin: 0;
-  padding: 0
+  padding: 0;
 }
 
 .article-entry .highlight table {
   margin: 0;
-  width: auto
+  width: auto;
 }
 
 .article-entry .highlight td {
   border: none;
-  padding: 0
+  padding: 0;
 }
 
 .article-entry .highlight figcaption {
   font-size: .85em;
-  color: #999;
+  color: #777;
+  /* Light gray figcaption */
   line-height: 1em;
   margin-bottom: 1em;
 }
 
 .article-entry .highlight figcaption a {
-  float: right
+  float: right;
 }
 
 .article-entry .highlight .gutter pre {
   text-align: right;
-  padding-right: 20px
+  padding-right: 20px;
 }
 
 .article-entry .highlight .line {
-  height: 22.400000000000002px
+  height: 22.400000000000002px;
 }
 
 .article-entry .highlight .line.marked {
-  background: #515151
+  background: #f9f9f9;
+  /* Very light gray for marked lines */
 }
 
 .article-entry .gist {
   margin: 0 -20px;
   border-style: solid;
-  border-color: color-border;
+  border-color: #ddd;
+  /* Light gray border */
   border-width: 1px 0;
-  background: #2d2d2d;
+  background: #fff;
+  /* White background */
   padding: 15px 20px 15px 0;
 }
 
@@ -97,41 +110,45 @@
 .article-entry .gist .gist-file .gist-data .line-numbers {
   background: none;
   border: none;
-  padding: 0 20px 0 0
+  padding: 0 20px 0 0;
 }
 
 .article-entry .gist .gist-file .gist-data .line-data {
-  padding: 0 !important
+  padding: 0 !important;
 }
 
 .article-entry .gist .gist-file .highlight {
   margin: 0;
   padding: 0;
-  border: none
+  border: none;
 }
 
 .article-entry .gist .gist-file .gist-meta {
-  background: #2d2d2d;
-  color: #999;
+  background: #fff;
+  /* White background */
+  color: #777;
+  /* Light gray text */
   font: .85em -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  text-shadow: 0 0;
+  text-shadow: none;
   padding: 0;
   margin-top: 1em;
   margin-left: 20px;
 }
 
 .article-entry .gist .gist-file .gist-meta a {
-  color: #258fb8;
+  color: #4078c0;
+  /* Blue links */
   font-weight: normal;
 }
 
 .article-entry .gist .gist-file .gist-meta a:hover {
-  text-decoration: underline
+  text-decoration: underline;
 }
 
 pre .comment,
 pre .title {
-  color: #999
+  color: #998;
+  /* Brown comments */
 }
 
 pre .variable,
@@ -146,7 +163,8 @@ pre .html .doctype,
 pre .css .id,
 pre .css .class,
 pre .css .pseudo {
-  color: #f2777a
+  color: #a71d5d;
+  /* Red variables and tags */
 }
 
 pre .number,
@@ -155,13 +173,15 @@ pre .built_in,
 pre .literal,
 pre .params,
 pre .constant {
-  color: #f99157
+  color: #098658;
+  /* Green numbers and built-ins */
 }
 
 pre .class,
 pre .ruby .class .title,
 pre .css .rules .attribute {
-  color: #9c9
+  color: #c18401;
+  /* Orange classes */
 }
 
 pre .string,
@@ -170,11 +190,13 @@ pre .inheritance,
 pre .header,
 pre .ruby .symbol,
 pre .xml .cdata {
-  color: #9c9
+  color: #df5000;
+  /* Orange strings */
 }
 
 pre .css .hexcolor {
-  color: #6cc
+  color: #df5000;
+  /* Orange hex colors */
 }
 
 pre .function,
@@ -185,17 +207,21 @@ pre .ruby .title .keyword,
 pre .perl .sub,
 pre .javascript .title,
 pre .coffeescript .title {
-  color: #69c
+  color: #0086b3;
+  /* Blue functions */
 }
 
 pre .keyword,
 pre .javascript .function {
-  color: #c9c
+  color: #a71d5d;
+  /* Red keywords */
 }
 
 .markdown-body .highlight {
-  color: #ccc;
-  background-color: #2d2d2d;
+  color: #333;
+  /* Dark text color */
+  background-color: #fff;
+  /* White background */
   border-radius: 5px;
 }
 
@@ -210,14 +236,17 @@ pre .javascript .function {
 
 .markdown-body .highlight .gutter pre {
   color: #999;
-  background: #1b1b1b;
+  /* Light gray gutter numbers */
+  background: #f8f8f8;
+  /* Slightly lighter background for gutters */
 }
 
 .highlight .code pre {
   width: 100%;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #2d2d2d !important;
+  background-color: #fff !important;
+  /* White background */
 }
 
 .markdown-body .highlight table tbody pre {
@@ -228,13 +257,15 @@ details summary {
   outline: none;
   cursor: pointer;
 }
+
 figure {
   position: relative;
 }
 
 figure figcaption {
   padding-left: 1rem;
-  background-color: #1b1b1b;
+  background-color: #f8f8f8;
+  /* Slightly lighter background for captions */
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
