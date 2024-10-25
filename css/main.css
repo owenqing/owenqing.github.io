@@ -1,3 +1,18 @@
+/* 确保 Mermaid 图表的 <pre> 和 <svg> 背景颜色是白色 */
+.mermaid,
+.mermaid pre,
+.mermaid svg {
+  background-color: #fff !important;
+}
+
+/* 如果需要移除边框或其他样式，可以在这里添加 */
+.mermaid pre,
+.mermaid svg {
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 .article-entry pre,
 .article-entry .highlight {
   background: #fff;
