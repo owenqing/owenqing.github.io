@@ -13,7 +13,7 @@
   
   <title>
     
-      理解并发编程 
+      复杂系统的编程方法 
       
       
       |
@@ -149,11 +149,11 @@
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">
     <div class="post-content">
-      <div class="post-title">理解并发编程</div>
+      <div class="post-title">复杂系统的编程方法</div>
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-          2024-10-25 23:49:24
+          2024-11-03 22:33:51
         </span>
         
               <span class="post-tags">
@@ -169,123 +169,32 @@
           
       </div>
       <div class="markdown-body">
-        <h2 id="1-缘起"><a href="#1-缘起" class="headerlink" title="1. 缘起"></a>1. 缘起</h2><p>并发的核心在于通过多线程和多进程，在不同 CPU 核心上并行执行任务。为了提高计算机性能，硬件和软件设计时需平衡 CPU、内存和 I&#x2F;O 三者之间的速度差异，这带来了三个主要问题：可见性、有序性和原子性。</p>
-<ol>
-<li><strong>可见性</strong>: CPU 和内存间的速度差异导致了多级缓存的使用。CPU 中的数据不会立即写回主内存，造成数据在不同线程或处理器之间不一致。</li>
-<li><strong>有序性</strong>: 编译器和处理器为了优化性能可能会重排指令，这可能破坏程序原本的顺序依赖关系。</li>
-<li><strong>原子性</strong>:CPU 与 I&#x2F;O 设备的速度差距促使操作系统引入进程和线程的概念来复用 CPU 资源，但这也可能导致对共享资源的非原子访问问题。</li>
-</ol>
-<p>为解决这些问题，应用程序中需要加入同步原语：</p>
-<ul>
-<li><strong>内存屏障</strong>确保指令按预定顺序执行，解决有序性问题。</li>
-<li><strong>缓存一致性协议</strong>如 MESI 确保所有处理器看到的是最新的数据，解决可见性问题。</li>
-<li><strong>锁机制</strong>保证对共享资源的安全访问，解决原子性问题。</li>
-</ul>
-<p>总之，并发编程的目标是通过合理运用这些同步技术，编写出高效且正确的程序。</p>
-<h2 id="2-并发模型"><a href="#2-并发模型" class="headerlink" title="2. 并发模型"></a>2. 并发模型</h2><p>常见的并发模型包括多线程、多进程和协程，每种都有其独特的优势与适用场景。</p>
-<h4 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h4><ul>
-<li>线程是操作系统调度的基本单元。在一个多核CPU环境中，多线程应用可以并行运行于不同的核心上。</li>
-<li>同一进程内的多个线程共享内存空间，使得数据交换变得简单直接。</li>
-<li>但是，当多个线程同时访问同一块内存区域时，如果没有妥善处理可见性、有序性和原子性问题，则可能导致线程安全问题。</li>
-</ul>
-<h4 id="多进程"><a href="#多进程" class="headerlink" title="多进程"></a>多进程</h4><ul>
-<li>相较于多线程，多进程提供了更高级别的隔离和安全性，因为每个进程拥有独立的地址空间。</li>
-<li>这种方式避免了线程间因共享资源而可能引发的安全隐患。</li>
-<li>不过，由于需要维护额外的上下文信息，多进程模型通常会消耗更多的系统资源（如CPU时间和内存）。</li>
-</ul>
-<h4 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h4><ul>
-<li>协程是一种轻量级的用户态“线程”，它允许程序以极低的成本创建大量并发任务。</li>
-<li>Go语言中的goroutine和Java的虚拟线程都是协程概念的具体实现。</li>
-<li>相比传统操作系统线程，协程减少了上下文切换的开销，使得单个应用程序能够支持数以万计甚至更多的并发执行单位。（在 Golang 中启动一个 goroutine 仅需约2KB的内存，而 Java 的一个线程至少也需要大约2MB。）</li>
-</ul>
-<p>综上所述，选择合适的并发模型对于构建高效且可靠的软件系统至关重要。根据应用场景的需求不同，开发者可以选择最适合当前需求的并发策略来优化性能与资源利用效率。</p>
-<h2 id="3-并发设计模式"><a href="#3-并发设计模式" class="headerlink" title="3. 并发设计模式"></a>3. 并发设计模式</h2><h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><p>Q1: 为了确保消息的有序消费，Kafka 的设计规定一个分区（partition）只能被单个消费者消费，而不能被多个消费者同时消费。然而，在实际应用中，许多场景并不需要严格的消费顺序，反而更加关注消费性能。如果在不调整分区数量的前提下，如何提高并发消费速度呢？<br>A1: </p>
-<ol>
-<li>可以将从 kafka poll 下来的消息，发送到多个消费 worker (并发) 中进行消费逻辑的处理，</li>
-<li>worker 处理完后将消息的 offset 信息发送到本地提交器</li>
-<li>提交器需要保证 offset 的提交是按 partition 顺序提交的。不能乱序，也不能跳过。</li>
-</ol>
-<p>Q2: 提交器可以选择什么数据结构来保证 offset 的分区有序性？<br>A2: 在有插入、删除、查询，而且要求保序的场景下，可以选择 SKIPLIST 或 Red-Black Tree。这两种数据结构比较均衡，插入、删除、查询的复杂度都能做到 O(nlog(n))。</p>
-<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><pre class="mermaid">flowchart TD
-    Kafka -->|Poll| Dispatcher
-    Dispatcher --> Worker1
-    Dispatcher --> Worker2
-    Dispatcher --> Worker3
-    Worker1 -->|Mark| Committer
-    Worker2 -->|Mark| Committer
-    Worker3 -->|Mark| Committer
-    Dispatcher -->|Put| Committer</pre>
-<ol>
-<li>Dispatcher 周期性的将 kafka 中的数据 poll 下来并分发给并发的 worker</li>
-<li>Dispatcher 在发送 worker 前需要先将 topic、partition、offset 信息 put 到 Committer 中的 SKIPLIST</li>
-<li>worker 处理完消费逻辑向 Committer 标记消费状态</li>
-<li>Committer 定期按顺序提交已消费的 offset (不重、不漏、更不能跳过没有标记消费的 offset 信息)</li>
-</ol>
-<h3 id="并发模式"><a href="#并发模式" class="headerlink" title="并发模式"></a>并发模式</h3><blockquote>
-<p>Do not communicate by sharing memory; instead, share memory by communicating.</p>
-</blockquote>
-<h4 id="基于消息通信-Lock-Free"><a href="#基于消息通信-Lock-Free" class="headerlink" title="基于消息通信 (Lock Free)"></a>基于消息通信 (Lock Free)</h4><p>基于通信的并发模型，是程序世界对实现世界的模拟。现实世界是一个并发的世界。如进入一家早餐店就餐，顾客、厨师、服务员各自在做各自的事情，但是又通过信息的传递紧密的联系在一起。基于通信的并发非常自然而且无锁，遇到复杂的并发场景时可以考虑使用这种模型。Erlang 中的 Actor 模型与 Golang 中的 CSP 模型都是基于消息通信的。两个模型的侧重点有些微不同，Actor 模型强调的是对象内部的队列，CSP 模型强调对象之间的队列。</p>
-<p><strong>Actor 模型</strong> </p>
-<ol>
-<li>Dispatcher、Worker、Committer 内部都存在队列</li>
-<li>Dispatcher、Worker、Committer 都实现了 Run Stop 方法</li>
-<li>启动 Run 方法后各个对象都开始消费内部队列的消息</li>
-<li>Dispatcher 收到消息后发送到 Worker, Worker 将消息放在内部队列中，Worker 不停的处理消息。处理完成后发送给 Committer, Committer 也将收到的消息存放在内部队列中。Committer 的 Run 会进行提交处理</li>
-<li>程序出错或者优雅退出时，需要 Consumer 协调各个并发对象依次 Stop<br>Actor 模型的关键就是利用协调者 (Consumer) 执行各个对象的 Run 方法(开启轻量级进程或者协程)，在遇到错误或者主动退出时能正确调用 Stop 各个对象执行的任务。</li>
-</ol>
-<p><strong>CSP 模型</strong></p>
-<ol>
-<li>Dispatcher -&gt; Worker -&gt; Committer （’-&gt;’ 表示 channel）</li>
-<li>Dispatcher 启动，将 kafka 的消息 poll 到 channel_1 中</li>
-<li>Worker 消费 channel_1 中的数据，处理完成发送到 channel_2 中</li>
-<li>Committer 消费 channel_2 中的数据</li>
-<li>出现错误由 context 协调退出并抛出错误。正常退出则利用 channel close 机制</li>
-</ol>
-<pre class="mermaid">graph LR
-    %% 定义节点
-    Dispatcher[Dispatcher Goroutine]
-    subgraph Workers [Workers]
-        direction TB
-        Worker1((Worker 1 <i>Goroutine</i>))
-        Worker2((Worker 2 <i>Goroutine</i>))
-        WorkerN((Worker N <i>Goroutine</i>))
-    end
-    
-    Committer[Committer Goroutine]
-
-    %% 定义通道
-    channel_1[channel_1]
-    channel_2[channel_2]
-
-    %% 连接节点与通道
-    Dispatcher -->|poll| channel_1
-    channel_1 -.-> Worker1
-    channel_1 -.-> Worker2
-    channel_1 -.-> WorkerN
-    Worker1 -->|processed data| channel_2
-    Worker2 -->|processed data| channel_2
-    WorkerN -->|processed data| channel_2
-    channel_2 -->|consume| Committer</pre>
-
-<h4 id="基于共享内存-Lock"><a href="#基于共享内存-Lock" class="headerlink" title="基于共享内存 (Lock)"></a>基于共享内存 (Lock)</h4><p>线程与协程模型会共享进程中的变量，通常可以利用同步原语来保证并发程序的正确性。</p>
-<p>Q1: 启动 10 个协程，在没有任何同步操作条件下每个协程对某个共享变量操作 100 次自增。结果会是 1000 吗?<br>A1: 可能会小于 1000, 因为计算的加法不是原子的。如果要保证原子性，需要加上同步原语</p>
-<p>Q2: 同步原语有哪些？<br>A2: </p>
-<ol>
-<li>重量级锁: 又叫互斥锁、同步锁、悲观锁。性能最差，但能完全互斥</li>
-<li>轻量级锁: 又叫自旋锁、无锁、CAS。自旋可能有性能问题。主要用于竞争较小的场景。</li>
-<li>读写锁</li>
-</ol>
-
+        <p>若要打造一款汽车，我们首先会将其细分为多个独立的组件，例如车身结构、轮胎、悬挂系统、动力总成以及中央控制系统等。车辆工程师在完成总体架构的设计后，会将这些不同系统模块分配给专门的工程团队进行开发。每个团队所负责的模块实际上是一个小型系统，它们可以实现<strong>独立设计、生产和检测</strong>。然而，要实现整个汽车的组装，除了确保每个独立系统本身的质量外，还需要确保所有系统之间能够<strong>顺畅对接</strong>。因此，在设计阶段，预留出用于系统集成的<strong>接口</strong>至关重要。</p>
+<p>大型软件项目的开发流程与此极为相似。每个软件子系统都设计得既独立又具备可测试性，同时，通过定义良好的接口（<strong>interface</strong>），各独立模块得以<strong>无缝集成</strong>，最终构建出一个复杂的大型系统。</p>
+<p>这里的“接口”是一个广义的概念。在不同服务模块间，它可能体现为服务调用协议，比如 RESTful API 或 Protocol Buffers 等。而在系统内部，“接口”则可能表现为代码层面的抽象类型，例如 Go 语言中的 <code>type Engine interface</code>。无论是在系统间还是系统内部，接口都起到了关键作用，确保了不同组件之间的有效沟通与协作。</p>
+<h2 id="独立与可测试性"><a href="#独立与可测试性" class="headerlink" title="独立与可测试性"></a>独立与可测试性</h2><p>模块的独立性和复用性是软件设计中的重要原则。如果一个组件仅限于特定的使用场景，而不能广泛应用于其他场景，那么这个组件就不具备独立性和复用性。为了使组件能够独立并可复用，必须明确地定义通用的接口。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> EmailService <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(email *EmailService)</span></span> Send(msg <span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line">    client := kafka.New()</span><br><span class="line">    <span class="keyword">return</span> client.Send(msg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以邮件服务为例，其中的 Send 方法依赖于 Kafka 客户端。这种设计存在两个主要问题：</p>
+<p>测试困难：在 Send 方法内部直接实例化 Kafka 客户端，这使得在单元测试中难以隔离外部依赖，因为每次测试 Send 方法时都需要启动一个真实的 Kafka 服务。实际上，我们的测试目标是验证 Send 方法的业务逻辑，而不是 Kafka 的功能。Send 方法难以测试的核心原因在于它在函数内部生成了对外部资源的依赖。<br>代码重复与缺乏复用性：当系统中其他部分也需要向中间件发送消息时，如果每次都直接在代码中使用 kafka.New() 创建新的客户端实例，会导致大量的重复代码（所谓的“面条代码”）。这种方式不仅增加了代码的维护成本，还降低了代码的可读性和可维护性。此外，Kafka 客户端内嵌在 Send 方法中，使其既不具备独立性，也不容易复用，就像一个只能用于特定部件的螺母，而不是可以全车通用的标准件。<br>为了改善上述情况，可以采用依赖注入的方式，将 Kafka 客户端作为参数传递给 EmailService，或者定义一个更通用的消息发送接口，让 EmailService 通过该接口与任何支持的消息队列服务交互。这样做不仅可以提高代码的可测试性，还能增强模块的独立性和复用性。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接口定义</span></span><br><span class="line"><span class="keyword">type</span> Broker <span class="keyword">interface</span> &#123;</span><br><span class="line">    Send(msg <span class="type">string</span>) <span class="type">error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 邮件服务</span></span><br><span class="line"><span class="keyword">type</span> EmailService <span class="keyword">struct</span> &#123;</span><br><span class="line">    broker Broker</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewEmailService</span><span class="params">(broker Broker)</span></span> *EmailService &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;EmailService&#123; broker: broker &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(srv *EmailService)</span></span> Send(msg <span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> broker.Send(msg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里改进了一下写法，将内部产生的依赖改成了外部依赖。首先定义一个描述中间件功能的 Broker 接口，然后 mock 出一下 Broker 实例，最后通过外部注入的方式传递进去。这样只需要构造一个实现 Broker 协议的对象就能 mock Send 产生的行为了。<br>这个实例侧面也应证了迪米特法则。迪米特原则强调和直接的朋友通信。什么是直接的朋友呢？如果满足“一个对象的传递只出现在函数的参数、构造函数、函数的返回值这三个地方”就是直接的朋友。<br>上面在函数内部 New 出来的对象，违反了直接朋友的条件，所以测试起来就很困难。<br>有一个场景可能会违背迪米特法则。在对象手动装配的时候就可能产生函数内部 New 对象的可能，不过这个是可接受的(对象装配不是核心逻辑)。业界其实已经有写框架能做到自动装配对象，如 springboot。框架如果实现了自动装配，我们按照上述原则实践最终看到的代码都应该是独立解耦的。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 手动装配违反迪米特法则</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getEmailService</span><span class="params">()</span></span> (*EmailService, <span class="type">error</span>) &#123;</span><br><span class="line">    broker, err := xxx.NewKafka()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> yyy.NewEmailService(broker)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="模块依赖与装配"><a href="#模块依赖与装配" class="headerlink" title="模块依赖与装配"></a>模块依赖与装配</h2>
       </div>
       
         <div class="prev-or-next">
           <div class="post-foot-next">
             
+              <a href="/2024/02/22/%E7%90%86%E8%A7%A3%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
           </div>
           <div class="post-attach">
             <span class="post-pubtime">
               <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-              2024-10-25 23:49:24
+              2024-11-03 22:33:51
             </span>
             
                   <span class="post-tags">
@@ -302,11 +211,6 @@
           </div>
           <div class="post-foot-prev">
             
-              <a href="/2024/11/03/%E5%A4%8D%E6%9D%82%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BC%96%E7%A8%8B%E6%96%B9%E6%B3%95/" target="_self">
-                <span>Next</span>
-                <i class="iconfont icon-chevronright"></i>
-              </a>
-            
           </div>
         </div>
       
@@ -319,7 +223,7 @@
     <div class="title">Contents</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BC%98%E8%B5%B7"><span class="toc-text">1. 缘起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B"><span class="toc-text">2. 并发模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-text">多线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B"><span class="toc-text">多进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E7%A8%8B"><span class="toc-text">协程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B9%B6%E5%8F%91%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-text">3. 并发设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-text">案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F"><span class="toc-text">并发模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1-Lock-Free"><span class="toc-text">基于消息通信 (Lock Free)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98-Lock"><span class="toc-text">基于共享内存 (Lock)</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8B%AC%E7%AB%8B%E4%B8%8E%E5%8F%AF%E6%B5%8B%E8%AF%95%E6%80%A7"><span class="toc-text">独立与可测试性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E4%BE%9D%E8%B5%96%E4%B8%8E%E8%A3%85%E9%85%8D"><span class="toc-text">模块依赖与装配</span></a></li></ol>
       
     </div>
   </div>
@@ -607,12 +511,12 @@
       </a>
       <div class="share-content hidden">
         
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E7%90%86%E8%A7%A3%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B + '&url=' + http%3A%2F%2Fexample.com%2F2024%2F02%2F22%2F%25E7%2590%2586%25E8%25A7%25A3%25E5%25B9%25B6%25E5%258F%2591%25E7%25BC%2596%25E7%25A8%258B%2F + '" target="_blank" title="Twitter">
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%A4%8D%E6%9D%82%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BC%96%E7%A8%8B%E6%96%B9%E6%B3%95 + '&url=' + http%3A%2F%2Fexample.com%2F2024%2F11%2F03%2F%25E5%25A4%258D%25E6%259D%2582%25E7%25B3%25BB%25E7%25BB%259F%25E7%259A%2584%25E7%25BC%2596%25E7%25A8%258B%25E6%2596%25B9%25E6%25B3%2595%2F + '" target="_blank" title="Twitter">
             <i class="iconfont icon-twitter"></i>
           </a>
         
         
-          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2024/02/22/%E7%90%86%E8%A7%A3%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" target="_blank" title="Facebook">
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2024/11/03/%E5%A4%8D%E6%9D%82%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BC%96%E7%A8%8B%E6%96%B9%E6%B3%95/" target="_blank" title="Facebook">
             <i class="iconfont icon-facebooksquare"></i>
           </a>
         
