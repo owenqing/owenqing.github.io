@@ -326,8 +326,12 @@ a:hover {
 .post-navigation {
   font-size: 1.5rem;
   padding: 20px 90px;
-  text-align: right;
+  text-align: center;
   color: var(--color-text-base);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .post-navigation i {
@@ -335,7 +339,20 @@ a:hover {
 }
 
 .post-navigation .page-num {
-  padding: 0 10px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  background-color: var(--bg-content-search);
+  transition: all 0.3s ease;
+}
+
+.post-navigation .page-num:hover {
+  background-color: var(--color-text-a);
+  color: var(--bg-body);
+}
+
+.post-navigation .current {
+  background-color: var(--color-text-a);
+  color: var(--bg-body);
 }
 
 @media (max-width: 888px) {
