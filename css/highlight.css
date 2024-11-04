@@ -1,3 +1,70 @@
+/* Add dark mode styles at the beginning of the file */
+:root[color-mode="dark"] .highlight pre,
+:root[color-mode="dark"] .highlight .code pre {
+  background-color: #0d1117 !important;
+  color: #c9d1d9;
+}
+
+:root[color-mode="dark"] pre .comment,
+:root[color-mode="dark"] pre .title {
+  color: #8b949e;
+}
+
+:root[color-mode="dark"] pre .variable,
+:root[color-mode="dark"] pre .attribute,
+:root[color-mode="dark"] pre .tag,
+:root[color-mode="dark"] pre .regexp,
+:root[color-mode="dark"] pre .ruby .constant,
+:root[color-mode="dark"] pre .xml .tag .title,
+:root[color-mode="dark"] pre .xml .pi,
+:root[color-mode="dark"] pre .xml .doctype,
+:root[color-mode="dark"] pre .html .doctype,
+:root[color-mode="dark"] pre .css .id,
+:root[color-mode="dark"] pre .css .class,
+:root[color-mode="dark"] pre .css .pseudo {
+  color: #ff7b72;
+}
+
+:root[color-mode="dark"] pre .number,
+:root[color-mode="dark"] pre .preprocessor,
+:root[color-mode="dark"] pre .built_in,
+:root[color-mode="dark"] pre .literal,
+:root[color-mode="dark"] pre .params,
+:root[color-mode="dark"] pre .constant {
+  color: #79c0ff;
+}
+
+:root[color-mode="dark"] pre .class,
+:root[color-mode="dark"] pre .ruby .class .title,
+:root[color-mode="dark"] pre .css .rules .attribute {
+  color: #ffa657;
+}
+
+:root[color-mode="dark"] pre .string,
+:root[color-mode="dark"] pre .value,
+:root[color-mode="dark"] pre .inheritance,
+:root[color-mode="dark"] pre .header,
+:root[color-mode="dark"] pre .ruby .symbol,
+:root[color-mode="dark"] pre .xml .cdata {
+  color: #a5d6ff;
+}
+
+:root[color-mode="dark"] pre .keyword,
+:root[color-mode="dark"] pre .javascript .function {
+  color: #ff7b72;
+}
+
+:root[color-mode="dark"] .markdown-body .highlight {
+  background-color: #0d1117;
+  border-color: #30363d;
+}
+
+:root[color-mode="dark"] .markdown-body .highlight .gutter pre {
+  background-color: #161b22;
+  color: #6e7681;
+  border-right: 1px solid #30363d;
+}
+
 /* 确保 Mermaid 图表的 <pre> 和 <svg> 背景颜色是白色 */
 .mermaid,
 .mermaid pre,
