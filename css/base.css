@@ -5,9 +5,10 @@
 
 html,
 body {
+  background-color: var(--bg-body);
+  color: var(--color-text-base);
   font-size: 10px;
   letter-spacing: 0.01rem;
-  background-color: var(--bg-body);
   transition: color 400ms ease-in-out 0s, background-color 400ms ease-in-out 0s;
   font-family: Consolas, "Liberation Mono", Menlo, Monaco, "Source Han Sans CN", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif
 }
@@ -201,30 +202,42 @@ a:hover {
 }
 
 .post-item {
-  padding: 15px 20px;
-  border-bottom: 1px dashed #eee;
+  padding: 20px 25px;
+  margin-bottom: 20px;
+  border: 1px solid var(--post-item-border);
+  border-radius: 12px;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   font-size: 1.6rem;
   line-height: 1.5;
+  position: relative;
+  background: var(--post-item-bg);
+  box-shadow: 0 2px 5px var(--post-item-shadow);
 }
 
 .post-item:hover {
-  background-color: #f8f9fa;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px var(--post-item-hover-shadow);
+  border-color: var(--post-item-hover-border);
 }
 
 .post-item .time-m-d {
   flex-shrink: 0;
-  margin-right: 15px;
-  color: #666;
+  margin-right: 20px;
+  color: var(--post-time-color);
   font-size: 1.4rem;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--post-time-bg);
+  transition: all 0.3s ease;
 }
 
 .post-item .title {
   font-size: 1.6rem;
   line-height: 1.5;
-  color: #2c3e50;
+  color: var(--color-text-base);
+  transition: color 0.3s ease;
 }
 
 .post-item .title a {
@@ -233,12 +246,18 @@ a:hover {
   transition: color 0.3s ease;
 }
 
-.post-item .title a:hover {
-  color: #6190e8;
+/* 暗色模式下的悬停字体颜色 */
+body[data-theme='dark'] .post-item .title a:hover {
+  color: #4a9eff;
+}
+
+/* 明亮模式下的悬停字体颜色 */
+body[data-theme='light'] .post-item .title a:hover {
+  color: var(--color-text-a-hover);
 }
 
 .post-item:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
 .tag-details .time-m-d,
@@ -281,8 +300,39 @@ a:hover {
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* 添加博客名样式 */
+.navbar .blog-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  transition: all 0.3s ease;
+}
+
+.navbar .blog-title:hover {
+  transform: translateY(-2px);
+  opacity: 0.8;
+}
+
+/* 暗色模式适配 */
+body[data-theme='dark'] .navbar .blog-title {
+  color: #ffffff;
+}
+
+/* 导航菜单容器 */
+.navbar .nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .navbar ul {
@@ -338,12 +388,15 @@ a:hover {
   animation: float 3s ease-in-out infinite;
 }
 
+/* 响应式处理 */
 @media (max-width: 768px) {
-  .header {
-    padding: 15px 0;
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 20px;
   }
 
-  .navbar ul {
+  .navbar .nav-menu {
     gap: 20px;
   }
 
@@ -798,56 +851,151 @@ a:hover {
 /* 调整文章列表样式 */
 .post-list {
   flex: 1;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  padding: 0 10px;
 }
 
 /* 调整文章项样式 */
 .post-item {
-  padding: 15px 20px;
-  border-bottom: 1px dashed #eee;
+  padding: 20px 25px;
+  margin-bottom: 20px;
+  border: 1px solid var(--post-item-border);
+  border-radius: 12px;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   font-size: 1.6rem;
   line-height: 1.5;
+  position: relative;
+  background: var(--post-item-bg);
+  box-shadow: 0 2px 5px var(--post-item-shadow);
 }
 
 .post-item:hover {
-  background-color: #f8f9fa;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px var(--post-item-hover-shadow);
+  border-color: var(--post-item-hover-border);
 }
 
+/* 调整时间样式 */
 .post-item .time-m-d {
   flex-shrink: 0;
-  margin-right: 15px;
-  color: #666;
+  margin-right: 20px;
+  color: var(--post-time-color);
   font-size: 1.4rem;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--post-time-bg);
+  transition: all 0.3s ease;
 }
 
-.post-item .title {
-  font-size: 1.6rem;
-  line-height: 1.5;
-  color: #2c3e50;
+/* 添加主题变量 */
+:root {
+  --bg-content: #ffffff;
+  --bg-content-search: #f5f6f7;
+  --color-divider-md-border: #ebedf0;
+  --color-text-sub: #666666;
 }
 
-.post-item .title a {
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.3s ease;
+/* 暗色模式适配 */
+body[data-theme='dark'] {
+  --bg-content: #1a1a1a;
+  --bg-content-search: #2d2d2d;
+  --color-divider-md-border: #333333;
+  --color-text-sub: #888888;
 }
 
-.post-item .title a:hover {
-  color: #6190e8;
+/* 调整列表容器样式 */
+.post-list {
+  flex: 1;
+  margin-bottom: 30px;
+  padding: 0 10px;
 }
 
+/* 最后一个文章项去掉下边距 */
 .post-item:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
-/* 调整分页导航样式 */
-.post-navigation {
-  margin: 10px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
+:root {
+  --color-text-base: #2c3e50;
+  /* 深色主题下的文本颜色 */
+  --color-text-a-hover: #6190e8;
+  /* 悬停时的链接颜色 */
+}
+
+body[data-theme='dark'] {
+  --color-text-base: #ffffff;
+  /* 明亮主题下的文本颜色 */
+  --color-text-a-hover: #ffcc00;
+  /* 悬停时的链接颜色 */
+}
+
+/* 明亮模式变量 */
+:root[color-mode="light"] {
+  --bg-body: #FFFFFF;
+  --bg-content: #ffffff;
+  --bg-content-search: #f5f6f7;
+  --color-divider-md-border: #ebedf0;
+  --color-text-sub: #666666;
+  --post-item-shadow: rgba(0, 0, 0, 0.05);
+  --post-item-hover-shadow: rgba(0, 0, 0, 0.1);
+  --post-item-bg: #ffffff;
+  --post-item-border: #ebedf0;
+  --post-item-hover-border: #6190e8;
+  --post-time-bg: #f5f6f7;
+  --post-time-color: #666666;
+}
+
+/* 暗色模式变量 */
+:root[color-mode="dark"] {
+  --bg-body: #1E1E1E;
+  --bg-content: #252525;
+  --bg-content-search: #2d2d2d;
+  --color-divider-md-border: #383838;
+  --color-text-sub: #a0a0a0;
+  --post-item-shadow: rgba(0, 0, 0, 0.2);
+  --post-item-hover-shadow: rgba(0, 0, 0, 0.3);
+  --post-item-bg: #2d2d2d;
+  --post-item-border: #383838;
+  --post-item-hover-border: #4a9eff;
+  --post-time-bg: #363636;
+  --post-time-color: #a0a0a0;
+}
+
+/* 更新阴影样式以使用变量 */
+.post-item {
+  box-shadow: 0 2px 5px var(--post-item-shadow);
+}
+
+.post-item:hover {
+  box-shadow: 0 5px 15px var(--post-item-hover-shadow);
+}
+
+/* 调整暗色模式下的文章标题颜色 */
+body[data-theme='dark'] .post-item .title {
+  color: #e4e4e4;
+}
+
+/* 调整暗色模式下的悬停效果 */
+body[data-theme='dark'] .post-item:hover {
+  background: var(--bg-content);
+  border-color: #4a4a4a;
+}
+
+/* 暗色模式下的标题悬停效果 */
+body[data-theme='dark'] .post-item .title a:hover {
+  color: #4a9eff;
+}
+
+/* 暗色模式下的文章项悬停效果 */
+body[data-theme='dark'] .post-item:hover {
+  border-color: var(--post-item-hover-border);
+  background: var(--post-item-bg);
+}
+
+/* 暗色模式下时间标签的悬停效果 */
+body[data-theme='dark'] .post-item:hover .time-m-d {
+  background: #404040;
+  color: #b8b8b8;
 }
