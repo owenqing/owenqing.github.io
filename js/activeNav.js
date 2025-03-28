@@ -1,11 +1,21 @@
-// which nav has active
-let navs = document.querySelectorAll('.nav-item');
+// 处理导航项激活状态
+let navs = document.querySelectorAll('.nav-menu li');
 let pagePath = window.location.pathname;
-for (let nav of navs) {
-  let navPath = nav.getAttribute("data-path");
-  if (navPath && navPath === pagePath) {
-    nav.className = "nav-item active";
-  }
+
+// 处理首页的特殊情况
+if (pagePath === '/') {
+  // 首页不激活任何导航项
+  navs.forEach(nav => nav.classList.remove('active'));
+} else {
+  // 其他页面根据路径激活对应的导航项
+  navs.forEach(nav => {
+    let navPath = nav.querySelector('a').getAttribute('href');
+    if (pagePath.includes(navPath) && navPath !== '/') {
+      nav.classList.add('active');
+    } else {
+      nav.classList.remove('active');
+    }
+  });
 }
 
 // Scroll effect for header
