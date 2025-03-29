@@ -20,21 +20,6 @@ function log(message, ...args) {
     console.log(`[AI助手] ${message}`, ...args);
 }
 
-// 检测是否在本地开发环境
-const isLocalDevelopment = window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1';
-
-// 根据环境选择API端点
-function getApiEndpoint(path) {
-    if (isLocalDevelopment && aiAssistantConfig.debug) {
-        // 本地开发环境使用直接连接（需要CORS扩展）
-        return `http://localhost:11434/api/${path}`;
-    } else {
-        // 生产环境使用代理
-        return `/api/ollama/${path}`;
-    }
-}
-
 // AI 阅读助手
 document.addEventListener('DOMContentLoaded', function () {
     // 检查是否在文章页面 - 使用更宽松的检测
@@ -43,6 +28,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!isContentPage) {
         return;
     }
+
+    // 存储当前可用的 Ollama 端点
+    let ollamaEndpoint = '/api/ollama';  // 默认使用代理
 
     // 创建 AI 助手悬浮球
     const floatBall = document.createElement('div');
@@ -102,13 +90,8 @@ document.addEventListener('DOMContentLoaded', function () {
     setupDraggableContainer();
     setupTextSelection();
     setupShortcut();
+    setupOllamaRetryCheck();
     checkOllamaAvailability();
-
-    // 添加使用指南
-    if (aiAssistantConfig.debug) {
-        addStatusMessage('AI 助手已启用。要使用本地 Ollama 模型，请确保 Ollama 服务已在本地运行。', 'info', 'https://ollama.ai');
-        addStatusMessage('本地开发模式：请安装浏览器扩展来禁用CORS限制，或使用代理服务器。', 'info');
-    }
 
     // 点击悬浮球 - 完全重写事件处理
     floatBall.addEventListener('click', function (e) {
@@ -446,27 +429,29 @@ document.addEventListener('DOMContentLoaded', function () {
         // 清空模型选择器
         modelSelect.innerHTML = '<option value="checking">检测中...</option>';
 
-        // 设置超时，确保请求不会挂起太久
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('请求超时')), 5000);
-        });
+        // 尝试多个可能的 Ollama API 端点
+        const endpoints = [
+            '/api/ollama/tags',  // 代理服务器路径
+            'http://localhost:11434/api/tags'  // 本地直连路径
+        ];
 
-        // 使用动态API端点
-        const fetchPromise = fetch(getApiEndpoint('tags'), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        // 使用 Promise.race 实现超时控制
-        Promise.race([fetchPromise, timeoutPromise])
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+        // 使用 Promise.any 尝试所有端点，使用第一个成功的
+        Promise.any(endpoints.map(endpoint =>
+            fetch(endpoint, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-                return response.json();
             })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // 记录成功的端点
+                    ollamaEndpoint = endpoint.replace('/tags', '');
+                    return response.json();
+                })
+        ))
             .then(data => {
                 log('Ollama 可用，模型列表:', data);
                 simulationMode = false;
@@ -513,8 +498,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
                 currentModel = 'simulation';
 
-                // 添加更友好的错误提示
-                addStatusMessage('无法连接到 Ollama 服务，已启用模拟模式。如果您在本地运行 Ollama，请确保它已启动。', 'warning', 'https://ollama.ai');
+                // 添加模拟模式提示
+                addStatusMessage('Ollama 服务不可用，已启用模拟模式。请确保 Ollama 已安装并运行。', 'error', 'https://ollama.ai');
             });
     }
 
@@ -668,8 +653,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         log('请求体:', JSON.stringify(requestBody));
 
-        // 使用动态API端点
-        fetch(getApiEndpoint('chat'), {
+        // 使用当前可用的 Ollama 端点
+        fetch(`${ollamaEndpoint}/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1005,7 +990,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 检测 Ollama API 版本
     function detectOllamaApiVersion() {
-        fetch('/api/ollama/version', {
+        fetch(`${ollamaEndpoint}/version`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -1044,4 +1029,18 @@ document.addEventListener('DOMContentLoaded', function () {
         container.classList.remove('visible');
         console.log('关闭对话框');
     });
+
+    // 添加自动重试检测 Ollama 可用性的功能
+    function setupOllamaRetryCheck() {
+        // 初始检查
+        checkOllamaAvailability();
+
+        // 如果在模拟模式下，每 30 秒尝试重新连接一次
+        setInterval(() => {
+            if (simulationMode) {
+                log('尝试重新连接到 Ollama...');
+                checkOllamaAvailability();
+            }
+        }, 30000); // 30秒
+    }
 }); 
