@@ -1,0 +1,99 @@
+/* 代理设置样式 */
+.ai-proxy-settings {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.ai-settings-header {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+.ai-settings-description {
+    font-size: 13px;
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+
+.ai-proxy-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+.ai-custom-proxy {
+    margin-bottom: 10px;
+}
+
+.ai-custom-proxy-input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    background-color: white;
+}
+
+.ai-proxy-save {
+    background-color: #4b89dc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+
+.ai-proxy-save:hover {
+    background-color: #3a70c0;
+}
+
+/* 成功消息样式 */
+.ai-status-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 3px solid #28a745;
+}
+
+/* 深色模式适配 */
+:root[color-mode="dark"] .ai-proxy-settings {
+    background-color: #2d333b;
+    border-color: #444c56;
+}
+
+:root[color-mode="dark"] .ai-settings-header {
+    color: #adbac7;
+}
+
+:root[color-mode="dark"] .ai-settings-description {
+    color: #768390;
+}
+
+:root[color-mode="dark"] .ai-proxy-select,
+:root[color-mode="dark"] .ai-custom-proxy-input {
+    background-color: #22272e;
+    border-color: #444c56;
+    color: #adbac7;
+}
+
+:root[color-mode="dark"] .ai-proxy-save {
+    background-color: #58a6ff;
+}
+
+:root[color-mode="dark"] .ai-proxy-save:hover {
+    background-color: #4993e5;
+}
+
+:root[color-mode="dark"] .ai-status-success {
+    background-color: #1b3129;
+    color: #56d364;
+    border-left-color: #2ea043;
+}

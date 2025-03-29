@@ -13,9 +13,8 @@
                 
                   <title>
                     
-                      Tag
-                         : 计算机
-                            
+                      AI 助手代理设置指南
+                        
                               
                                     |
                                     
@@ -95,7 +94,7 @@
           
               
           
-            <li class="active">
+            <li class="">
               <a href="/tags/">
                 
                     Tags
@@ -131,40 +130,140 @@
 
 
         <div class="flex-container">
-          <!-- 标签详情页，展示某个标签下的文章列表，url形式：https://yoursite/tags/某个标签/ -->
+          <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
 
-<div class="container tag-details">
-  <div class="content-title">
-    <h2>
-      <span>计算机</span>
-    </h2>
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+    
+
+      
+        <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+          
+
+            
+
+                
+
+                    
+
+                        
+
+                            
+                              <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+                              <div class="container post-details" id="post-details">
+                                <div class="post-content">
+                                  <div class="post-title">AI 助手代理设置指南</div>
+                                  <div class="post-attach">
+                                    <span class="post-pubtime">
+                                      <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+                                      2025-03-29 15:52:04
+                                    </span>
+                                    
+                                  </div>
+                                  <div class="markdown-body">
+                                    <h1 id="AI-助手代理设置指南"><a href="#AI-助手代理设置指南" class="headerlink" title="AI 助手代理设置指南"></a>AI 助手代理设置指南</h1><p>当您通过 GitHub Pages 访问本网站时，浏览器的安全限制会阻止直接连接到本地运行的 Ollama 服务。为了解决这个问题，我们提供了代理设置选项。</p>
+<h2 id="什么是代理服务？"><a href="#什么是代理服务？" class="headerlink" title="什么是代理服务？"></a>什么是代理服务？</h2><p>代理服务充当中间人，允许从 HTTPS 网站（如 GitHub Pages）连接到 HTTP 服务（如本地 Ollama）。</p>
+<h2 id="如何使用代理连接到本地-Ollama"><a href="#如何使用代理连接到本地-Ollama" class="headerlink" title="如何使用代理连接到本地 Ollama"></a>如何使用代理连接到本地 Ollama</h2><ol>
+<li>确保您的本地 Ollama 服务正在运行</li>
+<li>在 AI 助手对话框中，您会看到”代理设置”选项</li>
+<li>从下拉菜单中选择一个代理服务</li>
+<li>点击”保存并重新连接”按钮</li>
+</ol>
+<h2 id="可用的代理选项"><a href="#可用的代理选项" class="headerlink" title="可用的代理选项"></a>可用的代理选项</h2><ul>
+<li><strong>默认代理</strong>：使用 CORS Anywhere 服务</li>
+<li><strong>备用代理</strong>：如果默认代理不可用，可以尝试备用选项</li>
+<li><strong>自定义代理</strong>：您可以输入自己的代理服务 URL</li>
+</ul>
+<h2 id="自托管代理"><a href="#自托管代理" class="headerlink" title="自托管代理"></a>自托管代理</h2><p>如果您希望更好的隐私保护，可以自托管代理服务：</p>
+<ol>
+<li>克隆 <a target="_blank" rel="noopener" href="https://github.com/Rob--W/cors-anywhere">CORS Anywhere</a> 仓库</li>
+<li>按照说明在本地或您自己的服务器上部署</li>
+<li>在 AI 助手设置中使用您的自托管代理 URL</li>
+</ol>
+<h2 id="故障排除"><a href="#故障排除" class="headerlink" title="故障排除"></a>故障排除</h2><p>如果连接失败：</p>
+<ol>
+<li>确认 Ollama 服务正在本地运行（<code>http://localhost:11434/api/tags</code> 可访问）</li>
+<li>尝试不同的代理服务</li>
+<li>检查代理服务是否有使用限制或需要授权</li>
+</ol>
+<h2 id="隐私说明"><a href="#隐私说明" class="headerlink" title="隐私说明"></a>隐私说明</h2><p>使用第三方代理服务时，您的请求和 Ollama 的响应将通过该服务传输。虽然内容仍然在您的设备和本地 Ollama 之间传输，但代理服务理论上可以看到这些数据。</p>
+<p>如果您对隐私有严格要求，建议使用自托管代理或在本地环境中使用本网站。 </p>
+
+                                  </div>
+                                  
+                                    <div class="prev-or-next">
+                                      <div class="post-foot-next">
+                                        
+                                      </div>
+                                      <div class="post-attach">
+                                        <span class="post-pubtime">
+                                          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+                                          2025-03-29 15:52:04
+                                        </span>
+                                        
+                                      </div>
+                                      <div class="post-foot-prev">
+                                        
+                                      </div>
+                                    </div>
+                                    
+                                </div>
+                                
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
   </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="模块化设计与依赖注入：构建可维护的软件系统">
-        <span class="time-m-d">2024-06-13</span>
-        <a href="/2024/06/13/%E6%A8%A1%E5%9D%97%E5%8C%96%E8%AE%BE%E8%AE%A1%E4%B8%8E%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/">
-          <span>模块化设计与依赖注入：构建可维护的软件系统</span>
-        </a>
-      </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AI-%E5%8A%A9%E6%89%8B%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE%E6%8C%87%E5%8D%97"><span class="toc-text">AI 助手代理设置指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%EF%BC%9F"><span class="toc-text">什么是代理服务？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E8%BF%9E%E6%8E%A5%E5%88%B0%E6%9C%AC%E5%9C%B0-Ollama"><span class="toc-text">如何使用代理连接到本地 Ollama</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E7%94%A8%E7%9A%84%E4%BB%A3%E7%90%86%E9%80%89%E9%A1%B9"><span class="toc-text">可用的代理选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E6%89%98%E7%AE%A1%E4%BB%A3%E7%90%86"><span class="toc-text">自托管代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4"><span class="toc-text">故障排除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E8%AF%B4%E6%98%8E"><span class="toc-text">隐私说明</span></a></li></ol></li></ol>
+      
     </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="理解并发编程">
-        <span class="time-m-d">2024-02-22</span>
-        <a href="/2024/02/22/%E7%90%86%E8%A7%A3%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">
-          <span>理解并发编程</span>
-        </a>
-      </div>
-    </div>
-  
-  <nav class="post-navigation">
-    
-    <span class="page-num">1 / 1</span>
-    
-  </nav>
-</div>
+  </div>
 
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+                                  
+                                    <div class="comments-container">
+                                      
+
+
+
+
+
+
+
+                                    </div>
+                                    
+                              </div>
+                              
             
   <div class="footer">
     <div class="social">
@@ -427,6 +526,24 @@
 
 
                 
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + AI%20%E5%8A%A9%E6%89%8B%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE%E6%8C%87%E5%8D%97 + '&url=' + https%3A%2F%2Fowenqing.github.io%2Fai-proxy-guide.html + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://owenqing.github.io/ai-proxy-guide.html" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
   
   
 <script src="/js/shares.js"></script>

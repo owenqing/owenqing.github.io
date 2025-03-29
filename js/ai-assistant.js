@@ -12,6 +12,17 @@ const aiAssistantConfig = {
             metaKey: true,  // Command 键 (Mac) 或 Windows 键
             ctrlKey: true   // Ctrl 键 (Windows/Linux)
         }
+    },
+    // 添加代理配置
+    proxy: {
+        enable: true,
+        // 默认使用 CORS Anywhere 服务，用户可以在设置中更改
+        url: "https://cors-anywhere.herokuapp.com/",
+        // 备用代理列表
+        alternatives: [
+            "https://corsproxy.io/?",
+            "https://api.allorigins.win/raw?url="
+        ]
     }
 };
 
@@ -28,9 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!isContentPage) {
         return;
     }
-
-    // 存储当前可用的 Ollama 端点
-    let ollamaEndpoint = '/api/ollama';  // 默认使用代理
 
     // 创建 AI 助手悬浮球
     const floatBall = document.createElement('div');
@@ -90,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function () {
     setupDraggableContainer();
     setupTextSelection();
     setupShortcut();
-    setupOllamaRetryCheck();
     checkOllamaAvailability();
 
     // 点击悬浮球 - 完全重写事件处理
@@ -429,280 +436,199 @@ document.addEventListener('DOMContentLoaded', function () {
         // 清空模型选择器
         modelSelect.innerHTML = '<option value="checking">检测中...</option>';
 
-        // 首先检查是否安装了桥接扩展
-        if (window.ollamaExtensionBridge) {
-            log('检测到 Ollama 桥接扩展');
-            useExtensionBridge();
-            return;
-        }
+        // 检查是否在 GitHub Pages 环境
+        const isGitHubPages = window.location.hostname.includes('github.io') ||
+            window.location.protocol === 'https:';
 
-        // 尝试通过 window.postMessage 与可能存在的扩展通信
-        window.addEventListener('message', function ollamaExtensionResponse(event) {
-            if (event.data && event.data.type === 'OLLAMA_EXTENSION_RESPONSE') {
-                log('收到扩展响应:', event.data);
-                window.removeEventListener('message', ollamaExtensionResponse);
+        // 获取 Ollama API URL (直接或通过代理)
+        const ollamaUrl = getOllamaApiUrl('api/tags');
 
-                if (event.data.success) {
-                    ollamaEndpoint = 'extension';
-                    handleOllamaAvailable(event.data.data);
-                } else {
-                    tryDirectLocalConnection();
-                }
-            }
-        }, { once: true });
+        log('使用 API URL:', ollamaUrl);
 
-        // 发送消息尝试检测扩展
-        window.postMessage({ type: 'OLLAMA_EXTENSION_CHECK' }, '*');
-
-        // 设置超时，如果没有扩展响应，尝试直接连接
-        setTimeout(() => {
-            tryDirectLocalConnection();
-        }, 500);
-    }
-
-    // 使用扩展桥接
-    function useExtensionBridge() {
-        log('使用扩展桥接访问 Ollama');
-        window.ollamaExtensionBridge.getTags()
-            .then(data => {
-                ollamaEndpoint = 'extension';
-                handleOllamaAvailable(data);
-            })
-            .catch(error => {
-                log('扩展桥接失败:', error);
-                tryDirectLocalConnection();
-            });
-    }
-
-    // 尝试直接连接本地 Ollama
-    function tryDirectLocalConnection() {
-        const localEndpoint = 'http://localhost:11434/api/tags';
-
-        log('尝试直接连接本地 Ollama...');
-
-        // 使用 JSONP 方式尝试绕过 CORS 限制
-        // 创建一个 script 元素来加载 JSONP
-        const script = document.createElement('script');
-        const callbackName = 'ollama_callback_' + Math.floor(Math.random() * 10000);
-
-        // 设置超时
-        const timeout = setTimeout(() => {
-            log('直接连接本地 Ollama 超时');
-            cleanup();
-            fallbackToSimulationMode();
-        }, 5000);
-
-        // 清理函数
-        function cleanup() {
-            delete window[callbackName];
-            document.body.removeChild(script);
-            clearTimeout(timeout);
-        }
-
-        // 定义回调函数
-        window[callbackName] = function (data) {
-            log('成功获取 Ollama 模型列表:', data);
-            cleanup();
-
-            // 设置端点
-            ollamaEndpoint = 'http://localhost:11434';
-            handleOllamaAvailable(data);
-        };
-
-        // 设置错误处理
-        script.onerror = function () {
-            log('JSONP 请求失败，尝试 iframe 方法');
-            cleanup();
-            tryIframeMethod();
-        };
-
-        // 设置 script 源
-        script.src = `${localEndpoint}?callback=${callbackName}`;
-        document.body.appendChild(script);
-    }
-
-    // 尝试使用 iframe 方法
-    function tryIframeMethod() {
-        log('尝试使用 iframe 方法连接本地 Ollama...');
-
-        // 创建一个隐藏的 iframe
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-
-        // 设置超时
-        const timeout = setTimeout(() => {
-            log('iframe 方法超时');
-            cleanup();
-            tryFetchWithCorsMode();
-        }, 3000);
-
-        // 清理函数
-        function cleanup() {
-            document.body.removeChild(iframe);
-            clearTimeout(timeout);
-        }
-
-        // 加载完成后尝试访问
-        iframe.onload = function () {
-            try {
-                // 尝试通过 iframe 访问本地 API
-                const result = iframe.contentWindow.fetch('http://localhost:11434/api/tags')
-                    .then(response => response.json())
-                    .then(data => {
-                        log('iframe 方法成功:', data);
-                        cleanup();
-                        ollamaEndpoint = 'http://localhost:11434';
-                        handleOllamaAvailable(data);
-                    })
-                    .catch(error => {
-                        log('iframe 方法失败:', error);
-                        cleanup();
-                        tryFetchWithCorsMode();
-                    });
-            } catch (error) {
-                log('iframe 方法出错:', error);
-                cleanup();
-                tryFetchWithCorsMode();
-            }
-        };
-
-        // iframe 加载失败
-        iframe.onerror = function () {
-            log('iframe 加载失败');
-            cleanup();
-            tryFetchWithCorsMode();
-        };
-
-        // 设置 iframe 源为空白页
-        iframe.src = 'about:blank';
-        document.body.appendChild(iframe);
-    }
-
-    // 尝试使用 fetch 的 no-cors 模式
-    function tryFetchWithCorsMode() {
-        log('尝试使用 fetch no-cors 模式...');
-
-        fetch('http://localhost:11434/api/tags', {
+        // 请求 Ollama API 获取可用模型
+        fetch(ollamaUrl, {
             method: 'GET',
-            mode: 'no-cors' // 尝试 no-cors 模式
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // 添加超时
+            signal: AbortSignal.timeout(5000)
         })
-            .then(() => {
-                // 即使成功，我们也无法读取响应内容，但至少知道服务存在
-                log('no-cors 请求成功，服务可能存在');
-                ollamaEndpoint = 'http://localhost:11434';
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                log('Ollama 可用，模型列表:', data);
+                simulationMode = false;
 
-                // 尝试使用 WebSocket 连接
-                tryWebSocketConnection();
+                // 清空选择器
+                modelSelect.innerHTML = '';
+
+                // 添加模型选项
+                if (data.models && data.models.length > 0) {
+                    data.models.forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model.name;
+                        option.textContent = model.name;
+                        modelSelect.appendChild(option);
+                    });
+
+                    // 设置默认模型
+                    currentModel = aiAssistantConfig.defaultModel || data.models[0].name;
+
+                    // 检查默认模型是否在列表中
+                    const modelExists = Array.from(modelSelect.options).some(opt => opt.value === currentModel);
+                    if (!modelExists && data.models.length > 0) {
+                        currentModel = data.models[0].name;
+                    }
+
+                    modelSelect.value = currentModel;
+
+                    // 添加成功连接提示
+                    if (isGitHubPages) {
+                        addStatusMessage('已通过代理成功连接到本地 Ollama 服务', 'success');
+                    }
+                } else {
+                    // 没有可用模型
+                    const option = document.createElement('option');
+                    option.value = 'no-models';
+                    option.textContent = '没有可用模型';
+                    modelSelect.appendChild(option);
+                    currentModel = 'no-models';
+
+                    // 添加提示消息
+                    addStatusMessage('未检测到可用模型，请先安装模型', 'warning');
+                }
             })
             .catch(error => {
-                log('no-cors 请求失败:', error);
-                fallbackToSimulationMode();
+                log('Ollama 不可用，启用模拟模式:', error);
+                simulationMode = true;
+
+                // 设置为模拟模式
+                modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
+                currentModel = 'simulation';
+
+                // 添加模拟模式提示
+                if (isGitHubPages) {
+                    addStatusMessage('无法通过代理连接到本地 Ollama 服务。请确保：<br>1. 本地 Ollama 服务正在运行<br>2. 代理服务可用<br>3. 或尝试更换代理服务', 'error');
+
+                    // 添加代理设置选项
+                    addProxySettings();
+                } else {
+                    addStatusMessage('Ollama 服务不可用，已启用模拟模式。请确保 Ollama 已安装并运行。', 'error', 'https://ollama.ai');
+                }
             });
     }
 
-    // 尝试使用 WebSocket 连接
-    function tryWebSocketConnection() {
-        log('尝试使用 WebSocket 连接...');
+    // 获取 Ollama API URL (直接或通过代理)
+    function getOllamaApiUrl(endpoint) {
+        const baseUrl = 'http://localhost:11434/';
+        const fullUrl = baseUrl + endpoint;
 
-        try {
-            const ws = new WebSocket('ws://localhost:11434/api/ws');
+        // 检查是否需要使用代理
+        const isGitHubPages = window.location.hostname.includes('github.io') ||
+            window.location.protocol === 'https:';
 
-            ws.onopen = function () {
-                log('WebSocket 连接成功');
-                ws.send(JSON.stringify({
-                    type: 'tags'
-                }));
-            };
+        if (isGitHubPages && aiAssistantConfig.proxy.enable) {
+            // 从本地存储获取用户选择的代理
+            const savedProxy = localStorage.getItem('aiAssistantProxy');
+            const proxyUrl = savedProxy || aiAssistantConfig.proxy.url;
 
-            ws.onmessage = function (event) {
-                log('收到 WebSocket 消息:', event.data);
-                try {
-                    const data = JSON.parse(event.data);
-                    ws.close();
-                    handleOllamaAvailable(data);
-                } catch (error) {
-                    log('解析 WebSocket 消息失败:', error);
-                    ws.close();
-                    fallbackToSimulationMode();
-                }
-            };
-
-            ws.onerror = function (error) {
-                log('WebSocket 错误:', error);
-                fallbackToSimulationMode();
-            };
-
-            // 设置超时
-            setTimeout(() => {
-                if (ws.readyState !== WebSocket.CLOSED) {
-                    log('WebSocket 超时');
-                    ws.close();
-                    fallbackToSimulationMode();
-                }
-            }, 5000);
-        } catch (error) {
-            log('创建 WebSocket 失败:', error);
-            fallbackToSimulationMode();
+            return proxyUrl + fullUrl;
         }
+
+        return fullUrl;
     }
 
-    // 回退到模拟模式
-    function fallbackToSimulationMode() {
-        log('所有连接方法都失败，回退到模拟模式');
-        handleOllamaUnavailable(new Error("无法连接到 Ollama 服务"));
-    }
+    // 添加代理设置选项
+    function addProxySettings() {
+        const settingsEl = document.createElement('div');
+        settingsEl.className = 'ai-proxy-settings';
 
-    // 处理 Ollama 可用的情况
-    function handleOllamaAvailable(data) {
-        log('Ollama 可用，模型列表:', data);
-        simulationMode = false;
+        // 获取当前代理
+        const currentProxy = localStorage.getItem('aiAssistantProxy') || aiAssistantConfig.proxy.url;
 
-        // 清空选择器
-        modelSelect.innerHTML = '';
+        // 创建代理选择器
+        let proxyOptions = `
+            <div class="ai-settings-header">代理设置</div>
+            <div class="ai-settings-description">选择一个代理服务来连接本地 Ollama:</div>
+            <select class="ai-proxy-select">
+                <option value="${aiAssistantConfig.proxy.url}" ${currentProxy === aiAssistantConfig.proxy.url ? 'selected' : ''}>
+                    默认代理
+                </option>
+        `;
 
-        // 添加模型选项
-        if (data.models && data.models.length > 0) {
-            data.models.forEach(model => {
-                const option = document.createElement('option');
-                option.value = model.name;
-                option.textContent = model.name;
-                modelSelect.appendChild(option);
-            });
+        // 添加备用代理选项
+        aiAssistantConfig.proxy.alternatives.forEach(proxy => {
+            proxyOptions += `
+                <option value="${proxy}" ${currentProxy === proxy ? 'selected' : ''}>
+                    备用代理 ${aiAssistantConfig.proxy.alternatives.indexOf(proxy) + 1}
+                </option>
+            `;
+        });
 
-            // 设置默认模型
-            currentModel = aiAssistantConfig.defaultModel || data.models[0].name;
+        // 添加自定义代理选项
+        const customProxy = ![aiAssistantConfig.proxy.url, ...aiAssistantConfig.proxy.alternatives].includes(currentProxy) ? currentProxy : '';
 
-            // 检查默认模型是否在列表中
-            const modelExists = Array.from(modelSelect.options).some(opt => opt.value === currentModel);
-            if (!modelExists && data.models.length > 0) {
-                currentModel = data.models[0].name;
+        proxyOptions += `
+                <option value="custom" ${customProxy ? 'selected' : ''}>自定义代理</option>
+            </select>
+            <div class="ai-custom-proxy" style="display: ${customProxy ? 'block' : 'none'}">
+                <input type="text" class="ai-custom-proxy-input" placeholder="输入代理URL" value="${customProxy}">
+            </div>
+            <button class="ai-proxy-save">保存并重新连接</button>
+        `;
+
+        settingsEl.innerHTML = proxyOptions;
+        conversationEl.appendChild(settingsEl);
+
+        // 添加事件监听
+        const proxySelect = settingsEl.querySelector('.ai-proxy-select');
+        const customProxyDiv = settingsEl.querySelector('.ai-custom-proxy');
+        const customProxyInput = settingsEl.querySelector('.ai-custom-proxy-input');
+        const saveButton = settingsEl.querySelector('.ai-proxy-save');
+
+        // 切换自定义代理输入框
+        proxySelect.addEventListener('change', function () {
+            if (this.value === 'custom') {
+                customProxyDiv.style.display = 'block';
+                customProxyInput.focus();
+            } else {
+                customProxyDiv.style.display = 'none';
+            }
+        });
+
+        // 保存代理设置
+        saveButton.addEventListener('click', function () {
+            let selectedProxy = proxySelect.value;
+
+            if (selectedProxy === 'custom') {
+                selectedProxy = customProxyInput.value.trim();
+
+                // 确保自定义代理URL以/结尾
+                if (selectedProxy && !selectedProxy.endsWith('/')) {
+                    selectedProxy += '/';
+                }
+
+                // 验证URL格式
+                if (!selectedProxy || !selectedProxy.startsWith('http')) {
+                    addStatusMessage('请输入有效的代理URL', 'error');
+                    return;
+                }
             }
 
-            modelSelect.value = currentModel;
-        } else {
-            // 没有可用模型
-            const option = document.createElement('option');
-            option.value = 'no-models';
-            option.textContent = '没有可用模型';
-            modelSelect.appendChild(option);
-            currentModel = 'no-models';
+            // 保存到本地存储
+            localStorage.setItem('aiAssistantProxy', selectedProxy);
 
-            // 添加提示消息
-            addStatusMessage('未检测到可用模型，请先安装模型', 'warning');
-        }
-    }
+            // 提示用户
+            addStatusMessage('代理设置已保存，正在重新连接...', 'info');
 
-    // 处理 Ollama 不可用的情况
-    function handleOllamaUnavailable(error) {
-        log('Ollama 不可用，启用模拟模式:', error);
-        simulationMode = true;
-
-        // 设置为模拟模式
-        modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
-        currentModel = 'simulation';
-
-        // 添加模拟模式提示
-        addStatusMessage('Ollama 服务不可用，已启用模拟模式。请确保 Ollama 已安装并运行。', 'error', 'https://ollama.ai');
+            // 重新检查连接
+            setTimeout(checkOllamaAvailability, 500);
+        });
     }
 
     // 添加状态消息
@@ -714,6 +640,8 @@ document.addEventListener('DOMContentLoaded', function () {
             statusMessage.classList.add('ai-status-error');
         } else if (type === 'warning') {
             statusMessage.classList.add('ai-status-warning');
+        } else if (type === 'success') {
+            statusMessage.classList.add('ai-status-success');
         }
 
         let messageHTML = `<p>${message}</p>`;
@@ -724,6 +652,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         statusMessage.innerHTML = messageHTML;
         conversationEl.appendChild(statusMessage);
+        conversationEl.scrollTop = conversationEl.scrollHeight;
     }
 
     // 添加上下文消息
@@ -854,16 +783,11 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         log('请求体:', JSON.stringify(requestBody));
-        log('使用端点:', ollamaEndpoint);
 
-        // 如果使用扩展桥接
-        if (ollamaEndpoint === 'extension' && window.ollamaExtensionBridge) {
-            handleExtensionStreamingResponse(requestBody, contentEl);
-            return;
-        }
+        // 获取 API URL (直接或通过代理)
+        const ollamaUrl = getOllamaApiUrl('api/chat');
 
-        // 使用当前可用的 Ollama 端点
-        fetch(`${ollamaEndpoint}/api/chat`, {
+        fetch(ollamaUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -927,59 +851,10 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error:', error);
 
-                // 如果是 CORS 错误，尝试通过其他方式发送
-                if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
-                    log('可能是 CORS 错误，尝试备用方法');
+                // 添加错误消息
+                contentEl.innerHTML = `<p class="ai-error">请求失败: ${error.message}。请检查 Ollama 服务是否正常运行。</p>`;
 
-                    // 显示正在尝试备用方法的消息
-                    contentEl.innerHTML = '<p>正在尝试备用连接方法...</p>';
-
-                    // 这里可以添加备用方法，如 WebSocket 等
-                    // 但由于复杂度较高，这里简化为回退到模拟模式
-                    setTimeout(() => {
-                        contentEl.innerHTML = '<p class="ai-error">无法直接连接到 Ollama，已切换到模拟模式</p>';
-                        simulationMode = true;
-                        simulateStreamingResponse(contentEl);
-                    }, 1000);
-                } else {
-                    // 添加错误消息
-                    contentEl.innerHTML = `<p class="ai-error">请求失败: ${error.message}。请检查 Ollama 服务是否正常运行。</p>`;
-
-                    // 重置状态
-                    isWaiting = false;
-                    sendButton.disabled = inputEl.value.trim().length === 0;
-
-                    // 如果连接失败，切换到模拟模式
-                    if (!simulationMode) {
-                        log('连接失败，切换到模拟模式');
-                        simulationMode = true;
-                        modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
-                        currentModel = 'simulation';
-
-                        // 添加模拟模式提示
-                        contentEl.innerHTML += `<p>已自动切换到模拟模式，你可以继续使用 AI 助手</p>`;
-                    }
-                }
-            });
-    }
-
-    // 处理扩展桥接的流式响应
-    function handleExtensionStreamingResponse(requestBody, contentEl) {
-        let fullResponse = '';
-
-        window.ollamaExtensionBridge.streamChat(requestBody,
-            // 进度回调
-            (chunk) => {
-                fullResponse += chunk;
-                updateStreamingContent(contentEl, fullResponse);
-            },
-            // 完成回调
-            () => {
-                finishResponse(fullResponse, contentEl);
-            },
-            // 错误回调
-            (error) => {
-                contentEl.innerHTML = `<p class="ai-error">请求失败: ${error}。请检查 Ollama 服务是否正常运行。</p>`;
+                // 重置状态
                 isWaiting = false;
                 sendButton.disabled = inputEl.value.trim().length === 0;
 
@@ -990,10 +865,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
                     currentModel = 'simulation';
 
+                    // 添加模拟模式提示
                     contentEl.innerHTML += `<p>已自动切换到模拟模式，你可以继续使用 AI 助手</p>`;
                 }
-            }
-        );
+            });
     }
 
     // 更新流式内容
@@ -1248,7 +1123,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 检测 Ollama API 版本
     function detectOllamaApiVersion() {
-        fetch(`${ollamaEndpoint}/version`, {
+        fetch('http://localhost:11434/api/version', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -1287,72 +1162,4 @@ document.addEventListener('DOMContentLoaded', function () {
         container.classList.remove('visible');
         console.log('关闭对话框');
     });
-
-    // 添加自动重试检测 Ollama 可用性的功能
-    function setupOllamaRetryCheck() {
-        // 初始检查
-        checkOllamaAvailability();
-
-        // 如果在模拟模式下，每 30 秒尝试重新连接一次
-        setInterval(() => {
-            if (simulationMode) {
-                log('尝试重新连接到 Ollama...');
-                checkOllamaAvailability();
-            }
-        }, 30000); // 30秒
-    }
-
-    // 在模拟模式下显示扩展安装指南
-    function showExtensionGuide() {
-        const guideEl = document.createElement('div');
-        guideEl.className = 'ai-extension-guide';
-        guideEl.innerHTML = `
-            <h3>安装 Ollama 桥接扩展以获得最佳体验</h3>
-            <p>由于浏览器安全限制，网站无法直接访问本地 Ollama 服务。安装我们的浏览器扩展可以解决这个问题。</p>
-            <div class="ai-extension-buttons">
-                <a href="https://your-website.com/ollama-bridge-extension.zip" class="ai-extension-button" download>下载扩展</a>
-                <button class="ai-extension-guide-button">查看安装指南</button>
-            </div>
-        `;
-
-        conversationEl.appendChild(guideEl);
-
-        // 添加安装指南按钮事件
-        guideEl.querySelector('.ai-extension-guide-button').addEventListener('click', function () {
-            showInstallationInstructions();
-        });
-    }
-
-    // 显示安装指南
-    function showInstallationInstructions() {
-        const modal = document.createElement('div');
-        modal.className = 'ai-modal';
-        modal.innerHTML = `
-            <div class="ai-modal-content">
-                <h3>Ollama 桥接扩展安装指南</h3>
-                <ol>
-                    <li>下载扩展文件</li>
-                    <li>解压缩下载的文件</li>
-                    <li>打开浏览器的扩展页面：
-                        <ul>
-                            <li>Chrome: 访问 chrome://extensions/</li>
-                            <li>Edge: 访问 edge://extensions/</li>
-                            <li>Firefox: 访问 about:addons</li>
-                        </ul>
-                    </li>
-                    <li>启用"开发者模式"</li>
-                    <li>点击"加载已解压的扩展"（Chrome/Edge）或"临时加载附加组件"（Firefox）</li>
-                    <li>选择解压后的扩展文件夹</li>
-                    <li>刷新本页面</li>
-                </ol>
-                <button class="ai-modal-close">关闭</button>
-            </div>
-        `;
-
-        document.body.appendChild(modal);
-
-        modal.querySelector('.ai-modal-close').addEventListener('click', function () {
-            document.body.removeChild(modal);
-        });
-    }
 }); 
