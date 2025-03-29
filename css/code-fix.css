@@ -1,0 +1,447 @@
+/* 全局代码块和Mermaid图表样式修复 - GitHub风格 */
+
+/* 修复代码块基本样式 */
+.article-entry pre,
+.article-entry .highlight,
+.markdown-body pre,
+.markdown-body .highlight {
+    margin: 1.5em 0;
+    padding: 0;
+    border-radius: 6px;
+    border: 1px solid #d0d7de;
+    overflow: hidden;
+    position: relative;
+    background-color: #f6f8fa;
+    box-shadow: none;
+    font-size: 85%;
+}
+
+/* 修复代码块内部样式 */
+.highlight table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+.highlight td {
+    padding: 0;
+    border: none;
+    vertical-align: top;
+}
+
+/* 修复行号样式 - GitHub风格 */
+.highlight .gutter {
+    width: 46px;
+    background-color: #f6f8fa;
+    border-right: 1px solid #d0d7de;
+    padding: 0;
+    text-align: right;
+    user-select: none;
+    position: relative;
+}
+
+.highlight .gutter pre {
+    margin: 0;
+    padding: 16px 8px 16px 0;
+    text-align: right;
+    color: #6e7781;
+    background-color: transparent;
+    border: none;
+    height: 100%;
+    font-size: 12px;
+    line-height: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: hidden;
+}
+
+/* 修复代码内容样式 - GitHub风格 */
+.highlight .code {
+    padding: 0;
+    width: 100%;
+    position: relative;
+}
+
+.highlight .code pre {
+    margin: 0;
+    padding: 16px;
+    overflow-x: auto;
+    background-color: transparent;
+    border: none;
+    height: 100%;
+    min-height: 100%;
+    display: block;
+    line-height: 20px;
+}
+
+/* 确保行号和代码内容等高 */
+.highlight table tr {
+    height: 100%;
+}
+
+/* 修复行高和字体 - GitHub风格 */
+.highlight .line {
+    height: 20px;
+    line-height: 20px;
+    display: inline-block;
+    width: 100%;
+}
+
+/* 确保代码行之间没有多余空白 */
+.highlight .code pre .line+.line {
+    margin-top: 0;
+}
+
+/* 修复代码块内的中文注释显示 */
+pre .comment {
+    color: #6a737d;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* 修复代码复制按钮 - GitHub风格 */
+.pin-copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    cursor: pointer;
+    background: rgba(246, 248, 250, 0.9);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+    border: 1px solid #d0d7de;
+    color: #24292f;
+}
+
+.pin-copy:hover {
+    opacity: 1;
+    background: #f3f4f6;
+}
+
+/* 修复Mermaid图表样式 - 科技风格 */
+.mermaid {
+    margin: 1.5em 0;
+    text-align: center;
+    background-color: rgba(240, 246, 255, 0.5);
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(75, 137, 220, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 添加科技风格背景效果 */
+.mermaid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        linear-gradient(90deg, rgba(75, 137, 220, 0.03) 1px, transparent 1px),
+        linear-gradient(rgba(75, 137, 220, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: -1;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto !important;
+    background-color: transparent !important;
+    margin: 0 auto;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.05));
+}
+
+/* 深色模式适配 - GitHub风格 */
+:root[color-mode="dark"] .article-entry pre,
+:root[color-mode="dark"] .article-entry .highlight,
+:root[color-mode="dark"] .markdown-body pre,
+:root[color-mode="dark"] .markdown-body .highlight {
+    background-color: #0d1117;
+    border-color: #30363d;
+}
+
+:root[color-mode="dark"] .highlight .gutter {
+    background-color: #0d1117;
+    border-color: #30363d;
+}
+
+:root[color-mode="dark"] .highlight .gutter pre {
+    color: #6e7781;
+}
+
+:root[color-mode="dark"] .highlight .code pre {
+    background-color: #0d1117 !important;
+    color: #c9d1d9;
+}
+
+:root[color-mode="dark"] pre .comment {
+    color: #8b949e;
+}
+
+/* 深色模式下的Mermaid图表 */
+:root[color-mode="dark"] .mermaid {
+    background-color: rgba(29, 35, 42, 0.7);
+    border-color: rgba(118, 131, 144, 0.2);
+}
+
+:root[color-mode="dark"] .mermaid::before {
+    background:
+        linear-gradient(90deg, rgba(118, 131, 144, 0.05) 1px, transparent 1px),
+        linear-gradient(rgba(118, 131, 144, 0.05) 1px, transparent 1px);
+}
+
+/* 修复行内代码样式 - GitHub风格 */
+.markdown-body code:not([class*="language-"]) {
+    padding: 0.2em 0.4em;
+    margin: 0 0.2em;
+    font-size: 85%;
+    background-color: rgba(175, 184, 193, 0.2);
+    border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+:root[color-mode="dark"] .markdown-body code:not([class*="language-"]) {
+    background-color: rgba(110, 118, 129, 0.4);
+    color: #c9d1d9;
+}
+
+/* 修复代码块标题 - GitHub风格 */
+figure figcaption {
+    font-size: 85%;
+    padding: 8px 16px;
+    background-color: #f6f8fa;
+    border-bottom: 1px solid #d0d7de;
+    color: #24292f;
+}
+
+:root[color-mode="dark"] figure figcaption {
+    background-color: #161b22;
+    border-color: #30363d;
+    color: #8b949e;
+}
+
+/* 修复figure容器样式 */
+figure.highlight {
+    margin: 1.5em 0;
+    padding: 0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* 确保代码块内容紧凑，没有多余空白 */
+.highlight .code pre code {
+    padding: 0;
+    margin: 0;
+    white-space: pre;
+    display: block;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* 修复代码块中的表格样式，确保没有边距和填充 */
+.highlight table tbody tr {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* 确保代码块中的行号和代码内容垂直对齐 */
+.highlight .gutter pre,
+.highlight .code pre {
+    vertical-align: top;
+}
+
+/* 修复代码块中可能出现的滚动条样式 - GitHub风格 */
+.highlight .code pre::-webkit-scrollbar {
+    height: 8px;
+}
+
+.highlight .code pre::-webkit-scrollbar-thumb {
+    background: #d0d7de;
+    border-radius: 6px;
+}
+
+.highlight .code pre::-webkit-scrollbar-track {
+    background: #f6f8fa;
+}
+
+:root[color-mode="dark"] .highlight .code pre::-webkit-scrollbar-thumb {
+    background: #30363d;
+}
+
+:root[color-mode="dark"] .highlight .code pre::-webkit-scrollbar-track {
+    background: #0d1117;
+}
+
+/* 确保行号背景充满整个单元格高度 */
+.highlight .gutter::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f6f8fa;
+    z-index: -1;
+}
+
+:root[color-mode="dark"] .highlight .gutter::after {
+    background-color: #0d1117;
+}
+
+/* 代码语法高亮颜色 - GitHub风格 */
+.highlight .keyword,
+.highlight .selector-tag,
+.highlight .subst {
+    color: #cf222e;
+}
+
+.highlight .number,
+.highlight .literal,
+.highlight .variable,
+.highlight .template-variable,
+.highlight .tag .attr {
+    color: #0550ae;
+}
+
+.highlight .string,
+.highlight .doctag {
+    color: #0a3069;
+}
+
+.highlight .title,
+.highlight .section,
+.highlight .selector-id {
+    color: #8250df;
+}
+
+.highlight .type,
+.highlight .class .title {
+    color: #953800;
+}
+
+.highlight .tag,
+.highlight .name,
+.highlight .attribute {
+    color: #116329;
+}
+
+.highlight .regexp,
+.highlight .link {
+    color: #0550ae;
+}
+
+.highlight .symbol,
+.highlight .bullet {
+    color: #0550ae;
+}
+
+.highlight .built_in,
+.highlight .builtin-name {
+    color: #8250df;
+}
+
+.highlight .meta {
+    color: #6e7781;
+}
+
+.highlight .deletion {
+    color: #cf222e;
+}
+
+.highlight .addition {
+    color: #116329;
+}
+
+.highlight .emphasis {
+    font-style: italic;
+}
+
+.highlight .strong {
+    font-weight: bold;
+}
+
+/* 深色模式语法高亮 */
+:root[color-mode="dark"] .highlight .keyword,
+:root[color-mode="dark"] .highlight .selector-tag,
+:root[color-mode="dark"] .highlight .subst {
+    color: #ff7b72;
+}
+
+:root[color-mode="dark"] .highlight .number,
+:root[color-mode="dark"] .highlight .literal,
+:root[color-mode="dark"] .highlight .variable,
+:root[color-mode="dark"] .highlight .template-variable,
+:root[color-mode="dark"] .highlight .tag .attr {
+    color: #79c0ff;
+}
+
+:root[color-mode="dark"] .highlight .string,
+:root[color-mode="dark"] .highlight .doctag {
+    color: #a5d6ff;
+}
+
+:root[color-mode="dark"] .highlight .title,
+:root[color-mode="dark"] .highlight .section,
+:root[color-mode="dark"] .highlight .selector-id {
+    color: #d2a8ff;
+}
+
+:root[color-mode="dark"] .highlight .type,
+:root[color-mode="dark"] .highlight .class .title {
+    color: #ffa657;
+}
+
+:root[color-mode="dark"] .highlight .tag,
+:root[color-mode="dark"] .highlight .name,
+:root[color-mode="dark"] .highlight .attribute {
+    color: #7ee787;
+}
+
+:root[color-mode="dark"] .highlight .regexp,
+:root[color-mode="dark"] .highlight .link {
+    color: #79c0ff;
+}
+
+:root[color-mode="dark"] .highlight .symbol,
+:root[color-mode="dark"] .highlight .bullet {
+    color: #79c0ff;
+}
+
+:root[color-mode="dark"] .highlight .built_in,
+:root[color-mode="dark"] .highlight .builtin-name {
+    color: #d2a8ff;
+}
+
+:root[color-mode="dark"] .highlight .meta {
+    color: #8b949e;
+}
+
+:root[color-mode="dark"] .highlight .deletion {
+    color: #ffa198;
+}
+
+:root[color-mode="dark"] .highlight .addition {
+    color: #7ee787;
+}
+
+/* Mermaid 图表中的文本颜色 */
+.mermaid .label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* 确保 Mermaid 图表在深色模式下可见 */
+:root[color-mode="dark"] .mermaid text {
+    fill: #adbac7;
+}
