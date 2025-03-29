@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 100);
     }
 
-    // 检查 Ollama 可用性 - 完全重写
+    // 检查 Ollama 可用性 - 使用代理
     function checkOllamaAvailability() {
         log('检查 Ollama 可用性...');
 
@@ -431,16 +431,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // 添加状态消息
         addStatusMessage('正在检测 Ollama 服务...', 'info');
-        addStatusMessage('如果您是从远程访问，请安装 CORS 浏览器扩展', 'info');
 
-        // 尝试连接到 Ollama
-        fetch('http://localhost:11434/api/tags', {
+        // 尝试直接连接
+        tryDirectConnection()
+            .catch(error => {
+                log('直接连接失败，尝试代理连接:', error);
+                return tryProxyConnection();
+            })
+            .then(result => {
+                // 处理成功连接
+                ollamaEndpoint = result.endpoint;
+                useProxy = result.useProxy;
+
+                log('Ollama 连接成功:', { endpoint: ollamaEndpoint, useProxy });
+
+                simulationMode = false;
+                addStatusMessage('已成功连接到 Ollama 服务', 'success');
+
+                // 更新模型列表
+                updateModelList(result.data);
+            })
+            .catch(error => {
+                log('所有连接方式都失败:', error);
+                enableSimulationMode();
+            });
+    }
+
+    // 尝试直接连接
+    function tryDirectConnection() {
+        return fetch('http://localhost:11434/api/tags', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             },
-            // 添加超时
-            signal: AbortSignal.timeout(5000)
+            signal: AbortSignal.timeout(3000)
         })
             .then(response => {
                 if (!response.ok) {
@@ -449,26 +473,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
-                log('Ollama 可用，模型列表:', data);
+                log('直接连接成功，模型列表:', data);
+                return {
+                    endpoint: 'http://localhost:11434',
+                    data: data,
+                    useProxy: false
+                };
+            });
+    }
 
-                // 保存端点
-                ollamaEndpoint = 'http://localhost:11434';
+    // 尝试代理连接
+    function tryProxyConnection() {
+        addStatusMessage('尝试通过代理连接...', 'info');
 
-                simulationMode = false;
-                addStatusMessage('已成功连接到 Ollama 服务', 'success');
-
-                // 处理模型列表...
-                updateModelList(data);
+        // 使用我们的代理
+        return window.proxyFetch('http://localhost:11434/api/tags', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Proxy response was not ok');
+                }
+                return response.json();
             })
-            .catch(error => {
-                log('尝试本地连接失败，尝试其他方式:', error);
-
-                // 添加提示消息
-                addStatusMessage('无法直接连接到 Ollama 服务', 'warning');
-                addStatusMessage('请确保您已安装 CORS 浏览器扩展并启用', 'info');
-
-                // 切换到模拟模式
-                enableSimulationMode();
+            .then(data => {
+                log('代理连接成功，模型列表:', data);
+                return {
+                    endpoint: 'http://localhost:11434',
+                    data: data,
+                    useProxy: true
+                };
             });
     }
 
@@ -642,7 +679,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 30);
     }
 
-    // 发送请求到 Ollama - 完全重写
+    // 发送请求到 Ollama - 使用代理
     function sendToOllama(contentEl) {
         log('发送请求到 Ollama', currentModel, conversation);
 
@@ -666,12 +703,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // 使用保存的端点
         const apiUrl = ollamaEndpoint ? `${ollamaEndpoint}/api/chat` : 'http://localhost:11434/api/chat';
 
-        fetch(apiUrl, {
+        // 根据是否使用代理选择不同的 fetch 方法
+        const fetchFunction = useProxy ? window.proxyFetch : fetch;
+
+        fetchFunction(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify(requestBody),
+            stream: true
         })
             .then(response => {
                 if (!response.ok) {
@@ -746,17 +787,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // 添加模拟模式提示
                     contentEl.innerHTML += `<p>已自动切换到模拟模式，你可以继续使用 AI 助手</p>`;
-
-                    // 添加帮助提示
-                    contentEl.innerHTML += `<p>如果您是从远程访问，请参考<button class="ai-inline-help">使用帮助</button></p>`;
-
-                    // 添加内联帮助按钮事件
-                    setTimeout(() => {
-                        const helpBtn = contentEl.querySelector('.ai-inline-help');
-                        if (helpBtn) {
-                            helpBtn.addEventListener('click', showHelpDialog);
-                        }
-                    }, 0);
                 }
             });
     }
