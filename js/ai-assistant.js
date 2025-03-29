@@ -429,142 +429,186 @@ document.addEventListener('DOMContentLoaded', function () {
         // 清空模型选择器
         modelSelect.innerHTML = '<option value="checking">检测中...</option>';
 
-        // 尝试多个可能的 Ollama API 端点
-        const endpoints = [
-            '/api/ollama/tags',  // 代理服务器路径
-            'http://localhost:11434/api/tags'  // 本地直连路径
-        ];
-
-        // 依次尝试每个端点，而不是使用 Promise.any
-        tryNextEndpoint(endpoints, 0);
+        // 尝试直接连接本地 Ollama
+        tryDirectLocalConnection();
     }
 
-    // 递归尝试下一个端点
-    function tryNextEndpoint(endpoints, index) {
-        if (index >= endpoints.length) {
-            // 所有端点都失败了
-            handleOllamaUnavailable(new Error("所有连接尝试都失败了"));
-            return;
+    // 尝试直接连接本地 Ollama
+    function tryDirectLocalConnection() {
+        const localEndpoint = 'http://localhost:11434/api/tags';
+
+        log('尝试直接连接本地 Ollama...');
+
+        // 使用 JSONP 方式尝试绕过 CORS 限制
+        // 创建一个 script 元素来加载 JSONP
+        const script = document.createElement('script');
+        const callbackName = 'ollama_callback_' + Math.floor(Math.random() * 10000);
+
+        // 设置超时
+        const timeout = setTimeout(() => {
+            log('直接连接本地 Ollama 超时');
+            cleanup();
+            fallbackToSimulationMode();
+        }, 5000);
+
+        // 清理函数
+        function cleanup() {
+            delete window[callbackName];
+            document.body.removeChild(script);
+            clearTimeout(timeout);
         }
 
-        const endpoint = endpoints[index];
-        log(`尝试连接到 Ollama 端点: ${endpoint}`);
+        // 定义回调函数
+        window[callbackName] = function (data) {
+            log('成功获取 Ollama 模型列表:', data);
+            cleanup();
 
-        // 对于本地端点，先尝试直接访问，如果失败再使用探测方法
-        if (endpoint.includes('localhost')) {
+            // 设置端点
+            ollamaEndpoint = 'http://localhost:11434';
+            handleOllamaAvailable(data);
+        };
+
+        // 设置错误处理
+        script.onerror = function () {
+            log('JSONP 请求失败，尝试 iframe 方法');
+            cleanup();
+            tryIframeMethod();
+        };
+
+        // 设置 script 源
+        script.src = `${localEndpoint}?callback=${callbackName}`;
+        document.body.appendChild(script);
+    }
+
+    // 尝试使用 iframe 方法
+    function tryIframeMethod() {
+        log('尝试使用 iframe 方法连接本地 Ollama...');
+
+        // 创建一个隐藏的 iframe
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+
+        // 设置超时
+        const timeout = setTimeout(() => {
+            log('iframe 方法超时');
+            cleanup();
+            tryFetchWithCorsMode();
+        }, 3000);
+
+        // 清理函数
+        function cleanup() {
+            document.body.removeChild(iframe);
+            clearTimeout(timeout);
+        }
+
+        // 加载完成后尝试访问
+        iframe.onload = function () {
             try {
-                // 尝试直接访问本地端点
-                fetch(endpoint, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    signal: AbortSignal.timeout(3000) // 3秒超时
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        // 记录成功的端点
-                        ollamaEndpoint = endpoint.replace('/tags', '');
-                        log(`成功直接连接到本地端点: ${ollamaEndpoint}`);
-                        return response.json();
-                    })
+                // 尝试通过 iframe 访问本地 API
+                const result = iframe.contentWindow.fetch('http://localhost:11434/api/tags')
+                    .then(response => response.json())
                     .then(data => {
+                        log('iframe 方法成功:', data);
+                        cleanup();
+                        ollamaEndpoint = 'http://localhost:11434';
                         handleOllamaAvailable(data);
                     })
                     .catch(error => {
-                        log(`直接访问本地端点失败，尝试探测方法: ${error.message}`);
-                        // 如果直接访问失败，尝试探测方法
-                        probeLocalEndpoint(endpoints, index);
+                        log('iframe 方法失败:', error);
+                        cleanup();
+                        tryFetchWithCorsMode();
                     });
             } catch (error) {
-                // 如果 fetch 本身抛出错误（如 CORS），尝试探测方法
-                log(`直接访问本地端点出错，尝试探测方法: ${error.message}`);
-                probeLocalEndpoint(endpoints, index);
+                log('iframe 方法出错:', error);
+                cleanup();
+                tryFetchWithCorsMode();
             }
-            return;
+        };
+
+        // iframe 加载失败
+        iframe.onerror = function () {
+            log('iframe 加载失败');
+            cleanup();
+            tryFetchWithCorsMode();
+        };
+
+        // 设置 iframe 源为空白页
+        iframe.src = 'about:blank';
+        document.body.appendChild(iframe);
+    }
+
+    // 尝试使用 fetch 的 no-cors 模式
+    function tryFetchWithCorsMode() {
+        log('尝试使用 fetch no-cors 模式...');
+
+        fetch('http://localhost:11434/api/tags', {
+            method: 'GET',
+            mode: 'no-cors' // 尝试 no-cors 模式
+        })
+            .then(() => {
+                // 即使成功，我们也无法读取响应内容，但至少知道服务存在
+                log('no-cors 请求成功，服务可能存在');
+                ollamaEndpoint = 'http://localhost:11434';
+
+                // 尝试使用 WebSocket 连接
+                tryWebSocketConnection();
+            })
+            .catch(error => {
+                log('no-cors 请求失败:', error);
+                fallbackToSimulationMode();
+            });
+    }
+
+    // 尝试使用 WebSocket 连接
+    function tryWebSocketConnection() {
+        log('尝试使用 WebSocket 连接...');
+
+        try {
+            const ws = new WebSocket('ws://localhost:11434/api/ws');
+
+            ws.onopen = function () {
+                log('WebSocket 连接成功');
+                ws.send(JSON.stringify({
+                    type: 'tags'
+                }));
+            };
+
+            ws.onmessage = function (event) {
+                log('收到 WebSocket 消息:', event.data);
+                try {
+                    const data = JSON.parse(event.data);
+                    ws.close();
+                    handleOllamaAvailable(data);
+                } catch (error) {
+                    log('解析 WebSocket 消息失败:', error);
+                    ws.close();
+                    fallbackToSimulationMode();
+                }
+            };
+
+            ws.onerror = function (error) {
+                log('WebSocket 错误:', error);
+                fallbackToSimulationMode();
+            };
+
+            // 设置超时
+            setTimeout(() => {
+                if (ws.readyState !== WebSocket.CLOSED) {
+                    log('WebSocket 超时');
+                    ws.close();
+                    fallbackToSimulationMode();
+                }
+            }, 5000);
+        } catch (error) {
+            log('创建 WebSocket 失败:', error);
+            fallbackToSimulationMode();
         }
-
-        // 对于非本地端点，使用正常的 fetch
-        fetch(endpoint, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            signal: AbortSignal.timeout(5000) // 5秒超时
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                // 记录成功的端点
-                ollamaEndpoint = endpoint.replace('/tags', '');
-                log(`成功连接到端点: ${ollamaEndpoint}`);
-                return response.json();
-            })
-            .then(data => {
-                handleOllamaAvailable(data);
-            })
-            .catch(error => {
-                log(`端点 ${endpoint} 连接失败: ${error.message}`);
-                // 尝试下一个端点
-                tryNextEndpoint(endpoints, index + 1);
-            });
     }
 
-    // 使用图片探测本地端点
-    function probeLocalEndpoint(endpoints, index) {
-        const baseUrl = endpoints[index].replace('/api/tags', '');
-
-        // 使用 Image 对象探测本地服务是否可用
-        const probeImg = new Image();
-        const probeTimeout = setTimeout(() => {
-            log('本地 Ollama 探测超时');
-            probeImg.onload = probeImg.onerror = null;
-            tryNextEndpoint(endpoints, index + 1);
-        }, 2000);
-
-        probeImg.onload = function () {
-            clearTimeout(probeTimeout);
-            log('本地 Ollama 可能可用，尝试通过代理访问');
-            // 如果图片加载成功，说明本地服务可能在运行
-            // 我们仍然使用代理路径，但知道本地服务是可用的
-            ollamaEndpoint = '/api/ollama';
-            fetchOllamaModels(ollamaEndpoint + '/tags');
-        };
-
-        probeImg.onerror = function () {
-            clearTimeout(probeTimeout);
-            log('本地 Ollama 探测失败，尝试下一个端点');
-            tryNextEndpoint(endpoints, index + 1);
-        };
-
-        // 尝试加载一个小图片或图标，这通常会快速失败如果服务不可用
-        probeImg.src = `${baseUrl}/favicon.ico?` + new Date().getTime();
-    }
-
-    // 新增函数：通过代理获取 Ollama 模型
-    function fetchOllamaModels(endpoint) {
-        fetch(endpoint, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                handleOllamaAvailable(data);
-            })
-            .catch(error => {
-                log(`通过代理获取模型失败: ${error.message}`);
-                handleOllamaUnavailable(error);
-            });
+    // 回退到模拟模式
+    function fallbackToSimulationMode() {
+        log('所有连接方法都失败，回退到模拟模式');
+        handleOllamaUnavailable(new Error("无法连接到 Ollama 服务"));
     }
 
     // 处理 Ollama 可用的情况
@@ -769,9 +813,10 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         log('请求体:', JSON.stringify(requestBody));
+        log('使用端点:', ollamaEndpoint);
 
         // 使用当前可用的 Ollama 端点
-        fetch(`${ollamaEndpoint}/chat`, {
+        fetch(`${ollamaEndpoint}/api/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -835,22 +880,38 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error:', error);
 
-                // 添加错误消息
-                contentEl.innerHTML = `<p class="ai-error">请求失败: ${error.message}。请检查 Ollama 服务是否正常运行。</p>`;
+                // 如果是 CORS 错误，尝试通过其他方式发送
+                if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
+                    log('可能是 CORS 错误，尝试备用方法');
 
-                // 重置状态
-                isWaiting = false;
-                sendButton.disabled = inputEl.value.trim().length === 0;
+                    // 显示正在尝试备用方法的消息
+                    contentEl.innerHTML = '<p>正在尝试备用连接方法...</p>';
 
-                // 如果连接失败，切换到模拟模式
-                if (!simulationMode) {
-                    log('连接失败，切换到模拟模式');
-                    simulationMode = true;
-                    modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
-                    currentModel = 'simulation';
+                    // 这里可以添加备用方法，如 WebSocket 等
+                    // 但由于复杂度较高，这里简化为回退到模拟模式
+                    setTimeout(() => {
+                        contentEl.innerHTML = '<p class="ai-error">无法直接连接到 Ollama，已切换到模拟模式</p>';
+                        simulationMode = true;
+                        simulateStreamingResponse(contentEl);
+                    }, 1000);
+                } else {
+                    // 添加错误消息
+                    contentEl.innerHTML = `<p class="ai-error">请求失败: ${error.message}。请检查 Ollama 服务是否正常运行。</p>`;
 
-                    // 添加模拟模式提示
-                    contentEl.innerHTML += `<p>已自动切换到模拟模式，你可以继续使用 AI 助手</p>`;
+                    // 重置状态
+                    isWaiting = false;
+                    sendButton.disabled = inputEl.value.trim().length === 0;
+
+                    // 如果连接失败，切换到模拟模式
+                    if (!simulationMode) {
+                        log('连接失败，切换到模拟模式');
+                        simulationMode = true;
+                        modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
+                        currentModel = 'simulation';
+
+                        // 添加模拟模式提示
+                        contentEl.innerHTML += `<p>已自动切换到模拟模式，你可以继续使用 AI 助手</p>`;
+                    }
                 }
             });
     }
