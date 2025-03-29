@@ -18,6 +18,8 @@ if (pagePath === '/') {
   });
 }
 
+// 注释掉这部分代码
+/*
 // Scroll effect for header
 const header = document.querySelector('.header');
 let lastScroll = 0;
@@ -33,3 +35,4 @@ window.addEventListener('scroll', () => {
 
   lastScroll = currentScroll;
 });
+*/

@@ -1,0 +1,23 @@
+/* 强制固定Header */
+.header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+}
+
+body {
+    padding-top: 62px !important;
+}
+
+/* 为所有容器类型添加相同的顶部间距 */
+.container {
+    margin-top: 40px !important;
+}
+
+/* 以下特定容器类不需要了，可以移除 */
+/* .container.index {
+    margin-top: 40px !important;
+} */
