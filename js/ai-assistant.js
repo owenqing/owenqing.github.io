@@ -12,17 +12,6 @@ const aiAssistantConfig = {
             metaKey: true,  // Command 键 (Mac) 或 Windows 键
             ctrlKey: true   // Ctrl 键 (Windows/Linux)
         }
-    },
-    // 添加代理配置
-    proxy: {
-        enable: true,
-        // 默认使用 CORS Anywhere 服务，用户可以在设置中更改
-        url: "https://cors-anywhere.herokuapp.com/",
-        // 备用代理列表
-        alternatives: [
-            "https://corsproxy.io/?",
-            "https://api.allorigins.win/raw?url="
-        ]
     }
 };
 
@@ -436,23 +425,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // 清空模型选择器
         modelSelect.innerHTML = '<option value="checking">检测中...</option>';
 
-        // 检查是否在 GitHub Pages 环境
-        const isGitHubPages = window.location.hostname.includes('github.io') ||
-            window.location.protocol === 'https:';
-
-        // 获取 Ollama API URL (直接或通过代理)
-        const ollamaUrl = getOllamaApiUrl('api/tags');
-
-        log('使用 API URL:', ollamaUrl);
-
         // 请求 Ollama API 获取可用模型
-        fetch(ollamaUrl, {
+        fetch('http://localhost:11434/api/tags', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            // 添加超时
-            signal: AbortSignal.timeout(5000)
+            }
         })
             .then(response => {
                 if (!response.ok) {
@@ -486,11 +464,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     modelSelect.value = currentModel;
-
-                    // 添加成功连接提示
-                    if (isGitHubPages) {
-                        addStatusMessage('已通过代理成功连接到本地 Ollama 服务', 'success');
-                    }
                 } else {
                     // 没有可用模型
                     const option = document.createElement('option');
@@ -512,123 +485,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 currentModel = 'simulation';
 
                 // 添加模拟模式提示
-                if (isGitHubPages) {
-                    addStatusMessage('无法通过代理连接到本地 Ollama 服务。请确保：<br>1. 本地 Ollama 服务正在运行<br>2. 代理服务可用<br>3. 或尝试更换代理服务', 'error');
-
-                    // 添加代理设置选项
-                    addProxySettings();
-                } else {
-                    addStatusMessage('Ollama 服务不可用，已启用模拟模式。请确保 Ollama 已安装并运行。', 'error', 'https://ollama.ai');
-                }
+                addStatusMessage('Ollama 服务不可用，已启用模拟模式。请确保 Ollama 已安装并运行。', 'error', 'https://ollama.ai');
             });
-    }
-
-    // 获取 Ollama API URL (直接或通过代理)
-    function getOllamaApiUrl(endpoint) {
-        const baseUrl = 'http://localhost:11434/';
-        const fullUrl = baseUrl + endpoint;
-
-        // 检查是否需要使用代理
-        const isGitHubPages = window.location.hostname.includes('github.io') ||
-            window.location.protocol === 'https:';
-
-        if (isGitHubPages && aiAssistantConfig.proxy.enable) {
-            // 从本地存储获取用户选择的代理
-            const savedProxy = localStorage.getItem('aiAssistantProxy');
-            const proxyUrl = savedProxy || aiAssistantConfig.proxy.url;
-
-            return proxyUrl + fullUrl;
-        }
-
-        return fullUrl;
-    }
-
-    // 添加代理设置选项
-    function addProxySettings() {
-        const settingsEl = document.createElement('div');
-        settingsEl.className = 'ai-proxy-settings';
-
-        // 获取当前代理
-        const currentProxy = localStorage.getItem('aiAssistantProxy') || aiAssistantConfig.proxy.url;
-
-        // 创建代理选择器
-        let proxyOptions = `
-            <div class="ai-settings-header">代理设置</div>
-            <div class="ai-settings-description">选择一个代理服务来连接本地 Ollama:</div>
-            <select class="ai-proxy-select">
-                <option value="${aiAssistantConfig.proxy.url}" ${currentProxy === aiAssistantConfig.proxy.url ? 'selected' : ''}>
-                    默认代理
-                </option>
-        `;
-
-        // 添加备用代理选项
-        aiAssistantConfig.proxy.alternatives.forEach(proxy => {
-            proxyOptions += `
-                <option value="${proxy}" ${currentProxy === proxy ? 'selected' : ''}>
-                    备用代理 ${aiAssistantConfig.proxy.alternatives.indexOf(proxy) + 1}
-                </option>
-            `;
-        });
-
-        // 添加自定义代理选项
-        const customProxy = ![aiAssistantConfig.proxy.url, ...aiAssistantConfig.proxy.alternatives].includes(currentProxy) ? currentProxy : '';
-
-        proxyOptions += `
-                <option value="custom" ${customProxy ? 'selected' : ''}>自定义代理</option>
-            </select>
-            <div class="ai-custom-proxy" style="display: ${customProxy ? 'block' : 'none'}">
-                <input type="text" class="ai-custom-proxy-input" placeholder="输入代理URL" value="${customProxy}">
-            </div>
-            <button class="ai-proxy-save">保存并重新连接</button>
-        `;
-
-        settingsEl.innerHTML = proxyOptions;
-        conversationEl.appendChild(settingsEl);
-
-        // 添加事件监听
-        const proxySelect = settingsEl.querySelector('.ai-proxy-select');
-        const customProxyDiv = settingsEl.querySelector('.ai-custom-proxy');
-        const customProxyInput = settingsEl.querySelector('.ai-custom-proxy-input');
-        const saveButton = settingsEl.querySelector('.ai-proxy-save');
-
-        // 切换自定义代理输入框
-        proxySelect.addEventListener('change', function () {
-            if (this.value === 'custom') {
-                customProxyDiv.style.display = 'block';
-                customProxyInput.focus();
-            } else {
-                customProxyDiv.style.display = 'none';
-            }
-        });
-
-        // 保存代理设置
-        saveButton.addEventListener('click', function () {
-            let selectedProxy = proxySelect.value;
-
-            if (selectedProxy === 'custom') {
-                selectedProxy = customProxyInput.value.trim();
-
-                // 确保自定义代理URL以/结尾
-                if (selectedProxy && !selectedProxy.endsWith('/')) {
-                    selectedProxy += '/';
-                }
-
-                // 验证URL格式
-                if (!selectedProxy || !selectedProxy.startsWith('http')) {
-                    addStatusMessage('请输入有效的代理URL', 'error');
-                    return;
-                }
-            }
-
-            // 保存到本地存储
-            localStorage.setItem('aiAssistantProxy', selectedProxy);
-
-            // 提示用户
-            addStatusMessage('代理设置已保存，正在重新连接...', 'info');
-
-            // 重新检查连接
-            setTimeout(checkOllamaAvailability, 500);
-        });
     }
 
     // 添加状态消息
@@ -640,8 +498,6 @@ document.addEventListener('DOMContentLoaded', function () {
             statusMessage.classList.add('ai-status-error');
         } else if (type === 'warning') {
             statusMessage.classList.add('ai-status-warning');
-        } else if (type === 'success') {
-            statusMessage.classList.add('ai-status-success');
         }
 
         let messageHTML = `<p>${message}</p>`;
@@ -652,7 +508,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         statusMessage.innerHTML = messageHTML;
         conversationEl.appendChild(statusMessage);
-        conversationEl.scrollTop = conversationEl.scrollHeight;
     }
 
     // 添加上下文消息
@@ -784,10 +639,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         log('请求体:', JSON.stringify(requestBody));
 
-        // 获取 API URL (直接或通过代理)
-        const ollamaUrl = getOllamaApiUrl('api/chat');
-
-        fetch(ollamaUrl, {
+        fetch('http://localhost:11434/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
