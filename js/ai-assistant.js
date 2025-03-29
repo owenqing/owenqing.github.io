@@ -435,72 +435,189 @@ document.addEventListener('DOMContentLoaded', function () {
             'http://localhost:11434/api/tags'  // 本地直连路径
         ];
 
-        // 使用 Promise.any 尝试所有端点，使用第一个成功的
-        Promise.any(endpoints.map(endpoint =>
-            fetch(endpoint, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    // 记录成功的端点
-                    ollamaEndpoint = endpoint.replace('/tags', '');
-                    return response.json();
+        // 依次尝试每个端点，而不是使用 Promise.any
+        tryNextEndpoint(endpoints, 0);
+    }
+
+    // 递归尝试下一个端点
+    function tryNextEndpoint(endpoints, index) {
+        if (index >= endpoints.length) {
+            // 所有端点都失败了
+            handleOllamaUnavailable(new Error("所有连接尝试都失败了"));
+            return;
+        }
+
+        const endpoint = endpoints[index];
+        log(`尝试连接到 Ollama 端点: ${endpoint}`);
+
+        // 对于本地端点，先尝试直接访问，如果失败再使用探测方法
+        if (endpoint.includes('localhost')) {
+            try {
+                // 尝试直接访问本地端点
+                fetch(endpoint, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    signal: AbortSignal.timeout(3000) // 3秒超时
                 })
-        ))
-            .then(data => {
-                log('Ollama 可用，模型列表:', data);
-                simulationMode = false;
-
-                // 清空选择器
-                modelSelect.innerHTML = '';
-
-                // 添加模型选项
-                if (data.models && data.models.length > 0) {
-                    data.models.forEach(model => {
-                        const option = document.createElement('option');
-                        option.value = model.name;
-                        option.textContent = model.name;
-                        modelSelect.appendChild(option);
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        // 记录成功的端点
+                        ollamaEndpoint = endpoint.replace('/tags', '');
+                        log(`成功直接连接到本地端点: ${ollamaEndpoint}`);
+                        return response.json();
+                    })
+                    .then(data => {
+                        handleOllamaAvailable(data);
+                    })
+                    .catch(error => {
+                        log(`直接访问本地端点失败，尝试探测方法: ${error.message}`);
+                        // 如果直接访问失败，尝试探测方法
+                        probeLocalEndpoint(endpoints, index);
                     });
+            } catch (error) {
+                // 如果 fetch 本身抛出错误（如 CORS），尝试探测方法
+                log(`直接访问本地端点出错，尝试探测方法: ${error.message}`);
+                probeLocalEndpoint(endpoints, index);
+            }
+            return;
+        }
 
-                    // 设置默认模型
-                    currentModel = aiAssistantConfig.defaultModel || data.models[0].name;
-
-                    // 检查默认模型是否在列表中
-                    const modelExists = Array.from(modelSelect.options).some(opt => opt.value === currentModel);
-                    if (!modelExists && data.models.length > 0) {
-                        currentModel = data.models[0].name;
-                    }
-
-                    modelSelect.value = currentModel;
-                } else {
-                    // 没有可用模型
-                    const option = document.createElement('option');
-                    option.value = 'no-models';
-                    option.textContent = '没有可用模型';
-                    modelSelect.appendChild(option);
-                    currentModel = 'no-models';
-
-                    // 添加提示消息
-                    addStatusMessage('未检测到可用模型，请先安装模型', 'warning');
+        // 对于非本地端点，使用正常的 fetch
+        fetch(endpoint, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            signal: AbortSignal.timeout(5000) // 5秒超时
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                // 记录成功的端点
+                ollamaEndpoint = endpoint.replace('/tags', '');
+                log(`成功连接到端点: ${ollamaEndpoint}`);
+                return response.json();
+            })
+            .then(data => {
+                handleOllamaAvailable(data);
             })
             .catch(error => {
-                log('Ollama 不可用，启用模拟模式:', error);
-                simulationMode = true;
-
-                // 设置为模拟模式
-                modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
-                currentModel = 'simulation';
-
-                // 添加模拟模式提示
-                addStatusMessage('Ollama 服务不可用，已启用模拟模式。请确保 Ollama 已安装并运行。', 'error', 'https://ollama.ai');
+                log(`端点 ${endpoint} 连接失败: ${error.message}`);
+                // 尝试下一个端点
+                tryNextEndpoint(endpoints, index + 1);
             });
+    }
+
+    // 使用图片探测本地端点
+    function probeLocalEndpoint(endpoints, index) {
+        const baseUrl = endpoints[index].replace('/api/tags', '');
+
+        // 使用 Image 对象探测本地服务是否可用
+        const probeImg = new Image();
+        const probeTimeout = setTimeout(() => {
+            log('本地 Ollama 探测超时');
+            probeImg.onload = probeImg.onerror = null;
+            tryNextEndpoint(endpoints, index + 1);
+        }, 2000);
+
+        probeImg.onload = function () {
+            clearTimeout(probeTimeout);
+            log('本地 Ollama 可能可用，尝试通过代理访问');
+            // 如果图片加载成功，说明本地服务可能在运行
+            // 我们仍然使用代理路径，但知道本地服务是可用的
+            ollamaEndpoint = '/api/ollama';
+            fetchOllamaModels(ollamaEndpoint + '/tags');
+        };
+
+        probeImg.onerror = function () {
+            clearTimeout(probeTimeout);
+            log('本地 Ollama 探测失败，尝试下一个端点');
+            tryNextEndpoint(endpoints, index + 1);
+        };
+
+        // 尝试加载一个小图片或图标，这通常会快速失败如果服务不可用
+        probeImg.src = `${baseUrl}/favicon.ico?` + new Date().getTime();
+    }
+
+    // 新增函数：通过代理获取 Ollama 模型
+    function fetchOllamaModels(endpoint) {
+        fetch(endpoint, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                handleOllamaAvailable(data);
+            })
+            .catch(error => {
+                log(`通过代理获取模型失败: ${error.message}`);
+                handleOllamaUnavailable(error);
+            });
+    }
+
+    // 处理 Ollama 可用的情况
+    function handleOllamaAvailable(data) {
+        log('Ollama 可用，模型列表:', data);
+        simulationMode = false;
+
+        // 清空选择器
+        modelSelect.innerHTML = '';
+
+        // 添加模型选项
+        if (data.models && data.models.length > 0) {
+            data.models.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model.name;
+                option.textContent = model.name;
+                modelSelect.appendChild(option);
+            });
+
+            // 设置默认模型
+            currentModel = aiAssistantConfig.defaultModel || data.models[0].name;
+
+            // 检查默认模型是否在列表中
+            const modelExists = Array.from(modelSelect.options).some(opt => opt.value === currentModel);
+            if (!modelExists && data.models.length > 0) {
+                currentModel = data.models[0].name;
+            }
+
+            modelSelect.value = currentModel;
+        } else {
+            // 没有可用模型
+            const option = document.createElement('option');
+            option.value = 'no-models';
+            option.textContent = '没有可用模型';
+            modelSelect.appendChild(option);
+            currentModel = 'no-models';
+
+            // 添加提示消息
+            addStatusMessage('未检测到可用模型，请先安装模型', 'warning');
+        }
+    }
+
+    // 处理 Ollama 不可用的情况
+    function handleOllamaUnavailable(error) {
+        log('Ollama 不可用，启用模拟模式:', error);
+        simulationMode = true;
+
+        // 设置为模拟模式
+        modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
+        currentModel = 'simulation';
+
+        // 添加模拟模式提示
+        addStatusMessage('Ollama 服务不可用，已启用模拟模式。请确保 Ollama 已安装并运行。', 'error', 'https://ollama.ai');
     }
 
     // 添加状态消息
