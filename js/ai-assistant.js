@@ -429,8 +429,49 @@ document.addEventListener('DOMContentLoaded', function () {
         // 清空模型选择器
         modelSelect.innerHTML = '<option value="checking">检测中...</option>';
 
-        // 尝试直接连接本地 Ollama
-        tryDirectLocalConnection();
+        // 首先检查是否安装了桥接扩展
+        if (window.ollamaExtensionBridge) {
+            log('检测到 Ollama 桥接扩展');
+            useExtensionBridge();
+            return;
+        }
+
+        // 尝试通过 window.postMessage 与可能存在的扩展通信
+        window.addEventListener('message', function ollamaExtensionResponse(event) {
+            if (event.data && event.data.type === 'OLLAMA_EXTENSION_RESPONSE') {
+                log('收到扩展响应:', event.data);
+                window.removeEventListener('message', ollamaExtensionResponse);
+
+                if (event.data.success) {
+                    ollamaEndpoint = 'extension';
+                    handleOllamaAvailable(event.data.data);
+                } else {
+                    tryDirectLocalConnection();
+                }
+            }
+        }, { once: true });
+
+        // 发送消息尝试检测扩展
+        window.postMessage({ type: 'OLLAMA_EXTENSION_CHECK' }, '*');
+
+        // 设置超时，如果没有扩展响应，尝试直接连接
+        setTimeout(() => {
+            tryDirectLocalConnection();
+        }, 500);
+    }
+
+    // 使用扩展桥接
+    function useExtensionBridge() {
+        log('使用扩展桥接访问 Ollama');
+        window.ollamaExtensionBridge.getTags()
+            .then(data => {
+                ollamaEndpoint = 'extension';
+                handleOllamaAvailable(data);
+            })
+            .catch(error => {
+                log('扩展桥接失败:', error);
+                tryDirectLocalConnection();
+            });
     }
 
     // 尝试直接连接本地 Ollama
@@ -815,6 +856,12 @@ document.addEventListener('DOMContentLoaded', function () {
         log('请求体:', JSON.stringify(requestBody));
         log('使用端点:', ollamaEndpoint);
 
+        // 如果使用扩展桥接
+        if (ollamaEndpoint === 'extension' && window.ollamaExtensionBridge) {
+            handleExtensionStreamingResponse(requestBody, contentEl);
+            return;
+        }
+
         // 使用当前可用的 Ollama 端点
         fetch(`${ollamaEndpoint}/api/chat`, {
             method: 'POST',
@@ -914,6 +961,39 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             });
+    }
+
+    // 处理扩展桥接的流式响应
+    function handleExtensionStreamingResponse(requestBody, contentEl) {
+        let fullResponse = '';
+
+        window.ollamaExtensionBridge.streamChat(requestBody,
+            // 进度回调
+            (chunk) => {
+                fullResponse += chunk;
+                updateStreamingContent(contentEl, fullResponse);
+            },
+            // 完成回调
+            () => {
+                finishResponse(fullResponse, contentEl);
+            },
+            // 错误回调
+            (error) => {
+                contentEl.innerHTML = `<p class="ai-error">请求失败: ${error}。请检查 Ollama 服务是否正常运行。</p>`;
+                isWaiting = false;
+                sendButton.disabled = inputEl.value.trim().length === 0;
+
+                // 如果连接失败，切换到模拟模式
+                if (!simulationMode) {
+                    log('连接失败，切换到模拟模式');
+                    simulationMode = true;
+                    modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
+                    currentModel = 'simulation';
+
+                    contentEl.innerHTML += `<p>已自动切换到模拟模式，你可以继续使用 AI 助手</p>`;
+                }
+            }
+        );
     }
 
     // 更新流式内容
@@ -1220,5 +1300,59 @@ document.addEventListener('DOMContentLoaded', function () {
                 checkOllamaAvailability();
             }
         }, 30000); // 30秒
+    }
+
+    // 在模拟模式下显示扩展安装指南
+    function showExtensionGuide() {
+        const guideEl = document.createElement('div');
+        guideEl.className = 'ai-extension-guide';
+        guideEl.innerHTML = `
+            <h3>安装 Ollama 桥接扩展以获得最佳体验</h3>
+            <p>由于浏览器安全限制，网站无法直接访问本地 Ollama 服务。安装我们的浏览器扩展可以解决这个问题。</p>
+            <div class="ai-extension-buttons">
+                <a href="https://your-website.com/ollama-bridge-extension.zip" class="ai-extension-button" download>下载扩展</a>
+                <button class="ai-extension-guide-button">查看安装指南</button>
+            </div>
+        `;
+
+        conversationEl.appendChild(guideEl);
+
+        // 添加安装指南按钮事件
+        guideEl.querySelector('.ai-extension-guide-button').addEventListener('click', function () {
+            showInstallationInstructions();
+        });
+    }
+
+    // 显示安装指南
+    function showInstallationInstructions() {
+        const modal = document.createElement('div');
+        modal.className = 'ai-modal';
+        modal.innerHTML = `
+            <div class="ai-modal-content">
+                <h3>Ollama 桥接扩展安装指南</h3>
+                <ol>
+                    <li>下载扩展文件</li>
+                    <li>解压缩下载的文件</li>
+                    <li>打开浏览器的扩展页面：
+                        <ul>
+                            <li>Chrome: 访问 chrome://extensions/</li>
+                            <li>Edge: 访问 edge://extensions/</li>
+                            <li>Firefox: 访问 about:addons</li>
+                        </ul>
+                    </li>
+                    <li>启用"开发者模式"</li>
+                    <li>点击"加载已解压的扩展"（Chrome/Edge）或"临时加载附加组件"（Firefox）</li>
+                    <li>选择解压后的扩展文件夹</li>
+                    <li>刷新本页面</li>
+                </ol>
+                <button class="ai-modal-close">关闭</button>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        modal.querySelector('.ai-modal-close').addEventListener('click', function () {
+            document.body.removeChild(modal);
+        });
     }
 }); 
