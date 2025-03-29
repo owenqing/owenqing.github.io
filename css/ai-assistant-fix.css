@@ -218,3 +218,56 @@
 :root[color-mode="dark"] .ai-assistant-send:disabled {
     background-color: #555;
 }
+
+/* 状态消息样式 */
+.ai-status-message {
+    margin: 8px 0;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.ai-status-message.info {
+    background-color: #e8f4fd;
+    color: #0366d6;
+    border-left: 3px solid #0366d6;
+}
+
+.ai-status-message.success {
+    background-color: #e6ffed;
+    color: #22863a;
+    border-left: 3px solid #22863a;
+}
+
+.ai-status-message.warning {
+    background-color: #fff5e5;
+    color: #e36209;
+    border-left: 3px solid #e36209;
+}
+
+.ai-status-message.error {
+    background-color: #ffeef0;
+    color: #d73a49;
+    border-left: 3px solid #d73a49;
+}
+
+/* 深色模式适配 */
+:root[color-mode="dark"] .ai-status-message.info {
+    background-color: rgba(3, 102, 214, 0.1);
+    color: #79b8ff;
+}
+
+:root[color-mode="dark"] .ai-status-message.success {
+    background-color: rgba(34, 134, 58, 0.1);
+    color: #85e89d;
+}
+
+:root[color-mode="dark"] .ai-status-message.warning {
+    background-color: rgba(227, 98, 9, 0.1);
+    color: #ffab70;
+}
+
+:root[color-mode="dark"] .ai-status-message.error {
+    background-color: rgba(215, 58, 73, 0.1);
+    color: #f97583;
+}

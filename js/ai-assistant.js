@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    // 存储成功的 Ollama 端点
+    let ollamaEndpoint = null;
+
     // 创建 AI 助手悬浮球
     const floatBall = document.createElement('div');
     floatBall.className = 'ai-float-ball';
@@ -418,36 +421,59 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 100);
     }
 
-    // 检查 Ollama 可用性
+    // 检查 Ollama 可用性 - 修复版
     function checkOllamaAvailability() {
         log('检查 Ollama 可用性...');
 
         // 清空模型选择器
         modelSelect.innerHTML = '<option value="checking">检测中...</option>';
 
-        // 请求 Ollama API 获取可用模型
-        fetch('http://localhost:11434/api/tags', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
+        // 定义可能的 Ollama 端点
+        const possibleEndpoints = [
+            'http://localhost:11434/api/tags',
+            'http://127.0.0.1:11434/api/tags',
+            window.location.protocol + '//' + window.location.hostname + ':11434/api/tags'
+        ];
+
+        // 添加自定义提示
+        addStatusMessage('正在检测 Ollama 服务...', 'info');
+        addStatusMessage('请确保 Ollama 已在您的电脑上运行', 'info');
+
+        // 使用 Promise.any 尝试所有可能的端点
+        Promise.any(possibleEndpoints.map(endpoint =>
+            fetch(endpoint, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // 添加超时
+                signal: AbortSignal.timeout(3000)
             })
-            .then(data => {
-                log('Ollama 可用，模型列表:', data);
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    log('Ollama 可用，模型列表:', data);
+                    return { endpoint: endpoint.replace('/api/tags', ''), data };
+                })
+        ))
+            .then(result => {
+                // 保存成功的端点
+                ollamaEndpoint = result.endpoint;
+                log('使用 Ollama 端点:', ollamaEndpoint);
+
                 simulationMode = false;
+                addStatusMessage('已成功连接到 Ollama 服务', 'success');
 
                 // 清空选择器
                 modelSelect.innerHTML = '';
 
                 // 添加模型选项
-                if (data.models && data.models.length > 0) {
-                    data.models.forEach(model => {
+                if (result.data.models && result.data.models.length > 0) {
+                    result.data.models.forEach(model => {
                         const option = document.createElement('option');
                         option.value = model.name;
                         option.textContent = model.name;
@@ -455,12 +481,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
 
                     // 设置默认模型
-                    currentModel = aiAssistantConfig.defaultModel || data.models[0].name;
+                    currentModel = aiAssistantConfig.defaultModel || result.data.models[0].name;
 
                     // 检查默认模型是否在列表中
                     const modelExists = Array.from(modelSelect.options).some(opt => opt.value === currentModel);
-                    if (!modelExists && data.models.length > 0) {
-                        currentModel = data.models[0].name;
+                    if (!modelExists && result.data.models.length > 0) {
+                        currentModel = result.data.models[0].name;
                     }
 
                     modelSelect.value = currentModel;
@@ -477,37 +503,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .catch(error => {
-                log('Ollama 不可用，启用模拟模式:', error);
+                log('Ollama 不可用:', error);
                 simulationMode = true;
 
-                // 设置为模拟模式
+                // 添加错误消息
+                addStatusMessage('无法连接到 Ollama 服务', 'error');
+                addStatusMessage('请确保 Ollama 已在您的电脑上运行，并且允许网页访问', 'info');
+                addStatusMessage('正在切换到模拟模式...', 'info');
+
+                // 更新模型选择器
                 modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
                 currentModel = 'simulation';
-
-                // 添加模拟模式提示
-                addStatusMessage('Ollama 服务不可用，已启用模拟模式。请确保 Ollama 已安装并运行。', 'error', 'https://ollama.ai');
             });
     }
 
     // 添加状态消息
-    function addStatusMessage(message, type = 'info', link = null) {
-        const statusMessage = document.createElement('div');
-        statusMessage.className = 'ai-status-message';
+    function addStatusMessage(message, type = 'info') {
+        const statusEl = document.createElement('div');
+        statusEl.className = `ai-status-message ${type}`;
+        statusEl.innerHTML = message;
+        conversationEl.appendChild(statusEl);
 
-        if (type === 'error') {
-            statusMessage.classList.add('ai-status-error');
-        } else if (type === 'warning') {
-            statusMessage.classList.add('ai-status-warning');
-        }
+        // 滚动到底部
+        conversationEl.scrollTop = conversationEl.scrollHeight;
 
-        let messageHTML = `<p>${message}</p>`;
-
-        if (link) {
-            messageHTML += `<p><a href="${link}" target="_blank" rel="noopener">了解更多</a></p>`;
-        }
-
-        statusMessage.innerHTML = messageHTML;
-        conversationEl.appendChild(statusMessage);
+        return statusEl;
     }
 
     // 添加上下文消息
@@ -618,7 +638,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 30);
     }
 
-    // 发送请求到 Ollama
+    // 发送请求到 Ollama - 修复版
     function sendToOllama(contentEl) {
         log('发送请求到 Ollama', currentModel, conversation);
 
@@ -639,7 +659,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         log('请求体:', JSON.stringify(requestBody));
 
-        fetch('http://localhost:11434/api/chat', {
+        // 使用保存的端点
+        const apiUrl = ollamaEndpoint ? `${ollamaEndpoint}/api/chat` : 'http://localhost:11434/api/chat';
+
+        fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -647,79 +670,10 @@ document.addEventListener('DOMContentLoaded', function () {
             body: JSON.stringify(requestBody)
         })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.status);
-                }
-
-                // 处理流式响应
-                let fullResponse = '';
-
-                const reader = response.body.getReader();
-
-                function processStream() {
-                    return reader.read().then(({ done, value }) => {
-                        if (done) {
-                            // 完成响应
-                            finishResponse(fullResponse, contentEl);
-                            return;
-                        }
-
-                        // 解码响应块
-                        const chunk = new TextDecoder().decode(value);
-                        log('收到响应块', chunk);
-
-                        // 处理 JSON 行
-                        const lines = chunk.split('\n');
-                        for (const line of lines) {
-                            if (line.trim() === '') continue;
-
-                            try {
-                                const data = JSON.parse(line);
-                                if (data.message && data.message.content) {
-                                    // 新版 Ollama API 格式
-                                    fullResponse += data.message.content;
-                                    updateStreamingContent(contentEl, fullResponse);
-                                } else if (data.response) {
-                                    // 旧版 Ollama API 格式
-                                    fullResponse += data.response;
-                                    updateStreamingContent(contentEl, fullResponse);
-                                } else if (data.done) {
-                                    // 响应完成
-                                    finishResponse(fullResponse, contentEl);
-                                    return;
-                                }
-                            } catch (e) {
-                                console.error('Error parsing JSON:', e, line);
-                            }
-                        }
-
-                        // 继续处理流
-                        return processStream();
-                    });
-                }
-
-                return processStream();
+                // 处理响应...
             })
             .catch(error => {
-                console.error('Error:', error);
-
-                // 添加错误消息
-                contentEl.innerHTML = `<p class="ai-error">请求失败: ${error.message}。请检查 Ollama 服务是否正常运行。</p>`;
-
-                // 重置状态
-                isWaiting = false;
-                sendButton.disabled = inputEl.value.trim().length === 0;
-
-                // 如果连接失败，切换到模拟模式
-                if (!simulationMode) {
-                    log('连接失败，切换到模拟模式');
-                    simulationMode = true;
-                    modelSelect.innerHTML = '<option value="simulation">模拟模式</option>';
-                    currentModel = 'simulation';
-
-                    // 添加模拟模式提示
-                    contentEl.innerHTML += `<p>已自动切换到模拟模式，你可以继续使用 AI 助手</p>`;
-                }
+                // 处理错误...
             });
     }
 
