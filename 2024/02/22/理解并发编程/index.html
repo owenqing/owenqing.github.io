@@ -66,6 +66,7 @@
                                                   <link rel="stylesheet" href="/css/ai-assistant.css">
                                                   <link rel="stylesheet" href="/css/ai-assistant-float.css">
                                                   <link rel="stylesheet" href="/css/ai-assistant-markdown.css">
+                                                  <link rel="stylesheet" href="/css/footer-fix.css">
 
                                                   <!-- 添加header效果脚本 -->
                                                   <!-- <script defer type="text/javascript" src="/js/headerEffect.js"></script> -->
@@ -73,6 +74,7 @@
                                                   <link rel="stylesheet" href="/css/header-fix.css">
 <meta name="generator" content="Hexo 7.3.0"></head>
 <script defer src="/js/ai-assistant.js"></script>
+<script defer src="/js/footer-fix.js"></script>
 
   <body>
     <div id="app">
@@ -350,23 +352,6 @@
                                     
                                 </div>
                                 
-  <div id="btn-catalog" class="btn-catalog">
-    <i class="iconfont icon-catalog"></i>
-  </div>
-  <div class="post-catalog hidden" id="catalog">
-    <div class="title">Contents</div>
-    <div class="catalog-content">
-      
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BC%98%E8%B5%B7"><span class="toc-text">1. 缘起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B"><span class="toc-text">2. 并发模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-text">多线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B"><span class="toc-text">多进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E7%A8%8B"><span class="toc-text">协程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B9%B6%E5%8F%91%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-text">3. 并发设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-text">案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F"><span class="toc-text">并发模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1-Lock-Free"><span class="toc-text">基于消息通信 (Lock Free)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98-Lock"><span class="toc-text">基于共享内存 (Lock)</span></a></li></ol></li></ol></li></ol>
-      
-    </div>
-  </div>
-
-  
-<script src="/js/catalog.js"></script>
-
-
-
 
                                   
                                     <div class="comments-container">
@@ -383,7 +368,8 @@
                               </div>
                               
             
-  <div class="footer">
+  <div class="footer"
+    style="position: fixed; bottom: 0; width: 100%; transform: translateY(100%); transition: transform 0.3s ease-in-out; z-index: 1000;">
     <div class="social">
       <ul>
         
@@ -422,6 +408,28 @@
         
           
   </div>
+
+  <script>
+    // 滚动监听脚本，控制footer显示
+    (function () {
+      // 获取footer元素
+      const footer = document.querySelector('.footer');
+      if (footer) {
+        // 确保初始状态隐藏
+        footer.style.transform = 'translateY(100%)';
+
+        // 添加滚动监听
+        window.addEventListener('scroll', function () {
+          // 只有向下滚动超过50px才显示（降低阈值使其更容易显示）
+          if (window.scrollY > 50) {
+            footer.style.transform = 'translateY(0)';
+          } else {
+            footer.style.transform = 'translateY(100%)';
+          }
+        });
+      }
+    })();
+  </script>
         </div>
 
         <div class="tools-bar">
