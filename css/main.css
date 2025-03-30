@@ -1672,7 +1672,8 @@ body[data-theme='dark'] .header.scrolled {
 .container {
   flex: 1 0 auto;
   width: 50%;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   padding-bottom: 60px;
 }
 
@@ -2442,18 +2443,7 @@ body[data-theme='dark'] .navbar ul li.active a {
 }
 
 .footer .social {
-  margin-bottom: 15px;
-  display: flex;
-  justify-content: center;
-}
-
-.footer .social ul {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
+  display: none !important;
 }
 
 .footer .footer-more {
@@ -2480,6 +2470,7 @@ body[data-theme='dark'] .navbar ul li.active a {
   flex-direction: column;
   padding-bottom: 20px;
   margin-top: 40px;
+  margin-bottom: 46px;
 }
 
 /* 调整文章列表样式 */
@@ -2840,6 +2831,10 @@ body[data-theme='dark'] .post-item:hover .time-m-d {
 body {
   padding-top: 62px !important;
   /* 使用!important确保优先级 */
+}
+
+html body .container.tag-index {
+  margin-bottom: 46px !important;
 }
 .footer {
   width: 100%;
