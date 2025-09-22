@@ -1,0 +1,463 @@
+/*
+  Zen Minimal Theme Overrides
+  A calm, uncluttered aesthetic with generous whitespace and muted tones.
+  Palette: off-white (paper), greige, soft ink, moss green accents.
+*/
+
+:root {
+    --zen-paper: #F9F8F6;
+    /* 米白 */
+    --zen-greige: #d9d3c7;
+    /* 灰褐 */
+    --zen-ink: #2D2D2D;
+    /* 浅墨（柔和深灰） */
+    --zen-ink-sub: #4a4a4a;
+    --zen-moss: #6b8f71;
+    /* 苔绿（点缀） */
+    --zen-border: rgba(0, 0, 0, 0.08);
+    --zen-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --zen-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+    /* Extended palette */
+    --bg-primary: #F9F8F6;
+    --bg-card: #FFFFFF;
+    --text-main: #2D2D2D;
+    --text-secondary: #666666;
+    --text-muted: #888888;
+    --accent: #9C9C8B;
+    --code-bg: #F0F0F0;
+}
+
+[color-mode="light"] body {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-main) !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
+    font-size: 1.7rem;
+    letter-spacing: 0.02em;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Subtle washi (washi paper) texture */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        repeating-linear-gradient(45deg,
+            rgba(230, 228, 220, 0.03),
+            rgba(230, 228, 220, 0.03) 10px,
+            rgba(230, 228, 220, 0.01) 10px,
+            rgba(230, 228, 220, 0.01) 20px);
+    z-index: 0;
+    /* above background, below content */
+    opacity: 0.8;
+}
+
+/* ensure stacking context places content above texture */
+body>* {
+    position: relative;
+    z-index: 1;
+}
+
+/* Reduce global ornamentation */
+* {
+    text-shadow: none !important;
+    box-sizing: border-box;
+}
+
+/* Header: remove gradients, glows, animations; keep a thin border only */
+.header {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
+
+.header::before,
+.header::after,
+.blog-title::before,
+.blog-title::after,
+.blog-title .outer-orbit,
+.blog-title .electron,
+.blog-title .electron-yellow {
+    display: none !important;
+}
+
+.navbar {
+    max-width: 860px !important;
+    padding: 0 16px !important;
+    margin: 0 auto;
+}
+
+.blog-title {
+    padding-left: 0 !important;
+    margin: 0 18px 0 0 !important;
+    color: var(--zen-ink) !important;
+    font-weight: 500 !important;
+    font-size: 2.0rem !important;
+}
+
+.navbar ul li {
+    margin: 0 12px !important;
+}
+
+.navbar ul li a {
+    color: var(--text-secondary) !important;
+    padding: 6px 10px !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    transition: none !important;
+    font-weight: 400 !important;
+}
+
+.navbar ul li a:hover,
+.navbar ul li.active a {
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+    transform: none !important;
+}
+
+/* Layout breathing space */
+.container {
+    max-width: 860px !important;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+.index .post-list,
+.friend-index .friend-list,
+.archives .post-list,
+.tag-index .tag-list,
+.about-index .markdown-body {
+    padding: 0 8px !important;
+}
+
+/* Homepage/post list cards: zen minimal */
+.post-item {
+    background: #FFFFFF !important;
+    border: none !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    transition: none !important;
+    padding: 20px 24px !important;
+}
+
+.post-item:hover {
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.post-item .time-m-d {
+    background: transparent !important;
+    color: var(--zen-ink-sub) !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+
+.post-item .title {
+    font-weight: 400 !important;
+    letter-spacing: 0.02em !important;
+    color: var(--text-main) !important;
+    margin: 0;
+}
+
+/* Footer: minimal and quiet */
+.footer {
+    background: transparent !important;
+    border-top: 1px solid var(--zen-border) !important;
+    color: var(--zen-ink-sub) !important;
+    padding: 20px 0;
+}
+
+/* Markdown typography for meditation-friendly reading */
+.markdown-body {
+    color: var(--text-main) !important;
+    line-height: 1.8 !important;
+    font-weight: 400 !important;
+    font-size: 1.7rem !important;
+    letter-spacing: 0.02em !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    background: transparent !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    font-variant-east-asian: proportional-width;
+    word-break: break-word;
+    text-align: justify;
+    padding: 20px 0;
+}
+
+/* 标题样式 */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+    color: var(--text-main) !important;
+    font-weight: 500 !important;
+    margin-top: 1.5em !important;
+    margin-bottom: 1em !important;
+    border-bottom: 0 !important;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+}
+
+.markdown-body h1 {
+    font-size: 2.0em !important;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
+
+.markdown-body h2 {
+    font-size: 1.75em !important;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
+
+.markdown-body h3 {
+    font-size: 1.5em !important;
+}
+
+.markdown-body h4 {
+    font-size: 1.25em !important;
+}
+
+.markdown-body h5 {
+    font-size: 1em !important;
+}
+
+.markdown-body h6 {
+    font-size: 1em !important;
+    color: var(--text-muted) !important;
+}
+
+.markdown-body p {
+    margin-bottom: 1.5em !important;
+    margin-top: 0 !important;
+    letter-spacing: 0.02em;
+    word-break: break-word;
+}
+
+/* 中英文混排优化 */
+.markdown-body p en,
+.markdown-body span[lang="en"] {
+    margin: 0 0.1em;
+}
+
+/* 列表样式优化 */
+.markdown-body ul,
+.markdown-body ol {
+    margin-top: 0 !important;
+    margin-bottom: 1.5em !important;
+    padding-left: 2em !important;
+}
+
+.markdown-body li {
+    margin-bottom: 0.25em !important;
+}
+
+.markdown-body ul li {
+    list-style-type: disc !important;
+}
+
+.markdown-body ol li {
+    list-style-type: decimal !important;
+}
+
+.markdown-body li p {
+    margin-top: 0.5em !important;
+    margin-bottom: 0.5em !important;
+}
+
+.markdown-body ol li {
+    padding-left: 0.5em !important;
+}
+
+/* 技术术语样式 */
+.markdown-body code {
+    background-color: var(--code-bg) !important;
+    color: var(--text-main) !important;
+    padding: 0.2em 0.4em !important;
+    border-radius: 3px !important;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+    font-size: 0.85em !important;
+}
+
+.markdown-body pre {
+    background-color: var(--code-bg) !important;
+    padding: 1em !important;
+    border-radius: 8px !important;
+    overflow: auto !important;
+    margin-top: 0 !important;
+    margin-bottom: 1.5em !important;
+    font-size: 0.85em !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.markdown-body pre code {
+    background: transparent !important;
+    padding: 0 !important;
+    font-size: 0.85em !important;
+    display: block;
+    overflow-x: auto;
+}
+
+.markdown-body a {
+    color: var(--zen-moss) !important;
+    border-bottom: 1px solid rgba(107, 143, 113, 0.25) !important;
+}
+
+.markdown-body a:hover {
+    color: #5c7f64 !important;
+    border-bottom-color: rgba(107, 143, 113, 0.4) !important;
+}
+
+.markdown-body blockquote {
+    background: rgba(217, 211, 199, 0.25) !important;
+    border-left: 3px solid var(--zen-greige) !important;
+    color: var(--zen-ink-sub) !important;
+    font-style: normal !important;
+    padding: 0 1em !important;
+    margin: 0 0 1.5em !important;
+    border-radius: 0 8px 8px 0;
+}
+
+.markdown-body hr {
+    height: 0.25em;
+    padding: 0;
+    margin: 1.5em 0;
+    background-color: var(--zen-border);
+    border: 0;
+}
+
+/* Article reading area */
+.container.post-details,
+.post-content {
+    background: var(--bg-primary) !important;
+}
+
+.post-content {
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.03) !important;
+    border-radius: 8px !important;
+    padding: 24px !important;
+    background: var(--bg-card) !important;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .post-content {
+        padding: 16px !important;
+    }
+}
+
+/* Remove ornaments inside reading area */
+.markdown-body img {
+    box-shadow: none !important;
+    margin-top: 1.5em !important;
+    margin-bottom: 1.5em !important;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.post-title {
+    font-weight: 500 !important;
+    font-size: 2.0rem !important;
+    line-height: 1.4 !important;
+    text-align: center !important;
+    color: var(--text-main) !important;
+    letter-spacing: 0.02em;
+    margin: 0 0 1rem;
+}
+
+/* Subtitle (time) */
+.post-details .post-attach {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 1.4rem !important;
+    color: var(--text-muted) !important;
+}
+
+.post-details .post-attach .post-pubtime i {
+    font-size: 1.4rem !important;
+    color: var(--text-muted) !important;
+    font-weight: 400;
+}
+
+/* 表格样式 */
+.markdown-body table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    border-radius: 8px;
+}
+
+.markdown-body table th {
+    font-weight: 600;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+    padding: 6px 13px;
+    border: 1px solid var(--zen-border);
+}
+
+.markdown-body table tr {
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--zen-border);
+}
+
+.markdown-body table tr:nth-child(2n) {
+    background-color: var(--bg-primary);
+}
+
+/* 代码高亮区域样式 */
+.markdown-body .highlight {
+    background-color: var(--code-bg) !important;
+    border-radius: 8px !important;
+    margin: 1.5em 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    overflow: hidden;
+}
+
+.markdown-body .highlight table {
+    margin: 0 !important;
+    width: 100% !important;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.markdown-body .highlight pre,
+.markdown-body .highlight code {
+    background-color: var(--code-bg) !important;
+    color: var(--text-main) !important;
+    border: none !important;
+}
+
+.markdown-body .highlight figcaption {
+    padding: 0.5em 1em !important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    border-radius: 8px 8px 0 0 !important;
+    font-size: 0.85em !important;
+    color: var(--text-muted) !important;
+}

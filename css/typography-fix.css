@@ -1,0 +1,211 @@
+/* 
+  Typography fixes for better Chinese-English mixed typesetting
+  中英文混排优化
+*/
+
+/* 基础段落样式 */
+.markdown-body p {
+  text-align: justify;
+  word-break: break-word;
+  word-wrap: break-word;
+  line-height: 1.8;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+}
+
+/* 英文单词和数字在中文环境中的处理 */
+.markdown-body p en,
+.markdown-body p .en,
+.markdown-body span[lang="en"] {
+  margin: 0 0.1em;
+  letter-spacing: 0.02em;
+}
+
+.markdown-body p cn,
+.markdown-body p .cn,
+.markdown-body span[lang="zh"] {
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* 标点符号优化 */
+.markdown-body p > * {
+  word-wrap: break-word;
+}
+
+/* 引号处理 */
+.markdown-body p q::before,
+.markdown-body p q::after {
+  content: none;
+}
+
+/* 优化标点符号的显示 */
+.markdown-body p > span {
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+/* 优化字体渲染 */
+.markdown-body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+}
+
+/* 中文标点符号优化 */
+.markdown-body p > span:not([lang]):not(.class):not(.en) {
+  /* 避免标点符号出现在行首 */
+  word-break: keep-all;
+}
+
+/* 列表项优化 */
+.markdown-body li {
+  text-align: justify;
+}
+
+/* 技术术语样式 */
+.markdown-body code {
+  background-color: #F0F0F0 !important;
+  color: #2D2D2D !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 3px !important;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+  font-size: 0.85em !important;
+}
+
+/* 代码块样式 */
+.markdown-body pre {
+  background-color: #F0F0F0 !important;
+  padding: 1em !important;
+  border-radius: 3px !important;
+  overflow: auto !important;
+  margin-top: 0 !important;
+  margin-bottom: 1.5em !important;
+  font-size: 0.85em !important;
+}
+
+.markdown-body pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  display: block;
+  overflow-x: auto;
+}
+
+/* 引用块样式 */
+.markdown-body blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+  margin: 0 0 1.5em;
+}
+
+.markdown-body blockquote > :first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* 标题样式 */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  line-height: 1.25;
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+  font-weight: 500;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+.markdown-body h2 {
+  font-size: 1.75em;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #6a737d;
+}
+
+/* 列表样式 */
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+}
+
+.markdown-body ul li {
+  list-style-type: disc;
+}
+
+.markdown-body ol li {
+  list-style-type: decimal;
+}
+
+.markdown-body li + li {
+  margin-top: 0.25em;
+}
+
+/* 表格样式 */
+.markdown-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+}
+
+.markdown-body table th {
+  font-weight: 600;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #c6cbd1;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+/* 分割线样式 */
+.markdown-body hr {
+  height: 0.25em;
+  padding: 0;
+  margin: 1.5em 0;
+  background-color: #e1e4e8;
+  border: 0;
+}

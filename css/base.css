@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html,
@@ -8,9 +9,11 @@ body {
   background-color: var(--bg-body);
   color: var(--color-text-base);
   font-size: 10px;
-  letter-spacing: 0.01rem;
+  letter-spacing: 0.02rem;
   transition: color 400ms ease-in-out 0s, background-color 400ms ease-in-out 0s;
-  font-family: Consolas, "Liberation Mono", Menlo, Monaco, "Source Han Sans CN", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.8;
 }
 
 body.hidden {
@@ -18,20 +21,28 @@ body.hidden {
   padding-right: 6px;
 }
 
+#write {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
 .markdown-body {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  line-height: 2;
+  line-height: 1.8;
   color: #24292e;
-  font-size: 1.6rem;
-  line-height: 2;
+  font-size: 1.7rem;
   word-wrap: break-word;
-  color: var(--color-text-md-content)
+  color: var(--color-text-md-content);
+  font-weight: 400;
+  text-align: justify;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 @media (max-width: 768px) {
   .markdown-body {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
 }
 
@@ -76,6 +87,173 @@ a:hover {
   flex-direction: column;
   justify-content: flex-start;
   margin-left: calc(100vw - 100%);
+}
+
+/* 标题样式 */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  line-height: 1.25;
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+  font-weight: 500;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  border-bottom: 1px solid var(--color-divider-md-border);
+  padding-bottom: 0.3em;
+}
+
+.markdown-body h2 {
+  font-size: 1.75em;
+  border-bottom: 1px solid var(--color-divider-md-border);
+  padding-bottom: 0.3em;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #6a737d;
+}
+
+/* 段落样式 */
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 1.5em;
+}
+
+/* 列表样式 */
+.markdown-body ul, 
+.markdown-body ol {
+  padding-left: 2em;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+}
+
+.markdown-body li {
+  margin-bottom: 0.25em;
+}
+
+.markdown-body ul li {
+  list-style-type: disc;
+}
+
+.markdown-body ol li {
+  list-style-type: decimal;
+}
+
+.markdown-body li > p {
+  margin-top: 1em;
+}
+
+.markdown-body li + li {
+  margin-top: 0.25em;
+}
+
+/* 引用块样式 */
+.markdown-body blockquote {
+  margin: 0 0 1.5em;
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+}
+
+.markdown-body blockquote > :first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* 代码块样式 */
+.markdown-body code,
+.markdown-body pre {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.85em;
+}
+
+.markdown-body code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  padding: 1em;
+  overflow: auto;
+  background-color: #f6f8fa;
+  border-radius: 3px;
+  box-shadow: none;
+  border: none;
+}
+
+.markdown-body pre code {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  font-size: 0.85em;
+  display: block;
+  overflow-x: auto;
+}
+
+/* 表格样式 */
+.markdown-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+}
+
+.markdown-body table th {
+  font-weight: 600;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #c6cbd1;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+/* 分割线样式 */
+.markdown-body hr {
+  height: 0.25em;
+  padding: 0;
+  margin: 1.5em 0;
+  background-color: #e1e4e8;
+  border: 0;
 }
 
 /* Header 容器 */
@@ -1540,9 +1718,9 @@ body[data-theme='dark'] .post-item:hover .time-m-d {
 
 /* 段落样式优化 */
 .markdown-body p {
-  margin-top: 0;
-  margin-bottom: 1.2em;
-  line-height: 1.8;
+  margin-top: 1.8em;
+  margin-bottom: 1.8em;
+  line-height: 2.0;
 }
 
 /* 链接样式优化 */
@@ -1567,6 +1745,7 @@ body[data-theme='dark'] .post-item:hover .time-m-d {
   background-color: var(--bg-block-md-pre) !important;
   border-radius: 6px;
   margin-bottom: 1.5em;
+  margin-top: 1.5em;
 }
 
 .markdown-body code {
@@ -1652,4 +1831,20 @@ body {
 
 html body .container.tag-index {
   margin-bottom: 46px !important;
+}
+
+.article-entry .highlight pre {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.article-entry .highlight table {
+  margin: 0;
+  width: auto;
+}
+
+.article-entry .highlight td {
+  border: none;
+  padding: 0;
 }

@@ -125,11 +125,13 @@
   border: none;
   margin: 0;
   padding: 0;
+  background-color: transparent;
 }
 
 .article-entry .highlight table {
   margin: 0;
   width: auto;
+  border: none;
 }
 
 .article-entry .highlight td {
@@ -140,7 +142,6 @@
 .article-entry .highlight figcaption {
   font-size: .85em;
   color: #777;
-  /* Light gray figcaption */
   line-height: 1em;
   margin-bottom: 1em;
 }
@@ -155,26 +156,23 @@
 }
 
 .article-entry .highlight .line {
-  height: 22.400000000000002px;
+  height: 1.5em;
 }
 
 .article-entry .highlight .line.marked {
-  background: #f9f9f9;
-  /* Very light gray for marked lines */
+  background: #f0f0f0;
 }
 
 .article-entry .gist {
   margin: 0 -20px;
   border: 1px solid #ddd;
-  /* Light gray border for the outermost gist block */
   background: #fff;
-  /* White background */
   padding: 15px 20px 15px 0;
 }
 
 .article-entry .gist .gist-file {
   border: none;
-  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+  font-family: "SFMono-Regular", Consolas, 'Liberation Mono', Menlo, monospace;
   margin: 0;
 }
 
@@ -201,9 +199,7 @@
 
 .article-entry .gist .gist-file .gist-meta {
   background: #fff;
-  /* White background */
   color: #777;
-  /* Light gray text */
   font: .85em -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   text-shadow: none;
   padding: 0;
@@ -213,124 +209,11 @@
 
 .article-entry .gist .gist-file .gist-meta a {
   color: #4078c0;
-  /* Blue links */
   font-weight: normal;
 }
 
 .article-entry .gist .gist-file .gist-meta a:hover {
   text-decoration: underline;
-}
-
-pre .comment,
-pre .title {
-  color: #998;
-  /* Brown comments */
-}
-
-pre .variable,
-pre .attribute,
-pre .tag,
-pre .regexp,
-pre .ruby .constant,
-pre .xml .tag .title,
-pre .xml .pi,
-pre .xml .doctype,
-pre .html .doctype,
-pre .css .id,
-pre .css .class,
-pre .css .pseudo {
-  color: #a71d5d;
-  /* Red variables and tags */
-}
-
-pre .number,
-pre .preprocessor,
-pre .built_in,
-pre .literal,
-pre .params,
-pre .constant {
-  color: #098658;
-  /* Green numbers and built-ins */
-}
-
-pre .class,
-pre .ruby .class .title,
-pre .css .rules .attribute {
-  color: #c18401;
-  /* Orange classes */
-}
-
-pre .string,
-pre .value,
-pre .inheritance,
-pre .header,
-pre .ruby .symbol,
-pre .xml .cdata {
-  color: #df5000;
-  /* Orange strings */
-}
-
-pre .css .hexcolor {
-  color: #df5000;
-  /* Orange hex colors */
-}
-
-pre .function,
-pre .python .decorator,
-pre .python .title,
-pre .ruby .function .title,
-pre .ruby .title .keyword,
-pre .perl .sub,
-pre .javascript .title,
-pre .coffeescript .title {
-  color: #0086b3;
-  /* Blue functions */
-}
-
-pre .keyword,
-pre .javascript .function {
-  color: #a71d5d;
-  /* Red keywords */
-}
-
-.markdown-body .highlight {
-  color: #333;
-  /* Dark text color */
-  background-color: #fff;
-  /* White background */
-  border: 1px solid #ddd;
-  /* Light gray border for the outermost highlight block */
-  border-radius: 5px;
-}
-
-.markdown-body .highlight table td {
-  padding: 0;
-  border: none;
-}
-
-.markdown-body .highlight table tr {
-  border: none;
-}
-
-.markdown-body .highlight .gutter pre {
-  color: #999;
-  /* Light gray gutter numbers */
-  background: #f8f8f8;
-  /* Slightly lighter background for gutters */
-}
-
-.highlight .code pre {
-  width: 100%;
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: #fff !important;
-  /* White background */
-  border: none;
-  /* No additional border for nested pre */
-}
-
-.markdown-body .highlight table tbody pre {
-  border-radius: 0;
 }
 
 details summary {
@@ -340,23 +223,60 @@ details summary {
 
 figure {
   position: relative;
+  margin: 1.5em 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 figure figcaption {
   padding-left: 1rem;
-  background-color: #f8f8f8;
-  /* Slightly lighter background for captions */
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  background-color: #F0F0F0;
+  border-bottom: 1px solid #ddd;
+  padding: 0.5em 1em;
+  font-size: 0.85em;
+  color: #666666;
 }
 
 figure table .gutter {
   user-select: none;
 }
 
-figure .pin-copy {
-  position: absolute;
-  top: 0;
-  right: 1rem;
-  cursor: pointer;
+/* 修复<td>和<pre>元素交互导致的边框问题 */
+figure.highlight table {
+  width: 100%;
+  border: none;
+  margin: 0;
+}
+
+figure.highlight table td {
+  border: none;
+  padding: 0;
+}
+
+figure.highlight table tr {
+  border: none;
+}
+
+figure.highlight pre {
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 16px;
+  background-color: transparent;
+}
+
+/* 修复代码块容器样式 */
+figure.highlight {
+    margin: 1.5em 0;
+    padding: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #d0d7de;
+    background-color: #f6f8fa;
+    box-shadow: none;
+}
+
+.highlight .code pre {
+    margin-bottom: 0px !important;
 }

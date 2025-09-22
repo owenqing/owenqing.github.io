@@ -1,0 +1,43 @@
+/* 修复代码块边框冲突问题 */
+.article-entry pre,
+.article-entry .highlight,
+.markdown-body pre,
+.markdown-body .highlight {
+    /* 移除重复边框定义，只保留一个统一的边框样式 */
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 修复代码块内部元素的边框和背景样式 */
+.highlight .code pre {
+    /* 移除可能导致冲突的左边框 */
+    border-left: none;
+}
+
+/* 确保代码块标题与容器边框一致 */
+figure figcaption {
+    border-bottom: 1px solid #d0d7de;
+}
+
+/* 修复figure容器的重复边框 */
+figure.highlight {
+    border: 1px solid #d0d7de;
+}
+
+/* 深色模式适配 */
+:root[color-mode="dark"] .article-entry pre,
+:root[color-mode="dark"] .article-entry .highlight,
+:root[color-mode="dark"] .markdown-body pre,
+:root[color-mode="dark"] .markdown-body .highlight {
+    border-color: #30363d;
+}
+
+:root[color-mode="dark"] figure figcaption {
+    border-color: #30363d;
+}
+
+:root[color-mode="dark"] figure.highlight {
+    border-color: #30363d;
+}

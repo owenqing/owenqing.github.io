@@ -14,9 +14,12 @@
     background-color: #f6f8fa;
     box-shadow: none;
     font-size: 85%;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* 修复代码块内部样式 */
+/* 修复代码块内部样式 - 移除多余边距 */
 .highlight table {
     width: 100%;
     border-collapse: collapse;
@@ -32,33 +35,25 @@
     vertical-align: top;
 }
 
-/* 修复行号样式 - GitHub风格 */
-.highlight .gutter {
-    width: 46px;
-    background-color: #f6f8fa;
-    border-right: 1px solid #d0d7de;
-    padding: 0;
-    text-align: right;
-    user-select: none;
-    position: relative;
-}
-
-.highlight .gutter pre {
-    margin: 0;
-    padding: 16px 8px 16px 0;
-    text-align: right;
-    color: #6e7781;
-    background-color: transparent;
-    border: none;
-    height: 100%;
-    font-size: 12px;
-    line-height: 20px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow-y: hidden;
+/* 修复 td.code 内容显示问题 */
+td.code {
+    /* 确保内容不会被裁剪，并在超出时显示滚动条 */
+    overflow: auto;
+    
+    /* 支持长行水平滚动 */
+    white-space: nowrap;
+    
+    /* 处理长单词和URL的换行问题 */
+    word-break: break-all;
+    word-wrap: break-word;
+    
+    /* 适配响应式布局 */
+    max-width: 100%;
+    min-width: 0;
+    
+    /* 确保高度足够 */
+    height: auto;
+    min-height: 100%;
 }
 
 /* 修复代码内容样式 - GitHub风格 */
@@ -66,8 +61,11 @@
     padding: 0;
     width: 100%;
     position: relative;
+    height: 100%;
+    min-height: 100%;
 }
 
+/* 修复代码块底部显示问题 */
 .highlight .code pre {
     margin: 0;
     padding: 16px;
@@ -78,9 +76,10 @@
     min-height: 100%;
     display: block;
     line-height: 20px;
+    box-sizing: border-box;
 }
 
-/* 确保行号和代码内容等高 */
+/* 确保代码块内容等高 */
 .highlight table tr {
     height: 100%;
 }
@@ -102,28 +101,6 @@
 pre .comment {
     color: #6a737d;
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-}
-
-/* 修复代码复制按钮 - GitHub风格 */
-.pin-copy {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 10;
-    cursor: pointer;
-    background: rgba(246, 248, 250, 0.9);
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    opacity: 0.7;
-    transition: opacity 0.3s;
-    border: 1px solid #d0d7de;
-    color: #24292f;
-}
-
-.pin-copy:hover {
-    opacity: 1;
-    background: #f3f4f6;
 }
 
 /* 修复Mermaid图表样式 - 科技风格 */
@@ -169,15 +146,6 @@ pre .comment {
 :root[color-mode="dark"] .markdown-body .highlight {
     background-color: #0d1117;
     border-color: #30363d;
-}
-
-:root[color-mode="dark"] .highlight .gutter {
-    background-color: #0d1117;
-    border-color: #30363d;
-}
-
-:root[color-mode="dark"] .highlight .gutter pre {
-    color: #6e7781;
 }
 
 :root[color-mode="dark"] .highlight .code pre {
@@ -237,6 +205,8 @@ figure.highlight {
     padding: 0;
     border-radius: 6px;
     overflow: hidden;
+    border: 1px solid #d0d7de;
+    background-color: #f6f8fa;
 }
 
 /* 确保代码块内容紧凑，没有多余空白 */
@@ -253,12 +223,6 @@ figure.highlight {
     border: none;
     margin: 0;
     padding: 0;
-}
-
-/* 确保代码块中的行号和代码内容垂直对齐 */
-.highlight .gutter pre,
-.highlight .code pre {
-    vertical-align: top;
 }
 
 /* 修复代码块中可能出现的滚动条样式 - GitHub风格 */
@@ -281,22 +245,6 @@ figure.highlight {
 
 :root[color-mode="dark"] .highlight .code pre::-webkit-scrollbar-track {
     background: #0d1117;
-}
-
-/* 确保行号背景充满整个单元格高度 */
-.highlight .gutter::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #f6f8fa;
-    z-index: -1;
-}
-
-:root[color-mode="dark"] .highlight .gutter::after {
-    background-color: #0d1117;
 }
 
 /* 代码语法高亮颜色 - GitHub风格 */
