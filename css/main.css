@@ -1130,6 +1130,19 @@ body.hidden {
   padding: 30px;
 }
 
+/* Add mobile optimization for #write */
+@media (max-width: 768px) {
+  #write {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  #write {
+    padding: 10px;
+  }
+}
+
 .markdown-body {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -1860,6 +1873,18 @@ body[data-theme='dark'] .header.scrolled {
     opacity: 0;
     z-index: -1;
   }
+  
+  /* Add better responsive handling for post items */
+  .post-item {
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .post-item .time-m-d {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 1200px) and (min-width: 887px) {
@@ -2081,6 +2106,24 @@ body[data-theme='dark'] .navbar ul li.active a {
   .navbar ul li.active a {
     border-radius: 20px !important;
   }
+  
+  /* Improve table responsiveness */
+  .markdown-body table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  /* Ensure images don't overflow */
+  .markdown-body img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Better code block handling */
+  .markdown-body pre {
+    overflow-x: auto;
+  }
 }
 
 /* 超窄屏幕处理 */
@@ -2095,6 +2138,35 @@ body[data-theme='dark'] .navbar ul li.active a {
 
   .navbar ul li a {
     padding: 6px 10px;
+  }
+  
+  /* Further optimize for small screens */
+  .post-item {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .markdown-body {
+    font-size: 1.5rem;
+    padding: 0 5px;
+  }
+  
+  .markdown-body h1 {
+    font-size: 2rem;
+  }
+  
+  .markdown-body h2 {
+    font-size: 1.8rem;
+  }
+  
+  .markdown-body h3 {
+    font-size: 1.6rem;
+  }
+  
+  .markdown-body h4, 
+  .markdown-body h5, 
+  .markdown-body h6 {
+    font-size: 1.4rem;
   }
 }
 
