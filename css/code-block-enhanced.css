@@ -1,0 +1,91 @@
+/* 增强代码块显示效果 */
+.article-entry pre,
+.article-entry .highlight,
+.markdown-body pre,
+.markdown-body .highlight {
+    /* 增加默认最小高度，让用户能看到更多代码内容 */
+    min-height: 120px;
+    
+    /* 在小屏幕上适当调整高度 */
+    /* 响应式处理 */
+}
+
+/* 调整代码块内边距，增加可读性 */
+.highlight .code pre {
+    padding: 20px;
+    padding-right: 0; /* 确保右侧无额外间距 */
+    margin-right: 0; /* 防止右侧出现空白 */
+    box-sizing: border-box; /* 确保内边距和边框不增加元素宽度 */
+    overflow-y: visible; /* 允许内容超出容器，取消纵向滚动条 */
+}
+
+/* 调整行号显示 */
+.highlight .gutter pre {
+    padding: 20px 8px 20px 0;
+    box-sizing: border-box; /* 确保内边距和边框不增加元素宽度 */
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .article-entry pre,
+    .article-entry .highlight,
+    .markdown-body pre,
+    .markdown-body .highlight {
+        /* 移动端减小最小高度 */
+        min-height: 80px;
+        
+        /* 移动端适当减小内边距 */
+        font-size: 0.8em;
+    }
+    
+    .highlight .code pre {
+        padding: 15px;
+        padding-right: 0;
+        margin-right: 0;
+        overflow-y: visible; /* 移动端也允许内容完整显示 */
+    }
+    
+    .highlight .gutter pre {
+        padding: 15px 5px 15px 0;
+    }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+    .article-entry pre,
+    .article-entry .highlight,
+    .markdown-body pre,
+    .markdown-body .highlight {
+        font-size: 0.75em;
+    }
+}
+
+/* 优化滚动条样式 */
+.highlight .code pre::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+.highlight .code pre::-webkit-scrollbar-thumb {
+    background: #d0d7de;
+    border-radius: 5px;
+}
+
+.highlight .code pre::-webkit-scrollbar-track {
+    background: #f6f8fa;
+}
+
+:root[color-mode="dark"] .highlight .code pre::-webkit-scrollbar-thumb {
+    background: #30363d;
+}
+
+:root[color-mode="dark"] .highlight .code pre::-webkit-scrollbar-track {
+    background: #0d1117;
+}
+
+/* 新增：确保表格布局中的单元格没有多余间距 */
+table.highlighttable td {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
