@@ -295,7 +295,7 @@ body>* {
     background-color: var(--code-bg) !important;
     padding: 1em !important;
     border-radius: 8px !important;
-    overflow: auto !important;
+    /* overflow: auto !important; */
     margin-top: 0 !important;
     margin-bottom: 1.5em !important;
     font-size: 0.85em !important;
