@@ -1,0 +1,253 @@
+/* 重新设计的代码块渲染样式 - 解决table嵌套pre滚动条问题 */
+
+/* 主容器样式 */
+.highlight {
+  margin: 1.5rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  background-color: #f6f8fa;
+  border: 1px solid #d0d7de;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* 深色模式适配 */
+:root[color-mode="dark"] .highlight {
+  background-color: #0d1117;
+  border-color: #30363d;
+}
+
+/* 代码块标题样式 */
+.highlight figcaption {
+  font-size: 0.85em;
+  padding: 0.5rem 1rem;
+  background-color: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
+  color: #666;
+}
+
+:root[color-mode="dark"] .highlight figcaption {
+  background-color: #161b22;
+  border-color: #30363d;
+  color: #8b949e;
+}
+
+/* 主要代码容器 - 使用flex布局替代table */
+.highlight .code-container {
+  display: flex;
+  overflow: auto;
+  max-height: 60vh;
+  min-height: 120px;
+}
+
+/* 行号区域 */
+.highlight .gutter {
+  padding: 1rem 0.5rem;
+  background-color: #f6f8fa;
+  border-right: 1px solid #d0d7de;
+  text-align: right;
+  min-width: fit-content;
+  user-select: none;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 85%;
+  line-height: 1.45;
+}
+
+:root[color-mode="dark"] .highlight .gutter {
+  background-color: #161b22;
+  border-color: #30363d;
+  color: #8b949e;
+}
+
+/* 代码区域 */
+.highlight .code-content {
+  flex: 1;
+  padding: 1rem;
+  overflow: visible;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 85%;
+  line-height: 1.45;
+  white-space: pre;
+}
+
+.highlight .code-content code {
+  display: block;
+  min-width: max-content;
+  width: 100%;
+}
+
+/* 语法高亮颜色 - 浅色模式 */
+.highlight .code-content .comment,
+.highlight .code-content .quote {
+  color: #6a737d;
+}
+
+.highlight .code-content .variable,
+.highlight .code-content .template-variable,
+.highlight .code-content .tag,
+.highlight .code-content .name,
+.highlight .code-content .selector-id,
+.highlight .code-content .selector-class,
+.highlight .code-content .regexp,
+.highlight .code-content .deletion {
+  color: #cf222e;
+}
+
+.highlight .code-content .number,
+.highlight .code-content .built_in,
+.highlight .code-content .builtin-name,
+.highlight .code-content .literal,
+.highlight .code-content .type,
+.highlight .code-content .params,
+.highlight .code-content .meta,
+.highlight .code-content .link {
+  color: #0550ae;
+}
+
+.highlight .code-content .attribute {
+  color: #116329;
+}
+
+.highlight .code-content .string,
+.highlight .code-content .symbol,
+.highlight .code-content .bullet,
+.highlight .code-content .addition {
+  color: #0a3069;
+}
+
+.highlight .code-content .title,
+.highlight .code-content .section {
+  color: #8250df;
+}
+
+.highlight .code-content .keyword,
+.highlight .code-content .selector-tag {
+  color: #cf222e;
+}
+
+.highlight .code-content .emphasis {
+  font-style: italic;
+}
+
+.highlight .code-content .strong {
+  font-weight: bold;
+}
+
+/* 语法高亮颜色 - 深色模式 */
+:root[color-mode="dark"] .highlight .code-content .comment,
+:root[color-mode="dark"] .highlight .code-content .quote {
+  color: #8b949e;
+}
+
+:root[color-mode="dark"] .highlight .code-content .variable,
+:root[color-mode="dark"] .highlight .code-content .template-variable,
+:root[color-mode="dark"] .highlight .code-content .tag,
+:root[color-mode="dark"] .highlight .code-content .name,
+:root[color-mode="dark"] .highlight .code-content .selector-id,
+:root[color-mode="dark"] .highlight .code-content .selector-class,
+:root[color-mode="dark"] .highlight .code-content .regexp,
+:root[color-mode="dark"] .highlight .code-content .deletion {
+  color: #ff7b72;
+}
+
+:root[color-mode="dark"] .highlight .code-content .number,
+:root[color-mode="dark"] .highlight .code-content .built_in,
+:root[color-mode="dark"] .highlight .code-content .builtin-name,
+:root[color-mode="dark"] .highlight .code-content .literal,
+:root[color-mode="dark"] .highlight .code-content .type,
+:root[color-mode="dark"] .highlight .code-content .params,
+:root[color-mode="dark"] .highlight .code-content .meta,
+:root[color-mode="dark"] .highlight .code-content .link {
+  color: #79c0ff;
+}
+
+:root[color-mode="dark"] .highlight .code-content .attribute {
+  color: #7ee787;
+}
+
+:root[color-mode="dark"] .highlight .code-content .string,
+:root[color-mode="dark"] .highlight .code-content .symbol,
+:root[color-mode="dark"] .highlight .code-content .bullet,
+:root[color-mode="dark"] .highlight .code-content .addition {
+  color: #a5d6ff;
+}
+
+:root[color-mode="dark"] .highlight .code-content .title,
+:root[color-mode="dark"] .highlight .code-content .section {
+  color: #d2a8ff;
+}
+
+:root[color-mode="dark"] .highlight .code-content .keyword,
+:root[color-mode="dark"] .highlight .code-content .selector-tag {
+  color: #ff7b72;
+}
+
+/* 滚动条样式 - 浅色模式 */
+.highlight .code-container::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.highlight .code-container::-webkit-scrollbar-thumb {
+  background: #d0d7de;
+  border-radius: 4px;
+}
+
+.highlight .code-container::-webkit-scrollbar-track {
+  background: #f6f8fa;
+}
+
+/* 滚动条样式 - 深色模式 */
+:root[color-mode="dark"] .highlight .code-container::-webkit-scrollbar-thumb {
+  background: #30363d;
+}
+
+:root[color-mode="dark"] .highlight .code-container::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .highlight {
+    margin: 1rem 0;
+    border-radius: 4px;
+  }
+  
+  .highlight .code-container {
+    max-height: 50vh;
+    min-height: 200px;
+  }
+  
+  .highlight .gutter {
+    padding: 0.75rem 0.25rem;
+    font-size: 0.75em;
+  }
+  
+  .highlight .code-content {
+    padding: 0.75rem;
+    font-size: 0.75em;
+  }
+  
+  .highlight figcaption {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75em;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+  .highlight .code-container {
+    max-height: 40vh;
+    min-height: 180px;
+  }
+  
+  .highlight .gutter {
+    font-size: 0.7em;
+  }
+  
+  .highlight .code-content {
+    font-size: 0.7em;
+  }
+}

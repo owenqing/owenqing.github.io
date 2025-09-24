@@ -105,3 +105,5 @@ table.highlighttable td {
         white-space: nowrap;
     }
 }
+
+/* 移除旧的样式定义，使用新的样式文件 */
