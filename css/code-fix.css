@@ -393,3 +393,28 @@ figure.highlight {
 :root[color-mode="dark"] .mermaid text {
     fill: #adbac7;
 }
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    /* 移除代码块的最大高度限制，让用户可以查看更多内容 */
+    .article-entry pre,
+    .article-entry .highlight,
+    .markdown-body pre,
+    .markdown-body .highlight {
+        max-height: none;
+    }
+    
+    /* 优化代码块内边距 */
+    .highlight .code pre {
+        padding: 16px;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+    
+    /* 确保表格可以水平滚动 */
+    .highlight table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}

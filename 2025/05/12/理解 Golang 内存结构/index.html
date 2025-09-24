@@ -34,9 +34,10 @@
 
                       <!-- hexo site css -->
                       <link rel="stylesheet" href="/css/main.css" />
-                      <link rel="stylesheet" href="/css/zen.css?v=1758708855843" />
+                      <link rel="stylesheet" href="/css/zen.css?v=1758710741896" />
                       <link rel="stylesheet" href="/css/typography-fix.css" />
                       <link rel="stylesheet" href="/css/code-block-enhanced.css" />
+                      <link rel="stylesheet" href="/css/mobile-nav.css" />
                       <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
                       <!-- 代码块风格 -->
                       
@@ -90,6 +91,15 @@
         <span class="electron-yellow"></span>
         owenqing posts
       </a>
+      
+      <!-- Mobile menu toggle button -->
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+        <span class="toggle-text">Menu</span>
+      </button>
+      
       <ul class="nav-menu">
         
           
@@ -137,9 +147,76 @@
   </div>
 </div>
 
-
-<script src="/js/activeNav.js"></script>
-
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const toggleText = document.querySelector('.toggle-text');
+    
+    if (navToggle && navMenu) {
+      navToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navMenu.classList.toggle('nav-menu-active');
+        const isOpen = navMenu.classList.contains('nav-menu-active');
+        navToggle.setAttribute('aria-expanded', isOpen);
+        toggleText.textContent = isOpen ? 'Close' : 'Menu';
+        navToggle.classList.toggle('active', isOpen);
+        
+        // Prevent body scroll when menu is open
+        if (isOpen) {
+          document.body.classList.add('hidden');
+        } else {
+          document.body.classList.remove('hidden');
+        }
+      });
+      
+      // Close menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          toggleText.textContent = 'Menu';
+          navToggle.classList.remove('active');
+          document.body.classList.remove('hidden');
+        }
+      });
+      
+      // Close menu when clicking on a nav link
+      const navLinks = document.querySelectorAll('.nav-menu a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          toggleText.textContent = 'Menu';
+          navToggle.classList.remove('active');
+          document.body.classList.remove('hidden');
+        });
+      });
+      
+      // Close menu on ESC key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navMenu.classList.contains('nav-menu-active')) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          toggleText.textContent = 'Menu';
+          navToggle.classList.remove('active');
+          document.body.classList.remove('hidden');
+        }
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          toggleText.textContent = 'Menu';
+          navToggle.classList.remove('active');
+          document.body.classList.remove('hidden');
+        }
+      });
+    }
+  });
+</script>
 
         <div class="flex-container">
           <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->

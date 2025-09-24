@@ -31,11 +31,11 @@
     .article-entry .highlight,
     .markdown-body pre,
     .markdown-body .highlight {
-        /* 移动端减小最小高度 */
-        min-height: 80px;
+        /* 移动端增加最小高度，改善显示效果 */
+        min-height: 250px;
         
-        /* 移动端适当减小内边距 */
-        font-size: 0.8em;
+        /* 保持合适的字体大小 */
+        font-size: 0.9em;
     }
     
     .highlight .code pre {
@@ -56,7 +56,8 @@
     .article-entry .highlight,
     .markdown-body pre,
     .markdown-body .highlight {
-        font-size: 0.75em;
+        min-height: 200px;
+        font-size: 0.85em;
     }
 }
 
@@ -88,4 +89,19 @@ table.highlighttable td {
     padding: 0;
     margin: 0;
     border: none;
+}
+
+/* 新增：优化移动端代码块容器 */
+@media (max-width: 768px) {
+    figure.highlight {
+        /* 移动端增加最大高度，让用户能查看更多代码 */
+        max-height: none;
+    }
+    
+    .highlight table {
+        /* 确保表格可以水平滚动 */
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
 }
