@@ -1,40 +1,25 @@
-// Mermaid 配置 - 科技风格
-document.addEventListener('DOMContentLoaded', function () {
-  // 检测当前颜色模式
-  const isDarkMode = document.documentElement.getAttribute('color-mode') === 'dark';
-
-  // 科技风格配色
+// Mermaid 配置 - 科技风格（仅浅色主题）
+document.addEventListener('DOMContentLoaded', function() {
+  // 定义科技风格配色方案（仅浅色）
   const techColors = {
     light: {
-      background: 'transparent',
-      nodeBg: '#f0f6ff',
-      nodeBorder: '#4b89dc',
-      lineColor: '#4b89dc',
-      textColor: '#333',
-      clusterBg: '#f8fafc',
-      clusterBorder: '#c6d2e0',
-      accentColor: '#0366d6',
-      secondaryColor: '#5a6acf'
-    },
-    dark: {
-      background: 'transparent',
-      nodeBg: '#1d232a',
-      nodeBorder: '#4b89dc',
-      lineColor: '#4b89dc',
-      textColor: '#adbac7',
-      clusterBg: '#22272e',
-      clusterBorder: '#444c56',
-      accentColor: '#58a6ff',
-      secondaryColor: '#7c84cb'
+      nodeBg: '#ffffff',
+      nodeBorder: '#6B7280',
+      lineColor: '#6B7280',
+      textColor: '#1F2937',
+      clusterBg: '#F9FAFB',
+      clusterBorder: '#E5E7EB',
+      accentColor: '#3B82F6',
+      secondaryColor: '#10B981'
     }
   };
 
-  // 选择当前模式的配色
-  const colors = isDarkMode ? techColors.dark : techColors.light;
+  // 固定使用浅色模式
+  const colors = techColors.light;
 
   mermaid.initialize({
     startOnLoad: true,
-    theme: isDarkMode ? 'dark' : 'default',
+    theme: 'default',
     securityLevel: 'loose',
     themeCSS: `
         /* 基础节点样式 - 科技风格 */
@@ -154,19 +139,4 @@ document.addEventListener('DOMContentLoaded', function () {
       axisFormat: '%Y-%m-%d'
     }
   });
-
-  // 监听颜色模式变化，重新初始化 Mermaid
-  const observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      if (mutation.attributeName === 'color-mode') {
-        // 重新加载页面以应用新的颜色模式
-        location.reload();
-      }
-    });
-  });
-
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['color-mode']
-  });
-}); 
+});

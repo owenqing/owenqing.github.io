@@ -4,13 +4,45 @@
   box-sizing: border-box;
 }
 
+/* 全局变量定义 */
+:root {
+  --bg-body: #FFFFFF;
+  --color-text-base: #2c3e50;
+  --color-text-a: #808080;
+  --color-text-a-hover: #6190e8;
+  --color-text-a-active: #6190e8;
+  --color-text-sub: #666666;
+  --bg-content-search: #f5f6f7;
+  --bg-content: #ffffff;
+  --color-divider-md-border: #ebedf0;
+  --color-text-md-title: #222;
+  --color-text-md-content: #222;
+  --color-text-md-code: #c7254e;
+  --bg-text-md-code: #f8f5ec;
+  --bg-block-md-quote: #f8f8f8;
+  --color-block-md-quote: #6a737d;
+  --bg-block-md-pre: #f8f8f8;
+  --color-text-md-pre: #555;
+  --bg-block-md-table: #ffffff;
+  --bg-block-md-table-2: #f8f8f8;
+  --color-border-md-table: #e5e5e5;
+  --post-item-shadow: rgba(0, 0, 0, 0.05);
+  --post-item-hover-shadow: rgba(0, 0, 0, 0.1);
+  --post-item-bg: #ffffff;
+  --post-item-border: #ebedf0;
+  --post-item-hover-border: #6190e8;
+  --post-time-bg: #f5f6f7;
+  --post-time-color: #666666;
+  --post-title-color: #222;
+  --post-item-text-color: #222;
+}
+
 html,
 body {
   background-color: var(--bg-body);
   color: var(--color-text-base);
   font-size: 10px;
   letter-spacing: 0.02rem;
-  transition: color 400ms ease-in-out 0s, background-color 400ms ease-in-out 0s;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
   line-height: 1.8;
@@ -49,8 +81,6 @@ body.hidden {
   word-wrap: break-word;
   color: var(--color-text-md-content);
   font-weight: 400;
-  text-align: justify;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 @media (max-width: 768px) {
