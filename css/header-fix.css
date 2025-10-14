@@ -21,3 +21,11 @@ body {
 /* .container.index {
     margin-top: 40px !important;
 } */
+
+/* Post pages: keep header opaque to avoid content showing through */
+.header.on-post,
+.header.on-post.scrolled {
+    background: var(--bg-primary) !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
