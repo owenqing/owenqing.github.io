@@ -1,0 +1,197 @@
+/* =========================================
+   移动端代码块显示修复 - 解决遮挡问题
+   创建时间: 2025-11-22
+   优先级: 最高 (覆盖其他样式)
+========================================= */
+
+/* 移动端代码块显示修复：移除高度限制，支持完整显示 */
+@media (max-width: 768px) {
+  /* 主容器：移除最大高度限制 */
+  .highlight .code-container {
+    max-height: none !important;  /* 移除高度限制，让内容完整显示 */
+    min-height: auto !important;   /* 根据实际情况自适应 */
+    overflow-x: auto;              /* 水平过长时显示滚动条 */
+    overflow-y: visible;           /* 允许垂直方向完整显示 */
+    display: block !important;     /* 避免flex导致的截断问题 */
+  }
+
+  /* 行号区域：确保不遮挡代码 */
+  .highlight .gutter {
+    position: sticky !important;   /* 使用sticky而不是fixed */
+    left: 0;
+    z-index: 10;                   /* 确保在行号上方 */
+    background-color: #f6f8fa !important;  /* 保持背景一致 */
+  }
+
+  /* 代码区域：确保内容不会被裁剪 */
+  .highlight .code-content {
+    overflow: visible !important;  /* 移除overflow限制 */
+    min-width: max-content;        /* 确保长内容不会换行 */
+    padding: 0.75rem !important;
+  }
+
+  /* 代码块容器：适配移动端 */
+  .highlight {
+    margin: 1rem 0 !important;
+    border-radius: 4px !important;
+    overflow-x: auto !important;   /* 只在X轴溢出时滚动 */
+    overflow-y: visible !important; /* Y轴允许完整显示 */
+    max-width: 100vw !important;   /* 限制最大宽度为视口 */
+    box-sizing: border-box !important;
+  }
+
+  /* 表格布局：确保可以水平滚动 */
+  .highlight table {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    border-collapse: collapse;
+  }
+
+  .highlight td {
+    padding: 0 !important;
+    vertical-align: top;
+    border: none;
+  }
+
+  /* 确保pre标签不会截断内容 */
+  .highlight pre {
+    margin: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    white-space: pre !important;
+    word-wrap: normal !important;
+    word-break: normal !important;
+    min-width: max-content;
+    padding: 16px !important;
+  }
+
+  /* 代码内容容器：移除任何可能的裁剪 */
+  .highlight .code {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 100% !important;
+  }
+
+  /* 代码行样式：确保不会重叠 */
+  .highlight .line {
+    display: block !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 移除垂直滚动条，保持内容完整 */
+  .highlight .code pre::-webkit-scrollbar {
+    height: 6px !important;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+  /* 在小屏幕上保持同样的修复策略 */
+  .highlight .code-container {
+    max-height: none !important;
+    min-height: auto !important;
+  }
+
+  /* 调整字体大小以适应小屏幕 */
+  .highlight .gutter {
+    font-size: 0.65em !important;
+    padding: 0.5rem 0.15rem !important;
+  }
+
+  .highlight .code-content {
+    font-size: 0.75em !important;
+    padding: 0.5rem !important;
+  }
+
+  /* 确保代码块标题不会占用太多空间 */
+  .highlight figcaption {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.7em !important;
+  }
+}
+
+/* ============================================================================
+   高优先级修复：确保不会受到其他样式覆盖
+============================================================================ */
+
+/* 强制隐藏垂直滚动条，避免遮挡 */
+.highlight .code-container::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.highlight .code-container {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* 强制移除max-height限制 */
+.article-entry pre,
+.article-entry .highlight,
+.markdown-body pre,
+.markdown-body .highlight {
+  max-height: none !important;
+}
+
+/* 修复figure标签可能导致的问题 */
+figure.highlight {
+  max-height: none !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+
+/* ============================================================================
+   保持横向滚动功能的同时确保内容完整显示
+============================================================================ */
+
+/* 横向滚动优化 - 确保只在需要时显示 */
+.highlight .code-container[data-has-horizontal-scroll="true"] {
+  overflow-x: auto;
+}
+
+/* 优化滚动条样式，减少对内容的遮挡 */
+.highlight .code-container::-webkit-scrollbar-track {
+  background: rgba(246, 248, 250, 0.5);
+}
+
+.highlight .code-container::-webkit-scrollbar-thumb {
+  background: #c0c7ce;
+  border-radius: 3px;
+}
+
+/* 深色模式滚动条 */
+:root[color-mode="dark"] .highlight .code-container::-webkit-scrollbar-track {
+  background: rgba(13, 17, 23, 0.5);
+}
+
+:root[color-mode="dark"] .highlight .code-container::-webkit-scrollbar-thumb {
+  background: #50575e;
+}
+
+/* ============================================================================
+   最终保险：使用!important覆盖所有可能的冲突
+============================================================================ */
+
+/* 最终的代码块样式保险 */
+@media (max-width: 768px) {
+  /* 深度选择器确保覆盖 */
+  .article-entry .highlight .code-container,
+  .markdown-body .highlight .code-container,
+  .post-content .highlight .code-container,
+  .highlight .code-container {
+    max-height: none !important;
+    overflow-y: visible !important;
+  }
+
+  /* 确保代码区域不被裁剪 */
+  .highlight .code-content,
+  .highlight .code,
+  .highlight pre {
+    overflow: visible !important;
+  }
+}
