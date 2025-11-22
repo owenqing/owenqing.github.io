@@ -13,7 +13,6 @@
     position: relative;
     background-color: #f6f8fa;
     box-shadow: none;
-    font-size: 85%;
     display: block;
     width: 100%;
     box-sizing: border-box;
@@ -173,7 +172,6 @@ pre .comment {
 .markdown-body code:not([class*="language-"]) {
     padding: 0.2em 0.4em;
     margin: 0 0.2em;
-    font-size: 85%;
     background-color: rgba(175, 184, 193, 0.2);
     border-radius: 6px;
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
