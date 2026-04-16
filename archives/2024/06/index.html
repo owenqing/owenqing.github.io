@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="owenqing" />
+  <!-- Open Graph Description 简短摘要-->
+  
+      <!-- 用于搜索引擎的文章摘要 -->
+      
+            
+                
+                  <title>
+                    
+                      archive_a: 2024/6
+                        
+                              
+                                    |
+                                    
+                                      owenqing
+                  </title>
+
+                  
+                    <link rel="apple-touch-icon" href="/images/ai.jpg">
+                    <link rel="icon" href="/images/ai.jpg">
+                    
+
+                      <!-- Font preconnect for faster loading -->
+                      <link rel="preconnect" href="https://fonts.googleapis.com">
+                      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                      <!-- Noto Sans SC for harmonious CJK/Latin mixing -->
+                      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap"
+                        rel="stylesheet">
+                      <!-- Raleway-Font (kept for legacy) -->
+                      <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+                      <!-- hexo site css -->
+                      <link rel="stylesheet" href="/css/main.css" />
+                      <link rel="stylesheet" href="/css/zen.css?v=1776352484990" />
+                      <link rel="stylesheet" href="/css/reading.css" />
+                      <link rel="stylesheet" href="/css/code-block-new.css" />
+                      <link rel="stylesheet" href="/css/article.css" />
+                      <link rel="stylesheet" href="/css/mobile-nav.css" />
+                      <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+                      <!-- 代码块风格 -->
+                      
+
+                            <!-- jquery3.3.1 -->
+                            
+                                <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+                                
+
+                                  <!-- fancybox -->
+                                  
+                                      <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+                                      <script defer type="text/javascript"
+                                        src="/plugins/jquery.fancybox.min.js"></script>
+                                      
+                                        
+<script src="/js/fancybox.js"></script>
+
+
+                                          
+
+                                              
+
+                                                  <script>
+                                                    (function() {
+                                                      const mode = localStorage.getItem('color-mode') || 'light';
+                                                      document.documentElement.setAttribute('color-mode', mode);
+                                                    })();
+                                                  </script>
+
+                                                  <!-- 添加header效果脚本 -->
+                                                  <!-- <script defer type="text/javascript" src="/js/headerEffect.js"></script> -->
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    <div id="app">
+      <div class="header"
+  style="position:fixed !important; top:0 !important; left:0 !important; right:0 !important; width:100% !important;">
+  <div class="navbar">
+    <nav class="navbar">
+      <a href="/" class="blog-title">
+        <span class="outer-orbit"></span>
+        <span class="electron"></span>
+        <span class="electron-yellow"></span>
+        owenqing posts
+      </a>
+
+      <!-- Mobile menu toggle button -->
+      <button class="nav-toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-menu">
+        <span class="hamburger" aria-hidden="true"></span>
+        <span class="hamburger" aria-hidden="true"></span>
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <ul class="nav-menu" id="nav-menu" role="menubar">
+        
+          
+            <li class="active">
+              <a href="/">
+                
+                    Home
+              </a>
+            </li>
+            
+              
+          
+              
+          
+              
+          
+            <li class="">
+              <a href="/tags/">
+                
+                    Tags
+              </a>
+            </li>
+            
+              
+          
+            <li class="">
+              <a href="/friends/">
+                
+                    Friends
+              </a>
+            </li>
+            
+              
+          
+            <li class="">
+              <a href="/about/">
+                
+                    About
+              </a>
+            </li>
+            
+              
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const headerEl = document.querySelector('.header');
+    const isPostPage = document.querySelector('.post-details') !== null;
+    if (headerEl && isPostPage) {
+      headerEl.classList.add('on-post');
+    }
+
+    if (navToggle && navMenu) {
+      navToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navMenu.classList.toggle('nav-menu-active');
+        const isOpen = navMenu.classList.contains('nav-menu-active');
+        navToggle.setAttribute('aria-expanded', isOpen);
+        navToggle.classList.toggle('active', isOpen);
+
+        // Prevent body scroll when menu is open
+        if (isOpen) {
+          document.body.classList.add('nav-open');
+        } else {
+          document.body.classList.remove('nav-open');
+        }
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function (e) {
+        if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+        }
+      });
+
+      // Close menu when clicking on a nav link
+      const navLinks = document.querySelectorAll('.nav-menu a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function () {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+        });
+      });
+
+      // Close menu on ESC key
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && navMenu.classList.contains('nav-menu-active')) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+          navToggle.focus(); // Return focus to toggle button
+        }
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+        }
+      });
+    }
+  });
+</script>
+
+        <div class="flex-container">
+          <!-- 归档页，展示本站所有文章，按照年份降序归类，url形式：https://yoursite/archives/ -->
+
+<!-- last: 按年份把文章分组，当前遍历到的年份 -->
+<!-- now: 当前遍历到的文章的发布年份 -->
+
+<div class="container archives">
+  <div class="post-list">
+    
+        <!-- 后续文章的发布年份呈现 -->
+        <div class="content-title">
+          <h2>
+            <span>2025</span>
+          </h2>
+        </div>
+      
+      <div class="post-item" title="理解 Golang 内存结构">
+        <div class="time-m-d">05-12</div>
+        <div class="title">
+          <a href="/2025/05/12/%E7%90%86%E8%A7%A3%20Golang%20%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/">
+            <span>理解 Golang 内存结构</span>
+          </a>
+        </div>
+      </div>
+    
+        <!-- 后续文章的发布年份呈现 -->
+        <div class="content-title">
+          <h2>
+            <span>2024</span>
+          </h2>
+        </div>
+      
+      <div class="post-item" title="简洁的架构">
+        <div class="time-m-d">06-13</div>
+        <div class="title">
+          <a href="/2024/06/13/%E7%AE%80%E6%B4%81%E7%9A%84%E6%9E%B6%E6%9E%84/">
+            <span>简洁的架构</span>
+          </a>
+        </div>
+      </div>
+    
+      <div class="post-item" title="理解并发编程">
+        <div class="time-m-d">02-22</div>
+        <div class="title">
+          <a href="/2024/02/22/%E7%90%86%E8%A7%A3%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">
+            <span>理解并发编程</span>
+          </a>
+        </div>
+      </div>
+    
+  </div>
+</div>
+
+            
+  <div class="footer">
+    <div class="social">
+      <ul>
+        
+          <li>
+            
+                <a title="github" href="">
+                  <i class="iconfont icon-github"></i>
+                </a>
+                
+          </li>
+          
+          <li>
+            
+              <a title="email" href="mailto:">
+                <i class="iconfont icon-envelope"></i>
+              </a>
+              
+          </li>
+          
+      </ul>
+    </div>
+    
+      
+        <div class="footer-more">
+          
+              Copyright © 2026
+                
+        </div>
+        
+      
+        <div class="footer-more">
+          
+              powered by owenqing
+                
+        </div>
+        
+          
+  </div>
+
+  <!-- 阅读体验增强脚本 -->
+  
+<script src="/js/reading.js"></script>
+
+
+  <!-- 代码块复制功能 -->
+  
+<script src="/js/code-copy.js"></script>
+
+        </div>
+
+        <div class="tools-bar">
+          
+  <div class="search-icon tools-bar-item" id="search-icon" role="button" aria-label="打开搜索" tabindex="0">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="search-title">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input" aria-hidden="true">
+          <i class="iconfont icon-search"></i>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="search..." aria-label="搜索文章" autocomplete="off">
+        
+        <span class="search-close-icon" id="search-close-icon" role="button" aria-label="关闭搜索" tabindex="0">
+          <i class="iconfont icon-close" aria-hidden="true"></i>
+        </span>
+      </div>
+      <div class="search-result" id="search-result" role="listbox" aria-label="搜索结果"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+          
+  <button class="tools-bar-item theme-icon" id="switch-color-scheme" aria-label="切换主题" type="button">
+    <i id="theme-icon" class="iconfont icon-moon" aria-hidden="true"></i>
+  </button>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+          <div class="back-to-top tools-bar-item hidden" role="button" aria-label="回到顶部" tabindex="0">
+  <a href="javascript: void(0)" aria-hidden="true">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="/js/mermaid-config.js"></script>
+  </body>
+
+</html>

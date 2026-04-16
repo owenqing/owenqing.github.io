@@ -1,0 +1,259 @@
+/**
+ * Code Block Styles - Notion Inspired
+ * 简洁优雅的代码块样式
+ * HTML结构: <pre><code class="highlight python">...</code></pre>
+ */
+
+/* 代码块容器 - pre:has(code.highlight) */
+.markdown-body pre:has(> code.highlight),
+pre:has(> code.highlight) {
+  position: relative;
+  margin: 1.5em 0;
+  border-radius: 8px;
+  background: #f7f6f3;
+  border: 1px solid #e3e2e0;
+  overflow: hidden;
+  font-size: 14px !important;
+  padding: 0 !important;
+}
+
+/* 代码块头部 - 语言标签 */
+.markdown-body pre:has(> code.highlight)::before,
+pre:has(> code.highlight)::before {
+  content: attr(data-lang);
+  display: block;
+  padding: 8px 16px;
+  background: #f7f6f3;
+  border-bottom: 1px solid #e3e2e0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #787774;
+  text-transform: lowercase;
+  letter-spacing: 0.3px;
+}
+
+/* 没有语言时隐藏头部 */
+.markdown-body pre:has(> code.highlight.plaintext)::before,
+pre:has(> code.highlight.plaintext)::before,
+.markdown-body pre:has(> code.highlight:not([class*=" "]))::before,
+pre:has(> code.highlight:not([class*=" "]))::before {
+  content: none;
+}
+
+/* 代码内容区域 - 只有一层，无嵌套框 */
+.markdown-body pre:has(> code.highlight) > code.highlight,
+pre:has(> code.highlight) > code.highlight {
+  display: block !important;
+  padding: 16px !important;
+  background: transparent !important;
+  border: none !important;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace !important;
+  font-size: inherit !important;
+  line-height: 1.5 !important;
+  color: #37352f;
+  overflow-x: auto;
+  white-space: pre;
+  word-wrap: normal;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+/* 代码行 */
+.markdown-body pre:has(> code.highlight) .line,
+pre:has(> code.highlight) .line {
+  display: block;
+  min-height: 1.5em;
+}
+
+/* 复制按钮 - Notion 风格 */
+.markdown-body pre:has(> code.highlight) .copy-btn,
+pre:has(> code.highlight) .copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  padding: 4px 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #37352f;
+  background: #ffffff;
+  border: 1px solid #e3e2e0;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.markdown-body pre:has(> code.highlight):hover .copy-btn,
+pre:has(> code.highlight):hover .copy-btn {
+  opacity: 1;
+}
+
+.markdown-body pre:has(> code.highlight) .copy-btn:hover,
+pre:has(> code.highlight) .copy-btn:hover {
+  background: #f7f6f3;
+  border-color: #d3d1cb;
+}
+
+.markdown-body pre:has(> code.highlight) .copy-btn:active,
+pre:has(> code.highlight) .copy-btn:active {
+  background: #eeeeec;
+}
+
+.markdown-body pre:has(> code.highlight) .copy-btn.copied,
+pre:has(> code.highlight) .copy-btn.copied {
+  color: #0f7b6c;
+  background: #e7f3f0;
+  border-color: #0f7b6c;
+  opacity: 1;
+}
+
+/* 语法高亮 - 柔和风格 */
+.markdown-body pre:has(> code.highlight) .comment,
+pre:has(> code.highlight) .comment {
+  color: #787774;
+  font-style: italic;
+}
+
+.markdown-body pre:has(> code.highlight) .keyword,
+pre:has(> code.highlight) .keyword {
+  color: #d73a49;
+  font-weight: 600;
+}
+
+.markdown-body pre:has(> code.highlight) .string,
+pre:has(> code.highlight) .string {
+  color: #22863a;
+}
+
+.markdown-body pre:has(> code.highlight) .number,
+pre:has(> code.highlight) .number {
+  color: #005cc5;
+}
+
+.markdown-body pre:has(> code.highlight) .title,
+.markdown-body pre:has(> code.highlight) .function,
+pre:has(> code.highlight) .title,
+pre:has(> code.highlight) .function {
+  color: #6f42c1;
+}
+
+.markdown-body pre:has(> code.highlight) .built_in,
+.markdown-body pre:has(> code.highlight) .class,
+pre:has(> code.highlight) .built_in,
+pre:has(> code.highlight) .class {
+  color: #005cc5;
+}
+
+.markdown-body pre:has(> code.highlight) .variable,
+pre:has(> code.highlight) .variable {
+  color: #24292e;
+}
+
+.markdown-body pre:has(> code.highlight) .operator,
+pre:has(> code.highlight) .operator {
+  color: #d73a49;
+}
+
+/* 暗色模式 - GitHub Dark Modern */
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight),
+:root[color-mode="dark"] pre:has(> code.highlight) {
+  background: #161b22;
+  border-color: #30363d;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight)::before,
+:root[color-mode="dark"] pre:has(> code.highlight)::before {
+  background: #161b22;
+  border-bottom-color: #30363d;
+  color: #8b949e;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) code.highlight,
+:root[color-mode="dark"] pre:has(> code.highlight) code.highlight {
+  color: #c9d1d9;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .copy-btn,
+:root[color-mode="dark"] pre:has(> code.highlight) .copy-btn {
+  color: #c9d1d9;
+  background: #21262d;
+  border-color: #30363d;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .copy-btn:hover,
+:root[color-mode="dark"] pre:has(> code.highlight) .copy-btn:hover {
+  background: #30363d;
+  border-color: #8b949e;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .copy-btn.copied,
+:root[color-mode="dark"] pre:has(> code.highlight) .copy-btn.copied {
+  color: #58a6ff;
+  background: rgba(88, 166, 255, 0.15);
+  border-color: #58a6ff;
+}
+
+/* 暗色语法高亮 */
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .comment,
+:root[color-mode="dark"] pre:has(> code.highlight) .comment {
+  color: #9b9a97;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .keyword,
+:root[color-mode="dark"] pre:has(> code.highlight) .keyword {
+  color: #ff7b72;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .string,
+:root[color-mode="dark"] pre:has(> code.highlight) .string {
+  color: #a5d6ff;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .number,
+:root[color-mode="dark"] pre:has(> code.highlight) .number {
+  color: #79c0ff;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .title,
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .function,
+:root[color-mode="dark"] pre:has(> code.highlight) .title,
+:root[color-mode="dark"] pre:has(> code.highlight) .function {
+  color: #d2a8ff;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .built_in,
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .class,
+:root[color-mode="dark"] pre:has(> code.highlight) .built_in,
+:root[color-mode="dark"] pre:has(> code.highlight) .class {
+  color: #ffa657;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .variable,
+:root[color-mode="dark"] pre:has(> code.highlight) .variable {
+  color: #c9d1d9;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .markdown-body pre:has(> code.highlight),
+  pre:has(> code.highlight) {
+    margin: 1em 0;
+    border-radius: 6px;
+    font-size: 14px !important;
+  }
+
+  .markdown-body pre:has(> code.highlight) code.highlight,
+  pre:has(> code.highlight) code.highlight {
+    padding: 12px;
+  }
+
+  .markdown-body pre:has(> code.highlight) .copy-btn,
+  pre:has(> code.highlight) .copy-btn {
+    opacity: 1;
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+}

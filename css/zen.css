@@ -1,0 +1,598 @@
+/*
+  Zen Minimal Theme Overrides
+  A calm, uncluttered aesthetic with generous whitespace and muted tones.
+  Palette: off-white (paper), greige, soft ink, moss green accents.
+*/
+
+:root {
+    --zen-paper: #F9F8F6;
+    /* 米白 */
+    --zen-greige: #d9d3c7;
+    /* 灰褐 */
+    --zen-ink: #2D2D2D;
+    /* 浅墨（柔和深灰） */
+    --zen-ink-sub: #4a4a4a;
+    --zen-moss: #6b8f71;
+    /* 苔绿（点缀） */
+    --zen-border: rgba(0, 0, 0, 0.08);
+    --zen-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --zen-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+    /* Extended palette */
+    --bg-primary: #F9F8F6;
+    --bg-card: #FFFFFF;
+    --text-main: #2D2D2D;
+    --text-secondary: #666666;
+    --text-muted: #888888;
+    --accent: #9C9C8B;
+    --code-bg: #F0F0F0;
+}
+
+[color-mode="light"] body {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-main) !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
+    font-size: 1.7rem;
+    letter-spacing: 0.02em;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+
+/* Reduce global ornamentation */
+* {
+    text-shadow: none !important;
+    box-sizing: border-box;
+}
+
+/* Header: frosted glass effect for better readability on scroll */
+.header {
+    background: rgba(249, 248, 246, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
+
+.header::before,
+.header::after,
+.blog-title::before,
+.blog-title::after,
+.blog-title .outer-orbit,
+.blog-title .electron,
+.blog-title .electron-yellow {
+    display: none !important;
+}
+
+.navbar {
+    max-width: 860px !important;
+    padding: 0 16px !important;
+    margin: 0 auto;
+}
+
+.blog-title {
+    padding-left: 0 !important;
+    margin: 0 18px 0 0 !important;
+    color: var(--zen-ink) !important;
+    font-weight: 500 !important;
+    font-size: 2.0rem !important;
+}
+
+/* Dark mode for header - frosted glass effect */
+[color-mode="dark"] .header {
+    background: rgba(22, 27, 34, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom-color: #30363d !important;
+}
+
+/* Dark mode for blog-title */
+[color-mode="dark"] .blog-title {
+    color: #e6edf3 !important;
+}
+
+.navbar ul li {
+    margin: 0 12px !important;
+}
+
+.navbar ul li a {
+    color: var(--text-secondary) !important;
+    padding: 6px 10px !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    transition: none !important;
+    font-weight: 400 !important;
+}
+
+.navbar ul li a:hover,
+.navbar ul li.active a {
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+    transform: none !important;
+}
+
+/* Dark mode for navbar links */
+[color-mode="dark"] .navbar ul li a {
+    color: #c9d1d9 !important;
+}
+
+[color-mode="dark"] .navbar ul li a:hover,
+[color-mode="dark"] .navbar ul li.active a {
+    color: #58a6ff !important;
+}
+
+/* Layout breathing space */
+.container {
+    max-width: 860px !important;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+/* 文章页面需要更宽的容器 */
+.container.post-details {
+    max-width: 1400px !important;
+}
+
+.index .post-list,
+.friend-index .friend-list,
+.archives .post-list,
+.tag-index .tag-list,
+.about-index .markdown-body {
+    padding: 0 8px !important;
+}
+
+/* Homepage/post list cards: zen minimal */
+.post-item {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--zen-border) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease !important;
+    padding: 20px 24px !important;
+}
+
+/* Dark mode for post-item */
+[color-mode="dark"] .post-item {
+    background: #161b22 !important;
+    border-color: #30363d !important;
+}
+
+.post-item:hover {
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.post-item .time-m-d {
+    background: transparent !important;
+    color: var(--zen-ink-sub) !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+
+/* Dark mode for post-item time */
+[color-mode="dark"] .post-item .time-m-d {
+    color: #8b949e !important;
+}
+
+.post-item .title {
+    font-weight: 400 !important;
+    letter-spacing: 0.02em !important;
+    color: var(--text-main) !important;
+    margin: 0;
+}
+
+/* Dark mode for post-item title */
+[color-mode="dark"] .post-item .title {
+    color: #c9d1d9 !important;
+}
+
+/* Footer: minimal and quiet */
+.footer {
+    background: transparent !important;
+    border-top: 1px solid var(--zen-border) !important;
+    color: var(--zen-ink-sub) !important;
+    padding: 20px 0;
+}
+
+/* Markdown typography for meditation-friendly reading */
+.markdown-body {
+    color: var(--text-main) !important;
+    line-height: 1.8 !important;
+    font-weight: 400 !important;
+    font-size: 1.7rem !important;
+    letter-spacing: 0.02em !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    background: transparent !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    font-variant-east-asian: proportional-width;
+    word-break: break-word;
+    text-align: justify;
+    padding: 20px 0;
+}
+
+/* 标题样式 - 层级优化：文章标题 > h1 > h2 > h3 > h4 > 正文 */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+    color: var(--text-main) !important;
+    margin-top: 1.5em !important;
+    margin-bottom: 1em !important;
+    border-bottom: 0 !important;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.markdown-body h1 {
+    font-size: 1.65em !important;
+    font-weight: 600 !important;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
+
+.markdown-body h2 {
+    font-size: 1.4em !important;
+    font-weight: 600 !important;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
+
+.markdown-body h3 {
+    font-size: 1.25em !important;
+    font-weight: 600 !important;
+}
+
+.markdown-body h4 {
+    font-size: 1.15em !important;
+    font-weight: 500 !important;
+}
+
+.markdown-body h5 {
+    font-size: 1em !important;
+    font-weight: 500 !important;
+}
+
+.markdown-body h6 {
+    font-size: 1em !important;
+    font-weight: 500 !important;
+    color: var(--text-muted) !important;
+}
+
+.markdown-body p {
+    margin-bottom: 1.5em !important;
+    margin-top: 0 !important;
+    letter-spacing: 0.02em;
+    word-break: break-word;
+}
+
+/* 中英文混排优化 */
+.markdown-body p en,
+.markdown-body span[lang="en"] {
+    margin: 0 0.1em;
+}
+
+/* 列表样式优化 */
+.markdown-body ul,
+.markdown-body ol {
+    margin-top: 0 !important;
+    margin-bottom: 1.5em !important;
+    padding-left: 2em !important;
+}
+
+.markdown-body li {
+    margin-bottom: 0.25em !important;
+}
+
+.markdown-body ul li {
+    list-style-type: disc !important;
+}
+
+.markdown-body ol li {
+    list-style-type: decimal !important;
+}
+
+.markdown-body li p {
+    margin-top: 0.5em !important;
+    margin-bottom: 0.5em !important;
+}
+
+.markdown-body ol li {
+    padding-left: 0.5em !important;
+}
+
+/* 技术术语样式 */
+.markdown-body code {
+    background-color: var(--code-bg) !important;
+    color: var(--text-main) !important;
+    padding: 0.2em 0.4em !important;
+    border-radius: 3px !important;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+    font-size: 0.85em !important;
+}
+
+.markdown-body pre {
+    background-color: var(--code-bg) !important;
+    padding: 1em !important;
+    border-radius: 8px !important;
+    /* overflow: auto !important; */
+    margin-top: 0 !important;
+    margin-bottom: 1.5em !important;
+    font-size: 0.85em !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.markdown-body pre code {
+    background: transparent !important;
+    padding: 0 !important;
+    font-size: 0.85em !important;
+    display: block;
+    overflow-x: auto;
+}
+
+.markdown-body a {
+    color: var(--zen-moss) !important;
+    border-bottom: 1px solid rgba(107, 143, 113, 0.25) !important;
+}
+
+.markdown-body a:hover {
+    color: #5c7f64 !important;
+    border-bottom-color: rgba(107, 143, 113, 0.4) !important;
+}
+
+.markdown-body blockquote {
+    background: rgba(217, 211, 199, 0.25) !important;
+    border-left: 3px solid var(--zen-greige) !important;
+    color: var(--zen-ink-sub) !important;
+    font-style: normal !important;
+    padding: 0 1em !important;
+    margin: 0 0 1.5em !important;
+    border-radius: 0 8px 8px 0;
+}
+
+.markdown-body hr {
+    height: 0.25em;
+    padding: 0;
+    margin: 1.5em 0;
+    background-color: var(--zen-border);
+    border: 0;
+}
+
+/* Article reading area */
+.container.post-details,
+.post-content {
+    background: var(--bg-primary) !important;
+}
+
+.post-content {
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.03) !important;
+    border-radius: 8px !important;
+    padding: 24px !important;
+    background: var(--bg-card) !important;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .post-content {
+        padding: 16px !important;
+    }
+}
+
+/* Remove ornaments inside reading area */
+.markdown-body img {
+    box-shadow: none !important;
+    margin-top: 1.5em !important;
+    margin-bottom: 1.5em !important;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.post-title {
+    font-weight: 600 !important;
+    font-size: 2.2rem !important;
+    line-height: 1.4 !important;
+    text-align: center !important;
+    color: var(--text-main) !important;
+    letter-spacing: -0.01em;
+    margin: 0 0 1rem;
+}
+
+/* Subtitle (time) */
+.post-details .post-attach {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 1.4rem !important;
+    color: var(--text-muted) !important;
+}
+
+.post-details .post-attach .post-pubtime i {
+    font-size: 1.4rem !important;
+    color: var(--text-muted) !important;
+    font-weight: 400;
+}
+
+/* 表格样式 */
+.markdown-body table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    border-radius: 8px;
+}
+
+.markdown-body table th {
+    font-weight: 600;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+    padding: 6px 13px;
+    border: 1px solid var(--zen-border);
+}
+
+.markdown-body table tr {
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--zen-border);
+}
+
+.markdown-body table tr:nth-child(2n) {
+    background-color: var(--bg-primary);
+}
+
+/* 代码高亮区域样式 - 由 code-block-new.css 接管 */
+
+/* ==================== 文章页暗色模式适配 ==================== */
+
+/* 文章页背景和容器 */
+[color-mode="dark"] .container.post-details,
+[color-mode="dark"] .post-content {
+    background: transparent !important;
+}
+
+[color-mode="dark"] .post-content {
+    border-color: #30363d !important;
+}
+
+/* 文章标题 */
+[color-mode="dark"] .post-title {
+    color: #e6edf3 !important;
+}
+
+/* Markdown 正文 */
+[color-mode="dark"] .markdown-body {
+    color: #c9d1d9 !important;
+}
+
+/* Markdown 标题 */
+[color-mode="dark"] .markdown-body h1,
+[color-mode="dark"] .markdown-body h2,
+[color-mode="dark"] .markdown-body h3,
+[color-mode="dark"] .markdown-body h4,
+[color-mode="dark"] .markdown-body h5,
+[color-mode="dark"] .markdown-body h6 {
+    color: #e6edf3 !important;
+    border-bottom-color: #30363d !important;
+}
+
+[color-mode="dark"] .markdown-body h6 {
+    color: #8b949e !important;
+}
+
+/* 强调文字 */
+[color-mode="dark"] .markdown-body strong {
+    color: #e6edf3 !important;
+}
+
+/* 引用块 - Notion 风格 */
+[color-mode="dark"] .markdown-body blockquote {
+    background: transparent !important;
+    border-left-color: #30363d !important;
+    color: #8b949e !important;
+}
+
+/* 链接 - GitHub 蓝 */
+[color-mode="dark"] .markdown-body a {
+    color: #58a6ff !important;
+    border-bottom-color: rgba(88, 166, 255, 0.3) !important;
+}
+
+[color-mode="dark"] .markdown-body a:hover {
+    color: #79c0ff !important;
+    border-bottom-color: rgba(121, 192, 255, 0.5) !important;
+}
+
+/* 代码 - 行内 */
+[color-mode="dark"] .markdown-body code {
+    background-color: #21262d !important;
+    color: #ff7b72 !important;
+}
+
+/* 代码块 */
+[color-mode="dark"] .markdown-body pre {
+    background-color: #161b22 !important;
+    border: 1px solid #30363d !important;
+}
+
+/* 分割线 */
+[color-mode="dark"] .markdown-body hr {
+    background-color: #30363d !important;
+}
+
+/* 表格 */
+[color-mode="dark"] .markdown-body table th,
+[color-mode="dark"] .markdown-body table td {
+    border-color: #30363d !important;
+}
+
+[color-mode="dark"] .markdown-body table th {
+    background-color: #21262d !important;
+}
+
+[color-mode="dark"] .markdown-body table tr {
+    background-color: #161b22 !important;
+}
+
+[color-mode="dark"] .markdown-body table tr:nth-child(2n) {
+    background-color: #0d1117 !important;
+}
+
+/* 文章元信息 */
+[color-mode="dark"] .post-details .post-attach {
+    color: #8b949e !important;
+}
+
+[color-mode="dark"] .post-details .post-attach .post-pubtime i {
+    color: #8b949e !important;
+}
+
+/* 列表 */
+[color-mode="dark"] .markdown-body ul li,
+[color-mode="dark"] .markdown-body ol li {
+    color: #c9d1d9 !important;
+}
+
+/* 图片 */
+[color-mode="dark"] .markdown-body img {
+    opacity: 0.95;
+}
+
+/* ==================== 工具栏按钮暗色模式适配 ==================== */
+
+/* 工具栏按钮背景 */
+[color-mode="dark"] .tools-bar .tools-bar-item {
+    background: #161b22 !important;
+    border-color: #30363d !important;
+}
+
+/* 工具栏按钮图标颜色 */
+[color-mode="dark"] .tools-bar .tools-bar-item a,
+[color-mode="dark"] .tools-bar .tools-bar-item i {
+    color: #c9d1d9 !important;
+}
+
+/* 工具栏按钮悬停效果 */
+[color-mode="dark"] .tools-bar .tools-bar-item:hover {
+    border-color: #58a6ff !important;
+}
+
+[color-mode="dark"] .tools-bar .tools-bar-item:hover a,
+[color-mode="dark"] .tools-bar .tools-bar-item:hover i {
+    color: #58a6ff !important;
+}

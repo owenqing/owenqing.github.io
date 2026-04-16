@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="owenqing" />
+  <!-- Open Graph Description 简短摘要-->
+  
+      <!-- 用于搜索引擎的文章摘要 -->
+      
+            
+                
+                  <title>
+                    
+                      简洁的架构
+                        
+                              
+                                    |
+                                    
+                                      owenqing
+                  </title>
+
+                  
+                    <link rel="apple-touch-icon" href="/images/ai.jpg">
+                    <link rel="icon" href="/images/ai.jpg">
+                    
+
+                      <!-- Font preconnect for faster loading -->
+                      <link rel="preconnect" href="https://fonts.googleapis.com">
+                      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                      <!-- Noto Sans SC for harmonious CJK/Latin mixing -->
+                      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap"
+                        rel="stylesheet">
+                      <!-- Raleway-Font (kept for legacy) -->
+                      <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+                      <!-- hexo site css -->
+                      <link rel="stylesheet" href="/css/main.css" />
+                      <link rel="stylesheet" href="/css/zen.css?v=1776352484989" />
+                      <link rel="stylesheet" href="/css/reading.css" />
+                      <link rel="stylesheet" href="/css/code-block-new.css" />
+                      <link rel="stylesheet" href="/css/article.css" />
+                      <link rel="stylesheet" href="/css/mobile-nav.css" />
+                      <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+                      <!-- 代码块风格 -->
+                      
+
+                            <!-- jquery3.3.1 -->
+                            
+                                <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+                                
+
+                                  <!-- fancybox -->
+                                  
+                                      <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+                                      <script defer type="text/javascript"
+                                        src="/plugins/jquery.fancybox.min.js"></script>
+                                      
+                                        
+<script src="/js/fancybox.js"></script>
+
+
+                                          
+
+                                              
+
+                                                  <script>
+                                                    (function() {
+                                                      const mode = localStorage.getItem('color-mode') || 'light';
+                                                      document.documentElement.setAttribute('color-mode', mode);
+                                                    })();
+                                                  </script>
+
+                                                  <!-- 添加header效果脚本 -->
+                                                  <!-- <script defer type="text/javascript" src="/js/headerEffect.js"></script> -->
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    <div id="app">
+      <div class="header"
+  style="position:fixed !important; top:0 !important; left:0 !important; right:0 !important; width:100% !important;">
+  <div class="navbar">
+    <nav class="navbar">
+      <a href="/" class="blog-title">
+        <span class="outer-orbit"></span>
+        <span class="electron"></span>
+        <span class="electron-yellow"></span>
+        owenqing posts
+      </a>
+
+      <!-- Mobile menu toggle button -->
+      <button class="nav-toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-menu">
+        <span class="hamburger" aria-hidden="true"></span>
+        <span class="hamburger" aria-hidden="true"></span>
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <ul class="nav-menu" id="nav-menu" role="menubar">
+        
+          
+            <li class="active">
+              <a href="/">
+                
+                    Home
+              </a>
+            </li>
+            
+              
+          
+              
+          
+              
+          
+            <li class="">
+              <a href="/tags/">
+                
+                    Tags
+              </a>
+            </li>
+            
+              
+          
+            <li class="">
+              <a href="/friends/">
+                
+                    Friends
+              </a>
+            </li>
+            
+              
+          
+            <li class="">
+              <a href="/about/">
+                
+                    About
+              </a>
+            </li>
+            
+              
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const headerEl = document.querySelector('.header');
+    const isPostPage = document.querySelector('.post-details') !== null;
+    if (headerEl && isPostPage) {
+      headerEl.classList.add('on-post');
+    }
+
+    if (navToggle && navMenu) {
+      navToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navMenu.classList.toggle('nav-menu-active');
+        const isOpen = navMenu.classList.contains('nav-menu-active');
+        navToggle.setAttribute('aria-expanded', isOpen);
+        navToggle.classList.toggle('active', isOpen);
+
+        // Prevent body scroll when menu is open
+        if (isOpen) {
+          document.body.classList.add('nav-open');
+        } else {
+          document.body.classList.remove('nav-open');
+        }
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function (e) {
+        if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+        }
+      });
+
+      // Close menu when clicking on a nav link
+      const navLinks = document.querySelectorAll('.nav-menu a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function () {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+        });
+      });
+
+      // Close menu on ESC key
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && navMenu.classList.contains('nav-menu-active')) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+          navToggle.focus(); // Return focus to toggle button
+        }
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+        }
+      });
+    }
+  });
+</script>
+
+        <div class="flex-container">
+          <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+    
+
+      
+        <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+          
+
+            
+
+                
+
+                    
+
+                        
+
+                            
+                              <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+                              <div class="container post-details" id="post-details">
+                                <div class="post-content">
+                                  <div class="post-title">简洁的架构</div>
+                                  <div class="post-attach">
+                                    <span class="post-pubtime">
+                                      <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+                                      2026-04-16 23:00:37
+                                    </span>
+                                    
+                                      <span class="post-tags">
+                                        <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                                        
+                                          <span class="span--tag mr-8">
+                                            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" title="计算机"
+                                              style="color: var(--post-item-text-color);">
+                                              #计算机
+                                            </a>
+                                          </span>
+                                          
+                                      </span>
+                                      
+                                  </div>
+                                  <div class="markdown-body">
+                                    <pre class="mermaid">graph LR
+    A[Frameworks & Drivers] --> B[Interface Adapters]
+    B --> C[Use Cases]
+    C --> D[Entities]
+
+    classDef f fill:#e0f2fe,stroke:#0369a1;
+    classDef a fill:#dcfce7,stroke:#16a34a;
+    classDef u fill:#fef9c3,stroke:#ca8a04;
+    classDef e fill:#fee2e2,stroke:#dc2626;
+
+    class A f
+    class B a
+    class C u
+    class D e</pre>
+
+<p>Clean Architecture(Robert C. Martin) 的核心思想是通过分层和依赖规则，实现软件系统的高内聚、低耦合，从而提升可维护性、可测试性和可扩展性。其关键在于将业务逻辑与外部技术细节（如数据库、框架、UI、Web 服务等）彻底分离，确保系统的核心——也就是业务规则——不依赖于任何外部组件。</p>
+<p>这一架构强调“依赖倒置原则”：高层模块（如用例、业务逻辑）不应依赖低层模块（如数据库、网络），两者都应依赖于抽象。所有依赖关系必须指向系统内部，即从外层（技术细节层）向内层（业务核心层）流动，而内层对最外层一无所知。</p>
+<p>Clean Architecture 通常将系统划分为多个同心圆层，从内到外依次是：Entities（实体，代表核心业务对象和规则）、Use Cases（用例，封装具体业务逻辑）、Interface Adapters（接口适配器，如控制器、数据转换器，用于连接内外）、Frameworks and Drivers（框架与驱动，包括数据库、Web 框架、UI 等）。越靠近中心，越稳定、越通用；越靠外层，越易变、越具体。</p>
+<p>通过这种结构，业务逻辑可以独立于技术栈进行开发和测试，即使更换数据库、UI 框架或部署方式，也不会影响核心业务规则，从而显著提升系统的长期可维护性和适应变化的能力。</p>
+<h2 id="它到底想解决什么？"><a href="#它到底想解决什么？" class="headerlink" title="它到底想解决什么？"></a>它到底想解决什么？</h2><p>想象一下：你写了一个用户注册功能，直接在 Flask 路由里连数据库、校验邮箱、插入数据——代码跑得挺快，但很快问题来了：</p>
+<ul>
+<li>想换数据库？得改业务逻辑。</li>
+<li>想写单元测试？得先起个数据库。</li>
+<li>想加个命令行入口？得把 Web 逻辑拆出来。</li>
+<li>业务规则一变，整个文件都得动。</li>
+</ul>
+<p>Clean Architecture 的核心思路很简单：<strong>把“业务逻辑”和“技术细节”分开，让前者不依赖后者</strong>。</p>
+<p>怎么分？靠两件事：</p>
+<ol>
+<li><strong>分层</strong>：把代码按职责分成几层，越往里越“纯粹”，只关心业务；越往外越“具体”，处理数据库、HTTP、文件等。</li>
+<li><strong>依赖方向</strong>：内层不知道外层的存在，外层去实现内层定义的接口。</li>
+</ol>
+<p>这样一来，换数据库、加 API、写测试，都只动外层，核心逻辑几乎不用改。</p>
+<h2 id="一个具体的例子：用户注册"><a href="#一个具体的例子：用户注册" class="headerlink" title="一个具体的例子：用户注册"></a>一个具体的例子：用户注册</h2><pre class="mermaid">%%{init: {'theme': 'base', 'themeVariables': { 'fontSize': '14px'}} }%%
+flowchart LR
+    classDef framework fill:#dbeafe,stroke:#3b82f6,color:#1e40af;
+    classDef adapter fill:#dcfce7,stroke:#22c55e,color:#166534;
+    classDef usecase fill:#fef3c7,stroke:#f59e0b,color:#92400e;
+    classDef entity fill:#fee2e2,stroke:#ef4444,color:#b91c1c;
+
+    subgraph Frameworks["Frameworks & Drivers"]
+        F1["📄 main.py"]
+        F2["🗃️ SQLite"]
+    end
+
+    subgraph Adapters["Interface Adapters\n(适配器)"]
+        A1["🔄 SqliteUserRepository"]
+        A2["🔄 InMemoryUserRepository"]
+    end
+
+    subgraph UseCases["Use Cases\n(业务用例)"]
+        U1["🧩 RegisterUser"]
+    end
+
+    subgraph Entities["Entities\n(核心业务)"]
+        E1["📝 UserRepository (接口)"]
+        E2["👤 User (实体)"]
+    end
+
+    %% 依赖关系：全部从外向内（左 → 右）
+    F1 --> A1
+    F2 --> A1
+    A1 --> U1
+    A2 --> U1
+    U1 --> E1
+    E1 --> E2
+
+    class F1,F2 framework
+    class A1,A2 adapter
+    class U1 usecase
+    class E1,E2 entity</pre>
+
+<p>我们用一个极简的用户注册功能来演示。项目结构如下：</p>
+<pre><code class="highlight plaintext">user_service/
+├── main.py
+├── entities/
+│   └── user_repository.py
+├── use_cases/
+│   └── register_user.py
+├── adapters/
+│   ├── sqlite_user_repository.py
+│   └── in_memory_user_repository.py
+└── tests/
+    └── test_register_user.py</code></pre>
+
+<h3 id="第一步：定义“我需要什么”（内核）"><a href="#第一步：定义“我需要什么”（内核）" class="headerlink" title="第一步：定义“我需要什么”（内核）"></a>第一步：定义“我需要什么”（内核）</h3><p>业务逻辑说：“我需要一个能存用户的地方。”<br>但它不关心是存到 SQLite、PostgreSQL，还是内存里。所以，我们先定义一个接口：</p>
+<pre><code class="highlight python"><span class="comment"># entities/user_repository.py</span>
+<span class="keyword">class</span> <span class="title class_">UserRepository</span>:
+    <span class="keyword">def</span> <span class="title function_">save</span>(<span class="params">self, name: <span class="built_in">str</span>, email: <span class="built_in">str</span></span>):
+        <span class="keyword">raise</span> NotImplementedError</code></pre>
+
+<p>然后写注册逻辑，只依赖这个接口：</p>
+<pre><code class="highlight python"><span class="comment"># use_cases/register_user.py</span>
+<span class="keyword">from</span> entities.user_repository <span class="keyword">import</span> UserRepository
+
+<span class="keyword">class</span> <span class="title class_">RegisterUser</span>:
+    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, user_repo: UserRepository</span>):
+        <span class="variable language_">self</span>.user_repo = user_repo
+
+    <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">self, name: <span class="built_in">str</span>, email: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:
+        <span class="keyword">if</span> <span class="string">&quot;@&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> email:
+            <span class="keyword">raise</span> ValueError(<span class="string">&quot;邮箱格式错误&quot;</span>)
+        <span class="variable language_">self</span>.user_repo.save(name, email)
+        <span class="keyword">return</span> <span class="string">&quot;注册成功！&quot;</span></code></pre>
+
+<p>注意：这段代码里没有任何 <code>import sqlite3</code>、<code>import flask</code>，也没有任何具体技术。它只做一件事：<strong>描述业务规则</strong>。</p>
+<h3 id="第二步：实现“怎么存”（外层）"><a href="#第二步：实现“怎么存”（外层）" class="headerlink" title="第二步：实现“怎么存”（外层）"></a>第二步：实现“怎么存”（外层）</h3><p>现在，我们提供两种实现：</p>
+<pre><code class="highlight python"><span class="comment"># adapters/sqlite_user_repository.py</span>
+<span class="keyword">import</span> sqlite3
+<span class="keyword">from</span> entities.user_repository <span class="keyword">import</span> UserRepository
+
+<span class="keyword">class</span> <span class="title class_">SqliteUserRepository</span>(<span class="title class_ inherited__">UserRepository</span>):
+    <span class="keyword">def</span> <span class="title function_">save</span>(<span class="params">self, name: <span class="built_in">str</span>, email: <span class="built_in">str</span></span>):
+        conn = sqlite3.connect(<span class="string">&quot;users.db&quot;</span>)
+        conn.execute(<span class="string">&quot;INSERT INTO users (name, email) VALUES (?, ?)&quot;</span>, (name, email))
+        conn.commit()
+        conn.close()</code></pre>
+
+<pre><code class="highlight python"><span class="comment"># adapters/in_memory_user_repository.py</span>
+<span class="keyword">from</span> entities.user_repository <span class="keyword">import</span> UserRepository
+
+<span class="keyword">class</span> <span class="title class_">InMemoryUserRepository</span>(<span class="title class_ inherited__">UserRepository</span>):
+    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):
+        <span class="variable language_">self</span>.users = []
+
+    <span class="keyword">def</span> <span class="title function_">save</span>(<span class="params">self, name: <span class="built_in">str</span>, email: <span class="built_in">str</span></span>):
+        <span class="variable language_">self</span>.users.append(&#123;<span class="string">&quot;name&quot;</span>: name, <span class="string">&quot;email&quot;</span>: email&#125;)</code></pre>
+
+<p>这两个类都实现了同一个接口，但一个写数据库，一个只存内存。业务逻辑完全不用知道区别。</p>
+<h3 id="第三步：对象装配"><a href="#第三步：对象装配" class="headerlink" title="第三步：对象装配"></a>第三步：对象装配</h3><p>在程序入口，我们决定用哪个实现：</p>
+<pre><code class="highlight python"><span class="comment"># main.py</span>
+<span class="keyword">from</span> use_cases.register_user <span class="keyword">import</span> RegisterUser
+<span class="keyword">from</span> adapters.sqlite_user_repository <span class="keyword">import</span> SqliteUserRepository
+
+<span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:
+    repo = SqliteUserRepository()
+    use_case = RegisterUser(repo)
+    <span class="built_in">print</span>(use_case.execute(<span class="string">&quot;小明&quot;</span>, <span class="string">&quot;xiaoming@example.com&quot;</span>))</code></pre>
+
+<p>如果哪天想换数据库，只需要改这一行：<code>repo = PostgresUserRepository()</code>，其他地方不动。</p>
+<h3 id="第四步：测试变得很简单"><a href="#第四步：测试变得很简单" class="headerlink" title="第四步：测试变得很简单"></a>第四步：测试变得很简单</h3><p>因为业务逻辑不依赖数据库，测试可以直接用内存实现：</p>
+<pre><code class="highlight python"><span class="comment"># tests/test_register_user.py</span>
+<span class="keyword">from</span> use_cases.register_user <span class="keyword">import</span> RegisterUser
+<span class="keyword">from</span> adapters.in_memory_user_repository <span class="keyword">import</span> InMemoryUserRepository
+
+<span class="keyword">def</span> <span class="title function_">test_invalid_email</span>():
+    repo = InMemoryUserRepository()
+    use_case = RegisterUser(repo)
+    <span class="keyword">try</span>:
+        use_case.execute(<span class="string">&quot;小明&quot;</span>, <span class="string">&quot;bad-email&quot;</span>)
+        <span class="keyword">assert</span> <span class="literal">False</span>
+    <span class="keyword">except</span> ValueError:
+        <span class="keyword">pass</span>  <span class="comment"># 预期行为</span></code></pre>
+
+<p>不需要 mock 数据库连接，也不用清理测试数据，跑得快，结果稳。</p>
+<h2 id="依赖关系长什么样？"><a href="#依赖关系长什么样？" class="headerlink" title="依赖关系长什么样？"></a>依赖关系长什么样？</h2><pre><code class="highlight plaintext">main.py
+   │
+   ▼
+use_cases/ ────依赖───▶ entities/
+   ▲                    ▲
+   │                    │
+adapters/ ───实现───────┘</code></pre>
+
+<ul>
+<li><code>use_cases</code> 只知道 <code>entities</code> 里的接口；</li>
+<li><code>adapters</code> 实现这些接口；</li>
+<li><code>main.py</code> 负责把它们“拼”在一起；</li>
+<li><strong>内层代码从不 import 外层</strong>。</li>
+</ul>
+<p>这就是所谓的“依赖向内”——不是规定，而是为了隔离变化。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>一开始觉得这种结构“太重”，一个小功能搞这么多文件。但后来发现：</p>
+<ul>
+<li>当项目变大，改需求、加功能时，<strong>知道哪些代码能动、哪些不能动，比什么都重要</strong>；</li>
+<li>测试写起来轻松很多，尤其是回归测试；</li>
+<li>团队协作时，有人改数据库、有人写 API，只要接口不变，互不干扰。</li>
+</ul>
+<p>当然，<strong>不是所有项目都需要这么分</strong>。如果你写个一次性脚本，直接写也没问题。但当你希望代码“活得久一点”，这种分离会带来长期收益。</p>
+<p>Clean Architecture 不是银弹，也不是必须遵守的教条。<br>它只是提供了一种思路：<strong>让业务逻辑独立于技术细节</strong>。<br>目录结构、分层命名，都是为了服务于这个目标。</p>
+<p>可以从一个小功能开始尝试——比如把数据库操作抽成一个接口，业务逻辑只依赖它。<br>不用一步到位，慢慢体会它带来的好处就好。</p>
+
+                                  </div>
+                                  
+                                    <div class="prev-or-next">
+                                      <div class="post-foot-next">
+                                        
+                                          <a href="/2024/02/22/%E7%90%86%E8%A7%A3%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" target="_self">
+                                            <i class="iconfont icon-chevronleft"></i>
+                                            <span>
+                                              Prev
+                                            </span>
+                                          </a>
+                                          
+                                      </div>
+                                      <div class="post-attach">
+                                        <span class="post-pubtime">
+                                          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+                                          2026-04-16 23:00:37
+                                        </span>
+                                        
+                                          <span class="post-tags">
+                                            <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                                            
+                                              <span class="span--tag mr-8">
+                                                <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" title="计算机"
+                                                  style="color: var(--post-item-text-color);">
+                                                  #计算机
+                                                </a>
+                                              </span>
+                                              
+                                          </span>
+                                          
+                                      </div>
+                                      <div class="post-foot-prev">
+                                        
+                                          <a href="/2025/05/12/%E7%90%86%E8%A7%A3%20Golang%20%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/" target="_self">
+                                            <span>
+                                              Next
+                                            </span>
+                                            <i class="iconfont icon-chevronright"></i>
+                                          </a>
+                                          
+                                      </div>
+                                    </div>
+                                    
+                                </div>
+                                
+
+                                  
+                                    <div class="comments-container">
+                                      
+
+
+
+
+
+
+
+                                    </div>
+                                    
+                              </div>
+                              
+            
+  <div class="footer">
+    <div class="social">
+      <ul>
+        
+          <li>
+            
+                <a title="github" href="">
+                  <i class="iconfont icon-github"></i>
+                </a>
+                
+          </li>
+          
+          <li>
+            
+              <a title="email" href="mailto:">
+                <i class="iconfont icon-envelope"></i>
+              </a>
+              
+          </li>
+          
+      </ul>
+    </div>
+    
+      
+        <div class="footer-more">
+          
+              Copyright © 2026
+                
+        </div>
+        
+      
+        <div class="footer-more">
+          
+              powered by owenqing
+                
+        </div>
+        
+          
+  </div>
+
+  <!-- 阅读体验增强脚本 -->
+  
+<script src="/js/reading.js"></script>
+
+
+  <!-- 代码块复制功能 -->
+  
+<script src="/js/code-copy.js"></script>
+
+        </div>
+
+        <div class="tools-bar">
+          
+  <div class="search-icon tools-bar-item" id="search-icon" role="button" aria-label="打开搜索" tabindex="0">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="search-title">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input" aria-hidden="true">
+          <i class="iconfont icon-search"></i>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="search..." aria-label="搜索文章" autocomplete="off">
+        
+        <span class="search-close-icon" id="search-close-icon" role="button" aria-label="关闭搜索" tabindex="0">
+          <i class="iconfont icon-close" aria-hidden="true"></i>
+        </span>
+      </div>
+      <div class="search-result" id="search-result" role="listbox" aria-label="搜索结果"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+          
+  <button class="tools-bar-item theme-icon" id="switch-color-scheme" aria-label="切换主题" type="button">
+    <i id="theme-icon" class="iconfont icon-moon" aria-hidden="true"></i>
+  </button>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+          <div class="back-to-top tools-bar-item hidden" role="button" aria-label="回到顶部" tabindex="0">
+  <a href="javascript: void(0)" aria-hidden="true">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="/js/mermaid-config.js"></script>
+  </body>
+
+</html>
