@@ -384,9 +384,32 @@ body {
 
 /* ========================================
    13. 回到顶部按钮优化
+   注：按钮位于 .tools-bar 容器内，使用 flex 布局
 ======================================== */
 
-.back-to-top {
+/* 工具栏内的回到顶部按钮 - 跟随 flex 布局 */
+.tools-bar .back-to-top {
+  position: static;
+  width: 44px;
+  height: 44px;
+  display: none;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.tools-bar .back-to-top.visible {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tools-bar .back-to-top:hover {
+  transform: scale(1) translateY(-2px);
+}
+
+/* 独立定位的回到顶部按钮（如果不在工具栏内使用） */
+.back-to-top:not(.tools-bar-item) {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
@@ -407,13 +430,13 @@ body {
   z-index: 999;
 }
 
-.back-to-top.visible {
+.back-to-top:not(.tools-bar-item).visible {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-.back-to-top:hover {
+.back-to-top:not(.tools-bar-item):hover {
   background: var(--accent);
   color: white;
   transform: translateY(-4px);
@@ -696,7 +719,12 @@ html {
     padding: var(--space-md);
   }
 
-  .back-to-top {
+  .tools-bar .back-to-top {
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-to-top:not(.tools-bar-item) {
     width: 40px;
     height: 40px;
     bottom: 1rem;
