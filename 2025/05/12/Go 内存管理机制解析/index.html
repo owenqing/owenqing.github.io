@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="owenqing" />
+  <!-- Open Graph Description 简短摘要-->
+  
+      <!-- 用于搜索引擎的文章摘要 -->
+      
+            
+                
+                  <title>
+                    
+                      Go 内存管理机制解析
+                        
+                              
+                                    |
+                                    
+                                      owenqing
+                  </title>
+
+                  
+                    <link rel="apple-touch-icon" href="/images/ai.jpg">
+                    <link rel="icon" href="/images/ai.jpg">
+                    
+
+                      <!-- Font preconnect for faster loading -->
+                      <link rel="preconnect" href="https://fonts.googleapis.com">
+                      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                      <!-- Noto Sans SC for harmonious CJK/Latin mixing -->
+                      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap"
+                        rel="stylesheet">
+                      <!-- Raleway-Font (kept for legacy) -->
+                      <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+                      <!-- hexo site css -->
+                      <link rel="stylesheet" href="/css/main.css" />
+                      <link rel="stylesheet" href="/css/zen.css?v=1776786772387" />
+                      <link rel="stylesheet" href="/css/reading.css" />
+                      <link rel="stylesheet" href="/css/code-block-new.css" />
+                      <link rel="stylesheet" href="/css/article.css" />
+                      <link rel="stylesheet" href="/css/mobile-nav.css" />
+                      <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+                      <!-- 代码块风格 -->
+                      
+
+                            <!-- jquery3.3.1 -->
+                            
+                                <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+                                
+
+                                  <!-- fancybox -->
+                                  
+                                      <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+                                      <script defer type="text/javascript"
+                                        src="/plugins/jquery.fancybox.min.js"></script>
+                                      
+                                        
+<script src="/js/fancybox.js"></script>
+
+
+                                          
+
+                                              
+
+                                                  <script>
+                                                    (function() {
+                                                      const mode = localStorage.getItem('color-mode') || 'light';
+                                                      document.documentElement.setAttribute('color-mode', mode);
+                                                    })();
+                                                  </script>
+
+                                                  <!-- 添加header效果脚本 -->
+                                                  <!-- <script defer type="text/javascript" src="/js/headerEffect.js"></script> -->
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    <div id="app">
+      <div class="header"
+  style="position:fixed !important; top:0 !important; left:0 !important; right:0 !important; width:100% !important;">
+  <div class="navbar">
+    <nav class="navbar">
+      <a href="/" class="blog-title">
+        <span class="outer-orbit"></span>
+        <span class="electron"></span>
+        <span class="electron-yellow"></span>
+        owenqing posts
+      </a>
+
+      <!-- Mobile menu toggle button -->
+      <button class="nav-toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-menu">
+        <span class="hamburger" aria-hidden="true"></span>
+        <span class="hamburger" aria-hidden="true"></span>
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <ul class="nav-menu" id="nav-menu" role="menubar">
+        
+          
+            <li class="active">
+              <a href="/">
+                
+                    Home
+              </a>
+            </li>
+            
+              
+          
+              
+          
+              
+          
+            <li class="">
+              <a href="/tags/">
+                
+                    Tags
+              </a>
+            </li>
+            
+              
+          
+            <li class="">
+              <a href="/friends/">
+                
+                    Friends
+              </a>
+            </li>
+            
+              
+          
+            <li class="">
+              <a href="/about/">
+                
+                    About
+              </a>
+            </li>
+            
+              
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const headerEl = document.querySelector('.header');
+    const isPostPage = document.querySelector('.post-details') !== null;
+    if (headerEl && isPostPage) {
+      headerEl.classList.add('on-post');
+    }
+
+    if (navToggle && navMenu) {
+      navToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navMenu.classList.toggle('nav-menu-active');
+        const isOpen = navMenu.classList.contains('nav-menu-active');
+        navToggle.setAttribute('aria-expanded', isOpen);
+        navToggle.classList.toggle('active', isOpen);
+
+        // Prevent body scroll when menu is open
+        if (isOpen) {
+          document.body.classList.add('nav-open');
+        } else {
+          document.body.classList.remove('nav-open');
+        }
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function (e) {
+        if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+        }
+      });
+
+      // Close menu when clicking on a nav link
+      const navLinks = document.querySelectorAll('.nav-menu a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function () {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+        });
+      });
+
+      // Close menu on ESC key
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && navMenu.classList.contains('nav-menu-active')) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+          navToggle.focus(); // Return focus to toggle button
+        }
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+          navMenu.classList.remove('nav-menu-active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          navToggle.classList.remove('active');
+          document.body.classList.remove('nav-open');
+        }
+      });
+    }
+  });
+</script>
+
+        <div class="flex-container">
+          <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+    
+
+      
+        <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+          
+
+            
+
+                
+
+                    
+
+                        
+
+                            
+                              <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+                              <div class="container post-details" id="post-details">
+                                <div class="post-content">
+                                  <div class="post-title">Go 内存管理机制解析</div>
+                                  <div class="post-attach">
+                                    <span class="post-pubtime">
+                                      <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+                                      2026-04-21 23:50:00
+                                    </span>
+                                    
+                                  </div>
+                                  <div class="markdown-body">
+                                    <h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><blockquote>
+<p>基于 Go 源码 <code>src/runtime/</code> 的深度分析，所有结构体定义和常量均来自实际源码。</p>
+</blockquote>
+<p>当你写下 <code>make([]byte, 100)</code> 的时候，Go 是怎么给你一块内存的？</p>
+<p>最直接的做法是问操作系统 —— 调用 <code>mmap</code> 系统调用。但一次系统调用的开销是几百纳秒到几微秒，而 Go 程序可能<strong>每秒分配几百万次</strong>。如果每次都问 OS，程序就别干正事了。</p>
+<p>Go 的解决思路和现实中的物流体系很像：不要每次需要一颗螺丝就跑去工厂，而是<strong>在桌上放一盒、部门放一柜、仓库放一批、工厂按吨生产</strong>。这就是 Go 内存分配器的核心设计：<strong>多级缓存 + 批量获取 + 无锁快速路径</strong>。它源自 Google 的 tcmalloc（Thread-Caching Malloc），但经过多年演化已经是完全不同的设计（<code>src/runtime/malloc.go</code>）。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/owenqing/blogimgs@main/img/01-memory-allocation-hierarchy.png"></p>
+<p>具体来说，Go 的内存分配有四个层级：</p>
+<table>
+<thead>
+<tr>
+<th align="center">层级</th>
+<th>类比</th>
+<th>实际结构</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td>你桌上的工具箱</td>
+<td><strong>mcache</strong>（Per-P）</td>
+<td>只有你自己用，拿东西不用打招呼</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td>部门的工具间</td>
+<td><strong>mcentral</strong>（Per-Size）</td>
+<td>部门共用，需要登记（加锁），但一次换一整箱</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td>公司中央仓库</td>
+<td><strong>mheap</strong>（全局唯一）</td>
+<td>全公司共用，管理所有库存和场地</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td>外部供应商</td>
+<td><strong>OS</strong>（mmap）</td>
+<td>最慢，但每次大批量进货</td>
+</tr>
+</tbody></table>
+<p>绝大部分分配在<strong>第 1 层</strong>就完成了 —— 从 mcache 的缓存 span 中通过一条 CPU 指令找到空闲 slot，整个过程无锁、无竞争，耗时个位数纳秒。只有当本地缓存耗尽时，才会逐级向上申请。每向上一层都更慢，但也更”大方”—— 以更大的粒度批量补货，摊销了锁和系统调用的开销。</p>
+<blockquote>
+<p>[!tip] 核心思想<br>每一层都在做同一件事：用”批量获取 + 本地缓存”来避免频繁访问更慢的下一层。这和 CPU 的 L1&#x2F;L2&#x2F;L3 缓存是完全一样的思想。</p>
+</blockquote>
+<p>有了全景之后，我们从最底层开始：Go 向操作系统拿到的内存，是怎么组织起来的？又是怎么切成程序能用的对象的？</p>
+<hr>
+<h2 id="Arena、Size-Class-与-mspan"><a href="#Arena、Size-Class-与-mspan" class="headerlink" title="Arena、Size Class 与 mspan"></a>Arena、Size Class 与 mspan</h2><p><img src="https://cdn.jsdelivr.net/gh/owenqing/blogimgs@main/img/02-virtual-address-space-arena.png"></p>
+<p>Go 的堆可能有几个 GB，不可能给每个字节单独记账。就像管理一个巨大的仓库，合理的做法是<strong>先把仓库划成若干区域，每个区域配一本管理簿</strong>。Go 把这些区域称为 <strong>Arena</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th align="center">Arena 大小</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>64-bit 非 Windows</td>
+<td align="center"><strong>64 MB</strong></td>
+<td>足够大以减少 arena 数量，对齐方便位运算</td>
+</tr>
+<tr>
+<td>Windows &#x2F; 32-bit</td>
+<td align="center"><strong>4 MB</strong></td>
+<td>虚拟内存管理粒度不同</td>
+</tr>
+<tr>
+<td>WebAssembly</td>
+<td align="center"><strong>512 KB</strong></td>
+<td>内存受限环境</td>
+</tr>
+</tbody></table>
+<p>每个 arena 的起始地址对齐到自身大小，通过简单的位运算就能从任意地址算出它属于哪个 arena（<code>src/runtime/malloc.go</code>）。堆需要更多空间时，mheap 会向 OS 申请新的虚拟内存并注册新 arena —— arena 的数量是动态增长的，不是一开始就固定的。</p>
+<p><strong>Arena 里面有什么？</strong> Go 为每个 Arena 维护一个 <code>heapArena</code> 结构体，就是这块区域的”管理簿”（<code>src/runtime/mheap.go</code>）：</p>
+<pre><code class="highlight go"><span class="keyword">type</span> heapArena <span class="keyword">struct</span> &#123;
+    spans     [pagesPerArena]*mspan          <span class="comment">// 页 → 管理单元的映射（8192 条目）</span>
+    pageInUse [pagesPerArena / <span class="number">8</span>]<span class="type">uint8</span>       <span class="comment">// 位图：哪些页正在使用</span>
+    pageMarks [pagesPerArena / <span class="number">8</span>]<span class="type">uint8</span>       <span class="comment">// 位图：哪些页有存活对象</span>
+    zeroedBase <span class="type">uintptr</span>                       <span class="comment">// 零初始化水位线</span>
+&#125;</code></pre>
+
+<p>这里先注意两件事。第一，<code>spans</code> 数组把 arena 内的每一页（8KB）映射到一个”管理单元”——也就是 <strong>mspan</strong>，我们马上会详细介绍它。现在只需要知道，mspan 是 Go 管理内存的核心单元，而 heapArena 通过 <code>spans</code> 数组记录了”这一页属于哪个 mspan”。第二，<code>zeroedBase</code> 是个巧妙的优化。OS 通过 mmap 给的新页本来就是零，而页分配器用地址有序的 first-fit 策略，新页地址总是递增的。<code>zeroedBase</code> 作为水位线，标记”此处以下的内存保证已清零”，省掉了大量不必要的 <code>memset</code>。</p>
+<p><strong>mheap 怎么管理这些 Arena？</strong> 所有 arena 的管理簿汇总在全局唯一的 mheap 中，通过一个二级查找表组织：</p>
+<pre><code class="highlight go"><span class="comment">// src/runtime/mheap.go</span>
+<span class="keyword">type</span> mheap <span class="keyword">struct</span> &#123;
+    arenas [<span class="number">1</span> &lt;&lt; arenaL1Bits]*[<span class="number">1</span> &lt;&lt; arenaL2Bits]*heapArena
+    <span class="comment">// ...</span>
+&#125;</code></pre>
+
+<p>给定任意一个堆上的指针，通过整数除法算出 arena 索引，查表拿到 heapArena，再按页偏移查 <code>spans</code> 数组 —— 整条链路全是数组索引，O(1) 完成，没有任何搜索。这个能力对 GC 至关重要：GC 需要频繁判断一个指针指向哪个管理单元。</p>
+<blockquote>
+<p>[!note] 关于二级表<br>大多数 64 位平台上 L1 位数 &#x3D; 0，<code>arenas</code> 退化为一维平面数组，编译器会优化掉 L1 索引。二级结构只是为了兼容不同平台。</p>
+</blockquote>
+<p>Arena 解决了”怎么组织原始内存”的问题。但 Arena 只是一大片连续的页，程序需要的是各种大小的对象。下一个问题自然是：<strong>怎么把这些页切成程序能用的对象？</strong> 在切之前，我们先要回答一个前置问题：切成多大的块？</p>
+<p><strong>Size Class：把”任意大小”变成”有限尺码”。</strong> 如果程序请求多少字节就给多少字节（像 C 的 malloc），很快就会遇到<strong>碎片</strong>问题：先分配 100B，再分配 200B，释放 100B 后请求 150B —— 那个 100B 的空洞放不下 150B，内存就像被啃得七零八落的奶酪。Go 的解决方案是把所有对象归入有限的”尺码”，就像买衣服只有 S&#x2F;M&#x2F;L&#x2F;XL。你要 100 字节？给你 112 字节。浪费一点，但同尺码的对象可以完美复用对方的空间，碎片消失了。</p>
+<p>Go 定义了 <strong>68 个 size class</strong>（class 0 保留，1-67 实际使用），涵盖 8B 到 32KB（<code>src/internal/runtime/gc/sizeclasses.go</code>）。设计约束是 **每个 size class 的内部浪费不超过 12.5%**。</p>
+<pre><code class="highlight go"><span class="keyword">const</span> (
+    NumSizeClasses = <span class="number">68</span>
+    MaxSmallSize   = <span class="number">32768</span>   <span class="comment">// 32 KB，小对象上限</span>
+    TinySize       = <span class="number">16</span>      <span class="comment">// Tiny 分配器阈值</span>
+    PageShift      = <span class="number">13</span>      <span class="comment">// pageSize = 8KB = 1 &lt;&lt; 13</span>
+)</code></pre>
+
+<p>从请求的 size 到 class 的查找是 <strong>O(1) 查表</strong>，没有循环：小于 1016 字节用 8B 步进查表，更大的用 128B 步进。</p>
+<p><strong>Span Class：再区分含不含指针。</strong> 尺码定好之后，Go 还做了一个额外的区分：这个尺码的对象含不含指针？</p>
+<pre><code class="highlight go"><span class="keyword">type</span> spanClass <span class="type">uint8</span>   <span class="comment">// sizeclass&lt;&lt;1 | noscan</span>
+<span class="comment">// 68 size class × 2 = 136 个 span class</span></code></pre>
+
+<p>含指针的对象在 GC 时需要扫描（追踪它引用了谁），不含指针的可以直接跳过。把它们分开管理，GC 就不用浪费时间扫描一堆 <code>[]byte</code>。68 个 size class × 2 &#x3D; <strong>136 个 span class</strong> —— 这个数字会反复出现：mcache 有 136 个缓存槽，mheap 有 136 个 mcentral，每个 span class 独立管理。</p>
+<p>现在我们有了尺码体系。回到之前的问题：<strong>怎么把 Arena 里的连续页，按某个尺码切成等大的格子？</strong> 这正是 mspan 做的事。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/owenqing/blogimgs@main/img/03-mspan-internal-structure.png"></p>
+<p><strong>mspan：Arena 上的”货架”。</strong> 简单来说，mspan 就是从 Arena 中拿出若干连续页，按某个 size class 切成等大 slot 的”货架”。它把前面的概念连接在一起：Arena 提供原始页，Size Class 定义尺码，mspan 把两者结合 —— 在一块连续的页上划出固定大小的格子，然后追踪哪些格子已用、哪些空闲。</p>
+<pre><code class="highlight go"><span class="comment">// src/runtime/mheap.go:422-516</span>
+<span class="keyword">type</span> mspan <span class="keyword">struct</span> &#123;
+    startAddr  <span class="type">uintptr</span>        <span class="comment">// 起始地址（在 Arena 中的位置）</span>
+    npages     <span class="type">uintptr</span>        <span class="comment">// 占多少页</span>
+
+    freeindex  <span class="type">uint16</span>         <span class="comment">// 搜索空闲 slot 的起点</span>
+    nelems     <span class="type">uint16</span>         <span class="comment">// slot 总数</span>
+    elemsize   <span class="type">uintptr</span>        <span class="comment">// 每个 slot 的大小（由 size class 决定）</span>
+
+    allocBits  *gcBits        <span class="comment">// 分配位图：1=已用, 0=空闲</span>
+    gcmarkBits *gcBits        <span class="comment">// GC 标记位图：1=存活</span>
+    allocCache <span class="type">uint64</span>         <span class="comment">// allocBits 补码缓存（CTZ 加速）</span>
+
+    spanclass  spanClass      <span class="comment">// 所属 span class</span>
+    sweepgen   <span class="type">uint32</span>         <span class="comment">// sweep 代</span>
+    allocCount <span class="type">uint16</span>         <span class="comment">// 已分配对象数</span>
+&#125;</code></pre>
+
+<p><code>startAddr</code> + <code>npages</code> 定位它在 Arena 中的位置，<code>spanclass</code> 说明它的尺码和 scan&#x2F;noscan 类别，<code>allocBits</code> 追踪每个 slot 的使用状态。一个完整的信息闭环。</p>
+<p><strong>CTZ 快速分配。</strong> 知道了 mspan 的结构，下一个问题是：怎么在上面快速找到一个空闲 slot？Go 的做法非常巧妙。<code>allocCache</code> 存储 <code>allocBits</code> 的补码（1 &#x3D; 空闲），分配时用 CPU 的 <strong>CTZ（Count Trailing Zeros）</strong> 指令直接定位第一个空闲位：</p>
+<pre><code class="highlight go"><span class="comment">// src/runtime/malloc.go:969-985</span>
+<span class="function"><span class="keyword">func</span> <span class="title">nextFreeFast</span><span class="params">(s *mspan)</span></span> gclinkptr &#123;
+    theBit := sys.TrailingZeros64(s.allocCache)  <span class="comment">// 一条 CPU 指令</span>
+    <span class="keyword">if</span> theBit &lt; <span class="number">64</span> &#123;
+        result := s.freeindex + <span class="type">uint16</span>(theBit)
+        <span class="keyword">if</span> result &lt; s.nelems &#123;
+            s.allocCache &gt;&gt;= <span class="type">uint</span>(theBit + <span class="number">1</span>)
+            s.freeindex = result + <span class="number">1</span>
+            s.allocCount++
+            <span class="keyword">return</span> gclinkptr(<span class="type">uintptr</span>(result)*s.elemsize + s.base())
+        &#125;
+    &#125;
+    <span class="keyword">return</span> <span class="number">0</span>
+&#125;</code></pre>
+
+<p>一条 CTZ 指令在 64 个 slot 中瞬间找到第一个空闲的，无锁、无分支预测失败。<strong>这就是 Go 小对象分配做到个位数纳秒的原因。</strong></p>
+<p><strong>位图交换：优雅的批量回收。</strong> 分配的问题解决了，回收呢？mspan 有两个位图：<code>allocBits</code>（谁被分配了）和 <code>gcmarkBits</code>（GC 标记谁还活着）。Sweep 时不需要逐个释放对象，只需要把 <code>gcmarkBits</code>（标记了谁还活着）变成新的 <code>allocBits</code>（谁还在用）—— 未标记的对象”自动”变成了空闲。</p>
+<blockquote>
+<p>[!tip] 关键洞察<br>交换两个位图指针就完成了所有回收，比 C 的逐对象 <code>free()</code> 高效得多。</p>
+</blockquote>
+<p><strong>mspan 的生命周期。</strong> mspan 不是静止的，它在系统中持续流转：<strong>mheap</strong> 在 Arena 中找到连续空闲页，创建 mspan，放入 <strong>mcentral</strong> 的 partial 列表。<strong>mcache</strong> 从 mcentral 获取 mspan，Goroutine 在上面分配对象。当 mspan 上所有 slot 用完，mcache 把它还给 mcentral 的 full 列表。GC sweep 后如果有对象死亡，mspan 回到 partial 列表继续服务；如果所有对象都死了，整个 mspan 的页归还 mheap。</p>
+<p>这里出现了三个名字：mcache、mcentral、mheap —— 正是开篇全景图中的三级缓存。下一节我们看它们怎么协作，以及所有分配的统一入口 <code>mallocgc</code>。</p>
+<hr>
+<h2 id="分配：三级缓存与-mallocgc"><a href="#分配：三级缓存与-mallocgc" class="headerlink" title="分配：三级缓存与 mallocgc"></a>分配：三级缓存与 mallocgc</h2><p>上一节搭好了”舞台”——Arena 提供场地，Size Class 定义规格，mspan 切好格子。这一节看<strong>谁持有这些格子、怎么分发、怎么回收</strong> —— 也就是三级缓存的协作机制，以及将一切串联起来的入口函数 <code>mallocgc</code>。</p>
+<p><strong>mcache：Per-P 无锁缓存。</strong> 分配的第一站是 mcache，它绑定在每个 P（Processor）上（<code>src/runtime/mcache.go</code>）：</p>
+<pre><code class="highlight go"><span class="keyword">type</span> mcache <span class="keyword">struct</span> &#123;
+    tiny       <span class="type">uintptr</span>                       <span class="comment">// Tiny 分配器</span>
+    tinyoffset <span class="type">uintptr</span>
+    tinyAllocs <span class="type">uintptr</span>
+    alloc      [numSpanClasses]*mspan        <span class="comment">// 136 个 span 指针</span>
+&#125;</code></pre>
+
+<p>为什么无锁？Go 的 GMP 模型保证同一时刻一个 P 上只有一个 Goroutine 在跑。mcache 绑定在 P 上，只有当前 Goroutine 会访问它，天然没有竞争。</p>
+<p>分配 128B noscan 对象的过程：算出 spanClass &#x3D; 21，从 <code>alloc[21]</code> 取出 mspan，调用 <code>nextFreeFast</code> 用 CTZ 找空闲 slot。99% 的分配到这里就结束了。</p>
+<p>mcache 还有一个针对极小对象的额外优化 —— <strong>Tiny 分配器</strong>。对于 &lt;16B 且不含指针的对象（小字符串、bool 等），多个对象合并到同一个 16B block 中。JSON 基准测试中这减少了约 12% 的分配次数和 20% 的堆内存。约束是仅限 noscan，否则一个对象存活会导致整个 block 无法回收。</p>
+<p>但 mcache 的容量是有限的 —— 每个 span class 只缓存一个 mspan。当这个 mspan 的 slot 用完了怎么办？</p>
+<p><strong>mcentral：Per-SpanClass 中心缓存。</strong> mspan 用完时，mcache 需要从 mcentral 换一个新的。全局共 136 个 mcentral，每个负责同一 span class 的所有 mspan（<code>src/runtime/mcentral.go</code>）：</p>
+<pre><code class="highlight go"><span class="keyword">type</span> mcentral <span class="keyword">struct</span> &#123;
+    spanclass spanClass
+    partial   [<span class="number">2</span>]spanSet    <span class="comment">// 有空闲 slot 的 span</span>
+    full      [<span class="number">2</span>]spanSet    <span class="comment">// 没有空闲 slot 的 span</span>
+&#125;</code></pre>
+
+<p><code>partial</code> 和 <code>full</code> 各有 2 组，这是 <strong>sweepgen 双缓冲</strong>设计：每个 GC 周期 sweepgen 加 2，两组角色互换（swept ↔ unswept），新周期只需切换索引而无需清空列表。</p>
+<p>mcache 来要 mspan 时，mcentral 按优先级搜索（<code>src/runtime/mcentral.go</code>）：先找已清扫的 partial span（最快），再找未清扫的 partial span（先 sweep 再给，限 100 个），再试 full unswept span（sweep 后可能腾出空间），最后才问 mheap 要新页。</p>
+<blockquote>
+<p>[!important] 批量交换<br>mcentral 的操作粒度是<strong>整个 span</strong>，不是单个对象。mcache 一次换走一整个 span（可能有几十上百个空闲 slot），后续分配都在本地完成。这就是摊销锁开销的关键。</p>
+</blockquote>
+<p>那如果 mcentral 也没有可用的 span 呢？请求继续上升到最后一层。</p>
+<p><strong>mheap：全局堆管理器。</strong> mheap 是整个体系的最终后盾，全局唯一的堆管理器，管理着所有 arena、所有 mcentral、以及页分配器（<code>src/runtime/mheap.go</code>）：</p>
+<pre><code class="highlight go"><span class="keyword">var</span> mheap_ mheap
+
+<span class="keyword">type</span> mheap <span class="keyword">struct</span> &#123;
+    lock      mutex                                              <span class="comment">// 堆锁</span>
+    pages     pageAlloc                                          <span class="comment">// 页分配器</span>
+    arenas    [<span class="number">1</span> &lt;&lt; arenaL1Bits]*[<span class="number">1</span> &lt;&lt; arenaL2Bits]*heapArena    <span class="comment">// Arena 映射</span>
+    central   [numSpanClasses]<span class="keyword">struct</span> &#123;                           <span class="comment">// 136 个 mcentral</span>
+        mcentral mcentral
+        pad      [...]<span class="type">byte</span>                                      <span class="comment">// cache-line 对齐</span>
+    &#125;
+    allspans  []*mspan                                           <span class="comment">// 所有 span（只追加）</span>
+    sweepgen  <span class="type">uint32</span>                                             <span class="comment">// 当前 sweep 代</span>
+
+    spanalloc  fixalloc     <span class="comment">// 分配 mspan 结构体本身</span>
+    cachealloc fixalloc     <span class="comment">// 分配 mcache 结构体本身</span>
+&#125;</code></pre>
+
+<p>看这个结构体，前面所有概念都汇聚在这里了：<code>arenas</code> 是内存地盘，<code>central[136]</code> 是 136 个 mcentral，<code>pages</code> 是页分配器，<code>allspans</code> 是 GC sweep 遍历用的 span 全集。<code>central</code> 数组中每个 mcentral 后都有 cache-line padding，防止伪共享。<code>fixalloc</code> 是堆外分配器 —— mspan 和 mcache 自身也需要内存，但不能用 <code>mallocgc</code>（否则死循环），所以用专门的固定大小分配器。</p>
+<p><strong>三层之间的”货币”。</strong> 理解整个体系的关键之一是看每层之间交换的粒度：</p>
+<table>
+<thead>
+<tr>
+<th>交换路径</th>
+<th align="center">交换单位</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mcache ↔ mcentral</td>
+<td align="center"><strong>mspan</strong></td>
+<td>一次换一整个 span，摊销锁</td>
+</tr>
+<tr>
+<td>mcentral → mheap</td>
+<td align="center"><strong>页</strong>（8KB）</td>
+<td>从 Arena 划拨连续页创建新 span</td>
+</tr>
+<tr>
+<td>mheap → OS</td>
+<td align="center"><strong>MB</strong> 级</td>
+<td>sysAlloc 至少 1MB，grow 至少 4MB</td>
+</tr>
+</tbody></table>
+<p>每向上一层，交换的粒度都更大 —— 因为更高层的操作更贵，所以每次要多拿一些回来。</p>
+<p><strong>页分配器：mheap 怎么找空闲页。</strong> 当 mcentral 问 mheap 要新 span 时，mheap 需要在 8KB 页的粒度上找到 N 个<strong>连续的空闲页</strong>。堆可能有几个 GB、几十万个页，逐页扫描太慢了。页分配器用<strong>五级基数树 + 位图</strong>的混合结构解决这个问题（<code>src/runtime/mpagealloc.go</code>）。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/owenqing/blogimgs@main/img/05-page-allocator-radix-tree.png"></p>
+<p>整个方案的基础是位图。最底层的 <code>pallocData</code> 每块管理 <strong>512 页 &#x3D; 4MB</strong>，用 8 个 uint64 记录每页是否已分配：</p>
+<pre><code class="highlight go"><span class="keyword">type</span> pallocData <span class="keyword">struct</span> &#123;
+    pallocBits          <span class="comment">// [8]uint64 — 1=已分配, 0=空闲</span>
+    scavenged pageBits  <span class="comment">// [8]uint64 — 1=已归还 OS</span>
+&#125;</code></pre>
+
+<p>在一个位图块内部，通过位运算可以快速找到连续的空闲页。但如果堆很大，逐块扫描所有位图仍然不够快 —— 这就需要在位图之上建一层摘要索引。Go 在位图之上建了五级摘要树。每个节点是一个 <code>pallocSum</code>，打包在 64 位整数中，记录三个值：<strong>start</strong>（区域开头的连续空闲页数）、<strong>max</strong>（区域内最大的连续空闲段）、<strong>end</strong>（区域末尾的连续空闲页数），各占 21 bit。</p>
+<p>为什么同时需要 start、max 和 end？因为连续空闲页可能<strong>跨越子节点的边界</strong>——一个子节点末尾的空闲页 + 下一个子节点开头的空闲页，合在一起可能构成更大的连续空间。三个值让父节点能准确计算这种跨边界的情况。</p>
+<p>五级结构从根到叶分别覆盖 ~16GiB → ~2GiB → ~256MiB → ~32MiB → <strong>4MiB</strong>（对应一个位图块）。搜索时先看高层摘要快速排除大片区域，再深入到具体的位图块定位页。页分配器还维护一个 <code>searchAddr</code>，它<strong>只增不减</strong>，标记”此地址以下全部已分配”。每次分配都从 <code>searchAddr</code> 开始搜索，跳过已知的满区域，大幅缩减搜索范围。</p>
+<p><strong>mallocgc：一切汇聚的入口。</strong> 前面所有铺垫到此完成。<code>mallocgc</code> 是 Go 所有堆分配的统一入口（<code>src/runtime/malloc.go</code>），它把前面所有概念串成一条执行路径：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/owenqing/blogimgs@main/img/04-mallocgc-allocation-flow.png"></p>
+<pre><code class="highlight go"><span class="function"><span class="keyword">func</span> <span class="title">mallocgc</span><span class="params">(size <span class="type">uintptr</span>, typ *_type, needzero <span class="type">bool</span>)</span></span> unsafe.Pointer</code></pre>
+
+<p><code>mallocgc</code> 根据对象大小走不同路径。<strong>零大小对象</strong>（<code>size == 0</code>）返回全局哨兵 <code>&amp;zerobase</code>，所有零大小对象共享同一地址。<strong>Tiny 对象</strong>（<code>&lt; 16B &amp;&amp; noscan</code>）走 mcache 的 Tiny 分配器，多个小对象合并到一个 16B block。<strong>小对象</strong>（<code>≤ 32KB</code>）是最常见的路径：查表得到 size class，算出 span class，从 <code>mcache.alloc[spc]</code> 取出 mspan，用 <code>nextFreeFast</code> 找空闲 slot，99% 在这里完成；如果 span 满了，走 refill → mcentral → mheap 逐级上升。<strong>大对象</strong>（<code>&gt; 32KB</code>）没有 size class，直接以页为单位从 mheap 分配，由页分配器找连续空闲页。</p>
+<p>分配不是孤立的操作，它和 GC 始终保持着动态平衡。<strong>GC Assist</strong> 要求分配内存前先帮忙做标记工作，分配越多帮忙越多，防止分配速度超过 GC 速度。<strong>Allocate-black</strong> 让 GC 标记阶段新分配的对象自动标为黑色（存活），不会被当前轮回收。<strong>比例 Sweep</strong> 在 <code>mheap.alloc</code> 前触发，确保堆增长和回收保持平衡。</p>
+<hr>
+<h2 id="回收：GC-与-Sweep"><a href="#回收：GC-与-Sweep" class="headerlink" title="回收：GC 与 Sweep"></a>回收：GC 与 Sweep</h2><p>Go 使用并发三色标记-清扫 GC。完整的 GC 机制是另一个大话题，这里聚焦于它和内存分配器的交互 —— 特别是 sweep 阶段怎么把”死掉的对象”变成”可用的空间”。</p>
+<p>GC 标记位图本身也需要内存，由专门的 <code>gcBitsArena</code> 管理（<code>src/runtime/mheap.go</code>）。系统维护 <code>free</code>、<code>next</code>、<code>current</code>、<code>previous</code> 四个指针，每个 GC 周期结束时轮转一次：<code>previous</code> 释放进 <code>free</code> 池，<code>current</code> 变成 <code>previous</code>，<code>next</code> 变成 <code>current</code>，<code>next</code> 置空等待下次分配。为什么不直接释放 <code>previous</code>？因为 sweep 完成前，旧的 <code>allocBits</code>（它指向上一轮 <code>gcmarkBits</code>）可能还在被读取，需要多等一轮才能安全回收。</p>
+<p><strong>Sweep 做了什么？</strong> 回顾上面的位图交换：sweep 一个 mspan 时，把 <code>gcmarkBits</code> 变成新的 <code>allocBits</code>，分配全新的 <code>gcmarkBits</code>（全零），重置 <code>freeindex</code> 和 <code>allocCount</code>。没有逐对象的释放操作。</p>
+<p>sweep 完成后，mspan 根据状态流向不同的地方——有空闲 slot 的回到 mcentral 的 <strong>partial</strong> 列表继续服务；全满的留在 <strong>full</strong> 列表等下一轮 GC；全空的则整个归还 <strong>mheap</strong>，页被回收用于创建新 span。这就是 mspan 生命周期的完整闭环：mheap 创建 → mcentral 分发 → mcache 使用 → GC sweep → 回到 mcentral 或归还 mheap。</p>
+<p><strong>sweepgen 状态机。</strong> 怎么判断一个 mspan 是否需要 sweep？每个 span 有自己的 <code>sweepgen</code>，通过和全局 <code>mheap_.sweepgen</code> 比较即可：差 2 &#x3D; 需要 sweep，差 1 &#x3D; 正在 sweep，相等 &#x3D; 已完成。每个 GC 周期全局 sweepgen 加 2，<strong>无需加锁</strong>，一次整数比较就能判断。这和 mcentral 的双缓冲设计配合：<code>partial</code>&#x2F;<code>full</code> 的两组正是通过 sweepgen 区分 swept 和 unswept。</p>
+<hr>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>整个内存管理体系可以用一句话串联：<strong>mallocgc</strong> 根据对象大小查找 <strong>size class</strong>，从 <strong>mcache</strong> 中对应的 <strong>mspan</strong> 上用 CTZ 找空闲 slot；mspan 耗尽时从 <strong>mcentral</strong> 换一个新的；mcentral 没库存时 <strong>mheap</strong> 通过<strong>页分配器</strong>在 <strong>Arena</strong> 中找连续空闲页创建新 mspan；Arena 不够时向 <strong>OS</strong> 批量申请。GC sweep 通过位图交换批量回收 mspan 中的死对象，让 mspan 重新回到 mcentral 或 mheap 继续流转。</p>
+<p><strong>性能关键设计：</strong></p>
+<table>
+<thead>
+<tr>
+<th>设计</th>
+<th>解决什么问题</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Per-P mcache</td>
+<td>Goroutine 竞争</td>
+<td>无锁分配</td>
+</tr>
+<tr>
+<td>allocCache + CTZ</td>
+<td>找空闲 slot</td>
+<td>一条 CPU 指令</td>
+</tr>
+<tr>
+<td>Tiny 分配器</td>
+<td>小 noscan 对象浪费</td>
+<td>减少 ~12% 分配次数</td>
+</tr>
+<tr>
+<td>Size Class</td>
+<td>内存碎片</td>
+<td>同尺码完美复用</td>
+</tr>
+<tr>
+<td>Span 级 refill</td>
+<td>频繁加锁</td>
+<td>批量交换摊销开销</td>
+</tr>
+<tr>
+<td>基数树 pallocSum</td>
+<td>找连续空闲页</td>
+<td>O(log N) 搜索</td>
+</tr>
+<tr>
+<td>位图交换 sweep</td>
+<td>逐对象释放</td>
+<td>指针交换即完成</td>
+</tr>
+<tr>
+<td>sweepgen 双缓冲</td>
+<td>sweep 状态判断</td>
+<td>无锁整数比较</td>
+</tr>
+<tr>
+<td>zeroedBase 水位线</td>
+<td>多余的清零</td>
+<td>新页本身已零</td>
+</tr>
+</tbody></table>
+<p><strong>源码阅读路线：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">顺序</th>
+<th>文件</th>
+<th>读什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td><code>src/runtime/malloc.go</code></td>
+<td><strong>从这里开始</strong>。开头 ~100 行注释是分配器的设计蓝图，然后看 <code>mallocgc</code></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td><code>src/runtime/mcache.go</code></td>
+<td>mcache 结构体、Tiny 分配器、refill 逻辑</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td><code>src/runtime/mcentral.go</code></td>
+<td>mcentral、cacheSpan 搜索优先级</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td><code>src/runtime/mheap.go</code></td>
+<td>mheap、heapArena、mspan 定义</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td><code>src/runtime/mpagealloc.go</code></td>
+<td>页分配器、基数树、pallocSum</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td><code>src/internal/runtime/gc/sizeclasses.go</code></td>
+<td>68 个 size class 完整表</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!tip] 阅读建议<br>从 <code>mallocgc</code> 函数开始，顺着调用链走：<code>mallocgc</code> → <code>mcache.nextFree</code> → <code>mcache.refill</code> → <code>mcentral.cacheSpan</code> → <code>mheap.alloc</code>。遇到不认识的结构体再跳到对应文件，这样每个概念都有上下文，比孤立阅读结构体定义有效得多。</p>
+</blockquote>
+
+                                  </div>
+                                  
+                                    <div class="prev-or-next">
+                                      <div class="post-foot-next">
+                                        
+                                          <a href="/2024/06/13/%E7%AE%80%E6%B4%81%E7%9A%84%E6%9E%B6%E6%9E%84/" target="_self">
+                                            <i class="iconfont icon-chevronleft"></i>
+                                            <span>
+                                              Prev
+                                            </span>
+                                          </a>
+                                          
+                                      </div>
+                                      <div class="post-attach">
+                                        <span class="post-pubtime">
+                                          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+                                          2026-04-21 23:50:00
+                                        </span>
+                                        
+                                      </div>
+                                      <div class="post-foot-prev">
+                                        
+                                      </div>
+                                    </div>
+                                    
+                                </div>
+                                
+
+                                  
+                                    <div class="comments-container">
+                                      
+
+
+
+
+
+
+
+                                    </div>
+                                    
+                              </div>
+                              
+            
+  <div class="footer">
+    <div class="social">
+      <ul>
+        
+          <li>
+            
+                <a title="github" href="">
+                  <i class="iconfont icon-github"></i>
+                </a>
+                
+          </li>
+          
+          <li>
+            
+              <a title="email" href="mailto:">
+                <i class="iconfont icon-envelope"></i>
+              </a>
+              
+          </li>
+          
+      </ul>
+    </div>
+    
+      
+        <div class="footer-more">
+          
+              Copyright © 2026
+                
+        </div>
+        
+      
+        <div class="footer-more">
+          
+              powered by owenqing
+                
+        </div>
+        
+          
+  </div>
+
+  <!-- 阅读体验增强脚本 -->
+  
+<script src="/js/reading.js"></script>
+
+
+  <!-- 代码块复制功能 -->
+  
+<script src="/js/code-copy.js"></script>
+
+        </div>
+
+        <div class="tools-bar">
+          
+  <div class="search-icon tools-bar-item" id="search-icon" role="button" aria-label="打开搜索" tabindex="0">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="search-title">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input" aria-hidden="true">
+          <i class="iconfont icon-search"></i>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="search..." aria-label="搜索文章" autocomplete="off">
+        
+        <span class="search-close-icon" id="search-close-icon" role="button" aria-label="关闭搜索" tabindex="0">
+          <i class="iconfont icon-close" aria-hidden="true"></i>
+        </span>
+      </div>
+      <div class="search-result" id="search-result" role="listbox" aria-label="搜索结果"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+          
+  <button class="tools-bar-item theme-icon" id="switch-color-scheme" aria-label="切换主题" type="button">
+    <i id="theme-icon" class="iconfont icon-moon" aria-hidden="true"></i>
+  </button>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+          <div class="back-to-top tools-bar-item hidden" role="button" aria-label="回到顶部" tabindex="0">
+  <a href="javascript: void(0)" aria-hidden="true">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="/js/mermaid-config.js"></script>
+  </body>
+
+</html>
