@@ -22,9 +22,20 @@
                   </title>
 
                   
-                    <link rel="apple-touch-icon" href="/images/ai.jpg">
-                    <link rel="icon" href="/images/ai.jpg">
+                    <link rel="apple-touch-icon" href="/images/apple-touch-icon-code.png">
+                    <link rel="icon" href="/images/favicon-code.png">
                     
+
+                      
+                        <!-- 提前应用字体选择，避免首屏字体闪烁 -->
+                        <script>
+                          (function() {
+                            var mode = localStorage.getItem('font-mode');
+                            if (mode !== 'serif') { mode = 'sans'; }
+                            document.documentElement.setAttribute('font-mode', mode);
+                          })();
+                        </script>
+                        
 
                       <!-- Font preconnect for faster loading -->
                       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,15 +43,24 @@
                       <!-- Noto Sans SC for harmonious CJK/Latin mixing -->
                       <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap"
                         rel="stylesheet">
+                      
+                        <!-- Noto Serif SC for serif reading mode -->
+                        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+                          rel="stylesheet">
+                        
                       <!-- Raleway-Font (kept for legacy) -->
                       <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
 
                       <!-- hexo site css -->
                       <link rel="stylesheet" href="/css/main.css" />
-                      <link rel="stylesheet" href="/css/zen.css?v=1776786772387" />
+                      <link rel="stylesheet" href="/css/zen.css?v=1788540410705" />
                       <link rel="stylesheet" href="/css/reading.css" />
+                      
+                        <link rel="stylesheet" href="/css/font-switch.css" />
+                        
                       <link rel="stylesheet" href="/css/code-block-new.css" />
                       <link rel="stylesheet" href="/css/article.css" />
+                      <link rel="stylesheet" href="/css/callout.css" />
                       <link rel="stylesheet" href="/css/mobile-nav.css" />
                       <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
                       <!-- 代码块风格 -->
@@ -75,6 +95,7 @@
                                                   <!-- 添加header效果脚本 -->
                                                   <!-- <script defer type="text/javascript" src="/js/headerEffect.js"></script> -->
 <meta name="generator" content="Hexo 7.3.0"></head>
+
 
   <body>
     <div id="app">
@@ -263,12 +284,11 @@
                                   <div class="post-title">简洁的架构</div>
                                   <div class="post-attach">
                                     <span class="post-pubtime">
-                                      <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-                                      2026-04-16 23:00:37
+                                      <i class="iconfont icon-updatetime mr-10" title="Published"></i>
+                                      2024-06-13
                                     </span>
                                     
                                       <span class="post-tags">
-                                        <i class="iconfont icon-tags mr-10" title="Tags"></i>
                                         
                                           <span class="span--tag mr-8">
                                             <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" title="计算机"
@@ -284,17 +304,7 @@
                                     <pre class="mermaid">graph LR
     A[Frameworks & Drivers] --> B[Interface Adapters]
     B --> C[Use Cases]
-    C --> D[Entities]
-
-    classDef f fill:#e0f2fe,stroke:#0369a1;
-    classDef a fill:#dcfce7,stroke:#16a34a;
-    classDef u fill:#fef9c3,stroke:#ca8a04;
-    classDef e fill:#fee2e2,stroke:#dc2626;
-
-    class A f
-    class B a
-    class C u
-    class D e</pre>
+    C --> D[Entities]</pre>
 
 <p>Clean Architecture(Robert C. Martin) 的核心思想是通过分层和依赖规则，实现软件系统的高内聚、低耦合，从而提升可维护性、可测试性和可扩展性。其关键在于将业务逻辑与外部技术细节（如数据库、框架、UI、Web 服务等）彻底分离，确保系统的核心——也就是业务规则——不依赖于任何外部组件。</p>
 <p>这一架构强调“依赖倒置原则”：高层模块（如用例、业务逻辑）不应依赖低层模块（如数据库、网络），两者都应依赖于抽象。所有依赖关系必须指向系统内部，即从外层（技术细节层）向内层（业务核心层）流动，而内层对最外层一无所知。</p>
@@ -314,13 +324,7 @@
 <li><strong>依赖方向</strong>：内层不知道外层的存在，外层去实现内层定义的接口。</li>
 </ol>
 <p>这样一来，换数据库、加 API、写测试，都只动外层，核心逻辑几乎不用改。</p>
-<h2 id="一个具体的例子：用户注册"><a href="#一个具体的例子：用户注册" class="headerlink" title="一个具体的例子：用户注册"></a>一个具体的例子：用户注册</h2><pre class="mermaid">%%{init: {'theme': 'base', 'themeVariables': { 'fontSize': '14px'}} }%%
-flowchart LR
-    classDef framework fill:#dbeafe,stroke:#3b82f6,color:#1e40af;
-    classDef adapter fill:#dcfce7,stroke:#22c55e,color:#166534;
-    classDef usecase fill:#fef3c7,stroke:#f59e0b,color:#92400e;
-    classDef entity fill:#fee2e2,stroke:#ef4444,color:#b91c1c;
-
+<h2 id="一个具体的例子：用户注册"><a href="#一个具体的例子：用户注册" class="headerlink" title="一个具体的例子：用户注册"></a>一个具体的例子：用户注册</h2><pre class="mermaid">flowchart LR
     subgraph Frameworks["Frameworks & Drivers"]
         F1["📄 main.py"]
         F2["🗃️ SQLite"]
@@ -346,12 +350,7 @@ flowchart LR
     A1 --> U1
     A2 --> U1
     U1 --> E1
-    E1 --> E2
-
-    class F1,F2 framework
-    class A1,A2 adapter
-    class U1 usecase
-    class E1,E2 entity</pre>
+    E1 --> E2</pre>
 
 <p>我们用一个极简的用户注册功能来演示。项目结构如下：</p>
 <pre><code class="highlight plaintext">user_service/
@@ -466,40 +465,33 @@ adapters/ ───实现───────┘</code></pre>
                                     <div class="prev-or-next">
                                       <div class="post-foot-next">
                                         
-                                          <a href="/2024/02/22/%E7%90%86%E8%A7%A3%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" target="_self">
-                                            <i class="iconfont icon-chevronleft"></i>
-                                            <span>
-                                              Prev
+                                          <a href="/2024/02/22/%E7%90%86%E8%A7%A3%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" target="_self"
+                                            class="prev-next-link prev-next-link-left">
+                                            <span class="prev-next-icon" aria-hidden="true">
+                                              <i class="iconfont icon-chevronleft"></i>
+                                            </span>
+                                            <span class="prev-next-body">
+                                              <span class="prev-next-label">
+                                                Prev
+                                              </span>
+                                              <span class="prev-next-title">理解并发编程</span>
                                             </span>
                                           </a>
                                           
                                       </div>
-                                      <div class="post-attach">
-                                        <span class="post-pubtime">
-                                          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-                                          2026-04-16 23:00:37
-                                        </span>
-                                        
-                                          <span class="post-tags">
-                                            <i class="iconfont icon-tags mr-10" title="Tags"></i>
-                                            
-                                              <span class="span--tag mr-8">
-                                                <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" title="计算机"
-                                                  style="color: var(--post-item-text-color);">
-                                                  #计算机
-                                                </a>
-                                              </span>
-                                              
-                                          </span>
-                                          
-                                      </div>
                                       <div class="post-foot-prev">
                                         
-                                          <a href="/2025/05/12/Go%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/" target="_self">
-                                            <span>
-                                              Next
+                                          <a href="/2025/05/12/Go%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/" target="_self"
+                                            class="prev-next-link prev-next-link-right">
+                                            <span class="prev-next-body">
+                                              <span class="prev-next-label">
+                                                Next
+                                              </span>
+                                              <span class="prev-next-title">Go 内存管理机制解析</span>
                                             </span>
-                                            <i class="iconfont icon-chevronright"></i>
+                                            <span class="prev-next-icon" aria-hidden="true">
+                                              <i class="iconfont icon-chevronright"></i>
+                                            </span>
                                           </a>
                                           
                                       </div>
@@ -522,6 +514,7 @@ adapters/ ───实现───────┘</code></pre>
                                     
                               </div>
                               
+
             
   <div class="footer">
     <div class="social">
@@ -760,6 +753,18 @@ adapters/ ───实现───────┘</code></pre>
         searchFunc(path, 'search-input', 'search-result');
     }
   </script>
+
+
+
+
+          
+  <button class="tools-bar-item" id="switch-font" aria-label="切换到衬线字体" aria-pressed="false" type="button">
+    <span class="font-switch-aa" id="font-icon" aria-hidden="true">Aa</span>
+  </button>
+
+  
+<script src="/js/fontswitch.js"></script>
+
 
 
 

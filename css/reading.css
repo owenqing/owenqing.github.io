@@ -169,20 +169,8 @@ body {
 
 .markdown-body p {
   margin-bottom: var(--paragraph-spacing);
-  text-align: justify;
+  text-align: left;
   word-break: break-word;
-  hyphens: auto;
-}
-
-/* 首字下沉效果（可选，适用于文章开头） */
-.markdown-body > p:first-of-type::first-letter {
-  font-size: 3em;
-  float: left;
-  line-height: 1;
-  margin-right: 0.1em;
-  margin-top: -0.1em;
-  font-weight: 700;
-  color: var(--accent);
 }
 
 /* 强调文本 */
@@ -745,5 +733,103 @@ html {
     padding: var(--space-sm) var(--space-md);
     margin-left: 0;
     margin-right: 0;
+  }
+}
+
+/* ========================================
+   21. 文章页首尾微调
+======================================== */
+
+/* 文章标题 */
+.post-title {
+  font-size: clamp(2.4rem, 4vw, 3rem) !important;
+}
+
+/* 底部上一篇/下一篇 */
+.prev-or-next .post-foot-next,
+.prev-or-next .post-foot-prev {
+  white-space: normal;
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 48%;
+}
+
+.prev-or-next .post-foot-next a,
+.prev-or-next .post-foot-prev a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 100%;
+  padding: 0.6rem 0;
+  color: inherit;
+}
+
+.prev-or-next .prev-next-link-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.prev-or-next .prev-next-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-light);
+  border-radius: 50%;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.prev-or-next .prev-next-icon i {
+  margin: 0;
+  font-size: 1.3rem;
+  opacity: 1;
+}
+
+.prev-or-next .prev-next-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.prev-or-next .prev-next-label {
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+.prev-or-next .prev-next-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prev-or-next .post-foot-next a:hover .prev-next-icon,
+.prev-or-next .post-foot-prev a:hover .prev-next-icon {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.prev-or-next .post-foot-next a:hover .prev-next-title,
+.prev-or-next .post-foot-prev a:hover .prev-next-title {
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .prev-or-next .post-foot-next,
+  .prev-or-next .post-foot-prev {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .prev-or-next .post-foot-next a,
+  .prev-or-next .post-foot-prev a {
+    justify-content: flex-start;
+    text-align: left;
   }
 }

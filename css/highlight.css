@@ -68,6 +68,9 @@
 /* Mermaid 图表样式 - 由 mermaid-config.js 动态控制 */
 .mermaid {
   background: transparent;
+  display: flex;
+  justify-content: center;
+  margin: 2em auto;
 }
 
 .mermaid svg {

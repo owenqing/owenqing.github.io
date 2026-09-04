@@ -17,9 +17,20 @@
                   </title>
 
                   
-                    <link rel="apple-touch-icon" href="/images/ai.jpg">
-                    <link rel="icon" href="/images/ai.jpg">
+                    <link rel="apple-touch-icon" href="/images/apple-touch-icon-code.png">
+                    <link rel="icon" href="/images/favicon-code.png">
                     
+
+                      
+                        <!-- 提前应用字体选择，避免首屏字体闪烁 -->
+                        <script>
+                          (function() {
+                            var mode = localStorage.getItem('font-mode');
+                            if (mode !== 'serif') { mode = 'sans'; }
+                            document.documentElement.setAttribute('font-mode', mode);
+                          })();
+                        </script>
+                        
 
                       <!-- Font preconnect for faster loading -->
                       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,15 +38,24 @@
                       <!-- Noto Sans SC for harmonious CJK/Latin mixing -->
                       <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap"
                         rel="stylesheet">
+                      
+                        <!-- Noto Serif SC for serif reading mode -->
+                        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+                          rel="stylesheet">
+                        
                       <!-- Raleway-Font (kept for legacy) -->
                       <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
 
                       <!-- hexo site css -->
                       <link rel="stylesheet" href="/css/main.css" />
-                      <link rel="stylesheet" href="/css/zen.css?v=1776786772392" />
+                      <link rel="stylesheet" href="/css/zen.css?v=1788540410705" />
                       <link rel="stylesheet" href="/css/reading.css" />
+                      
+                        <link rel="stylesheet" href="/css/font-switch.css" />
+                        
                       <link rel="stylesheet" href="/css/code-block-new.css" />
                       <link rel="stylesheet" href="/css/article.css" />
+                      <link rel="stylesheet" href="/css/callout.css" />
                       <link rel="stylesheet" href="/css/mobile-nav.css" />
                       <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
                       <!-- 代码块风格 -->
@@ -70,6 +90,7 @@
                                                   <!-- 添加header效果脚本 -->
                                                   <!-- <script defer type="text/javascript" src="/js/headerEffect.js"></script> -->
 <meta name="generator" content="Hexo 7.3.0"></head>
+
 
   <body>
     <div id="app">
@@ -498,6 +519,18 @@
         searchFunc(path, 'search-input', 'search-result');
     }
   </script>
+
+
+
+
+          
+  <button class="tools-bar-item" id="switch-font" aria-label="切换到衬线字体" aria-pressed="false" type="button">
+    <span class="font-switch-aa" id="font-icon" aria-hidden="true">Aa</span>
+  </button>
+
+  
+<script src="/js/fontswitch.js"></script>
+
 
 
 

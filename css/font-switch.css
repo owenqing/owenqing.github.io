@@ -1,0 +1,66 @@
+/**
+ * Font Switch
+ * 默认保持现有无衬线字体；切到 font-mode="serif" 时，
+ * 正文与标题使用类似 Notion 的衬线字体。
+ * 导航、工具栏、搜索、页脚以及代码块仍保持原有字体。
+ */
+
+:root {
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia,
+    "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", SimSun, serif;
+}
+
+/* Aa 按钮图标 */
+.font-switch-aa {
+  display: inline-block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-text-a, #808080);
+  transition: color 0.3s ease;
+}
+
+/* 处于衬线模式时，按钮上的 Aa 也同步变为衬线 */
+:root[font-mode="serif"] .font-switch-aa {
+  font-family: var(--font-serif);
+}
+
+.tools-bar .tools-bar-item:hover .font-switch-aa {
+  color: var(--color-text-a-hover, #6190e8);
+}
+
+/* 正文与标题切换到衬线 */
+:root[font-mode="serif"] .markdown-body,
+:root[font-mode="serif"] .post-title,
+:root[font-mode="serif"] .content-title,
+:root[font-mode="serif"] .post-item .title,
+:root[font-mode="serif"] .tag-details .post-item > a,
+:root[font-mode="serif"] .category-details .post-item > a {
+  font-family: var(--font-serif) !important;
+}
+
+/* 衬线正文加重一档，避免细笔画显得发淡 */
+:root[font-mode="serif"] .markdown-body {
+  font-weight: 500 !important;
+}
+
+:root[font-mode="serif"] .markdown-body code,
+:root[font-mode="serif"] .markdown-body pre {
+  font-weight: 400 !important;
+}
+
+/* 亮色模式下正文颜色向纯黑靠近一点 */
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body strong {
+  color: #1f1f1f !important;
+}
+
+/* 暗色模式适配 */
+:root[color-mode="dark"] .font-switch-aa {
+  color: #c9d1d9;
+}
+
+:root[color-mode="dark"] .tools-bar .tools-bar-item:hover .font-switch-aa {
+  color: #58a6ff;
+}

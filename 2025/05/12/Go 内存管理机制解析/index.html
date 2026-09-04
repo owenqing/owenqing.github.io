@@ -22,9 +22,20 @@
                   </title>
 
                   
-                    <link rel="apple-touch-icon" href="/images/ai.jpg">
-                    <link rel="icon" href="/images/ai.jpg">
+                    <link rel="apple-touch-icon" href="/images/apple-touch-icon-code.png">
+                    <link rel="icon" href="/images/favicon-code.png">
                     
+
+                      
+                        <!-- 提前应用字体选择，避免首屏字体闪烁 -->
+                        <script>
+                          (function() {
+                            var mode = localStorage.getItem('font-mode');
+                            if (mode !== 'serif') { mode = 'sans'; }
+                            document.documentElement.setAttribute('font-mode', mode);
+                          })();
+                        </script>
+                        
 
                       <!-- Font preconnect for faster loading -->
                       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,15 +43,24 @@
                       <!-- Noto Sans SC for harmonious CJK/Latin mixing -->
                       <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap"
                         rel="stylesheet">
+                      
+                        <!-- Noto Serif SC for serif reading mode -->
+                        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+                          rel="stylesheet">
+                        
                       <!-- Raleway-Font (kept for legacy) -->
                       <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
 
                       <!-- hexo site css -->
                       <link rel="stylesheet" href="/css/main.css" />
-                      <link rel="stylesheet" href="/css/zen.css?v=1776786772387" />
+                      <link rel="stylesheet" href="/css/zen.css?v=1788540410705" />
                       <link rel="stylesheet" href="/css/reading.css" />
+                      
+                        <link rel="stylesheet" href="/css/font-switch.css" />
+                        
                       <link rel="stylesheet" href="/css/code-block-new.css" />
                       <link rel="stylesheet" href="/css/article.css" />
+                      <link rel="stylesheet" href="/css/callout.css" />
                       <link rel="stylesheet" href="/css/mobile-nav.css" />
                       <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
                       <!-- 代码块风格 -->
@@ -75,6 +95,7 @@
                                                   <!-- 添加header效果脚本 -->
                                                   <!-- <script defer type="text/javascript" src="/js/headerEffect.js"></script> -->
 <meta name="generator" content="Hexo 7.3.0"></head>
+
 
   <body>
     <div id="app">
@@ -263,8 +284,8 @@
                                   <div class="post-title">Go 内存管理机制解析</div>
                                   <div class="post-attach">
                                     <span class="post-pubtime">
-                                      <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-                                      2026-04-21 23:50:00
+                                      <i class="iconfont icon-updatetime mr-10" title="Published"></i>
+                                      2025-05-12
                                     </span>
                                     
                                   </div>
@@ -312,9 +333,10 @@
 </tr>
 </tbody></table>
 <p>绝大部分分配在<strong>第 1 层</strong>就完成了 —— 从 mcache 的缓存 span 中通过一条 CPU 指令找到空闲 slot，整个过程无锁、无竞争，耗时个位数纳秒。只有当本地缓存耗尽时，才会逐级向上申请。每向上一层都更慢，但也更”大方”—— 以更大的粒度批量补货，摊销了锁和系统调用的开销。</p>
-<blockquote>
-<p>[!tip] 核心思想<br>每一层都在做同一件事：用”批量获取 + 本地缓存”来避免频繁访问更慢的下一层。这和 CPU 的 L1&#x2F;L2&#x2F;L3 缓存是完全一样的思想。</p>
-</blockquote>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><svg class="octicon octicon-light-bulb mr-2" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p><strong>核心思想</strong>：每一层都在做同一件事：用”批量获取 + 本地缓存”来避免频繁访问更慢的下一层。这和 CPU 的 L1&#x2F;L2&#x2F;L3 缓存是完全一样的思想。</p>
+</div>
 <p>有了全景之后，我们从最底层开始：Go 向操作系统拿到的内存，是怎么组织起来的？又是怎么切成程序能用的对象的？</p>
 <hr>
 <h2 id="Arena、Size-Class-与-mspan"><a href="#Arena、Size-Class-与-mspan" class="headerlink" title="Arena、Size Class 与 mspan"></a>Arena、Size Class 与 mspan</h2><p><img src="https://cdn.jsdelivr.net/gh/owenqing/blogimgs@main/img/02-virtual-address-space-arena.png"></p>
@@ -361,12 +383,13 @@
 &#125;</code></pre>
 
 <p>给定任意一个堆上的指针，通过整数除法算出 arena 索引，查表拿到 heapArena，再按页偏移查 <code>spans</code> 数组 —— 整条链路全是数组索引，O(1) 完成，没有任何搜索。这个能力对 GC 至关重要：GC 需要频繁判断一个指针指向哪个管理单元。</p>
-<blockquote>
-<p>[!note] 关于二级表<br>大多数 64 位平台上 L1 位数 &#x3D; 0，<code>arenas</code> 退化为一维平面数组，编译器会优化掉 L1 索引。二级结构只是为了兼容不同平台。</p>
-</blockquote>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>关于二级表</strong>：大多数 64 位平台上 L1 位数 &#x3D; 0，<code>arenas</code> 退化为一维平面数组，编译器会优化掉 L1 索引。二级结构只是为了兼容不同平台。</p>
+</div>
 <p>Arena 解决了”怎么组织原始内存”的问题。但 Arena 只是一大片连续的页，程序需要的是各种大小的对象。下一个问题自然是：<strong>怎么把这些页切成程序能用的对象？</strong> 在切之前，我们先要回答一个前置问题：切成多大的块？</p>
 <p><strong>Size Class：把”任意大小”变成”有限尺码”。</strong> 如果程序请求多少字节就给多少字节（像 C 的 malloc），很快就会遇到<strong>碎片</strong>问题：先分配 100B，再分配 200B，释放 100B 后请求 150B —— 那个 100B 的空洞放不下 150B，内存就像被啃得七零八落的奶酪。Go 的解决方案是把所有对象归入有限的”尺码”，就像买衣服只有 S&#x2F;M&#x2F;L&#x2F;XL。你要 100 字节？给你 112 字节。浪费一点，但同尺码的对象可以完美复用对方的空间，碎片消失了。</p>
-<p>Go 定义了 <strong>68 个 size class</strong>（class 0 保留，1-67 实际使用），涵盖 8B 到 32KB（<code>src/internal/runtime/gc/sizeclasses.go</code>）。设计约束是 **每个 size class 的内部浪费不超过 12.5%**。</p>
+<p>Go 定义了 <strong>68 个 size class</strong>（class 0 保留，1-67 实际使用），涵盖 8B 到 32KB（<code>src/internal/runtime/gc/sizeclasses.go</code>）。设计约束是 <strong>每个 size class 的内部浪费控制在 12.5% 以内</strong>。</p>
 <pre><code class="highlight go"><span class="keyword">const</span> (
     NumSizeClasses = <span class="number">68</span>
     MaxSmallSize   = <span class="number">32768</span>   <span class="comment">// 32 KB，小对象上限</span>
@@ -420,9 +443,10 @@
 
 <p>一条 CTZ 指令在 64 个 slot 中瞬间找到第一个空闲的，无锁、无分支预测失败。<strong>这就是 Go 小对象分配做到个位数纳秒的原因。</strong></p>
 <p><strong>位图交换：优雅的批量回收。</strong> 分配的问题解决了，回收呢？mspan 有两个位图：<code>allocBits</code>（谁被分配了）和 <code>gcmarkBits</code>（GC 标记谁还活着）。Sweep 时不需要逐个释放对象，只需要把 <code>gcmarkBits</code>（标记了谁还活着）变成新的 <code>allocBits</code>（谁还在用）—— 未标记的对象”自动”变成了空闲。</p>
-<blockquote>
-<p>[!tip] 关键洞察<br>交换两个位图指针就完成了所有回收，比 C 的逐对象 <code>free()</code> 高效得多。</p>
-</blockquote>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><svg class="octicon octicon-light-bulb mr-2" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p><strong>关键洞察</strong>：交换两个位图指针就完成了所有回收，比 C 的逐对象 <code>free()</code> 高效得多。</p>
+</div>
 <p><strong>mspan 的生命周期。</strong> mspan 不是静止的，它在系统中持续流转：<strong>mheap</strong> 在 Arena 中找到连续空闲页，创建 mspan，放入 <strong>mcentral</strong> 的 partial 列表。<strong>mcache</strong> 从 mcentral 获取 mspan，Goroutine 在上面分配对象。当 mspan 上所有 slot 用完，mcache 把它还给 mcentral 的 full 列表。GC sweep 后如果有对象死亡，mspan 回到 partial 列表继续服务；如果所有对象都死了，整个 mspan 的页归还 mheap。</p>
 <p>这里出现了三个名字：mcache、mcentral、mheap —— 正是开篇全景图中的三级缓存。下一节我们看它们怎么协作，以及所有分配的统一入口 <code>mallocgc</code>。</p>
 <hr>
@@ -448,9 +472,10 @@
 
 <p><code>partial</code> 和 <code>full</code> 各有 2 组，这是 <strong>sweepgen 双缓冲</strong>设计：每个 GC 周期 sweepgen 加 2，两组角色互换（swept ↔ unswept），新周期只需切换索引而无需清空列表。</p>
 <p>mcache 来要 mspan 时，mcentral 按优先级搜索（<code>src/runtime/mcentral.go</code>）：先找已清扫的 partial span（最快），再找未清扫的 partial span（先 sweep 再给，限 100 个），再试 full unswept span（sweep 后可能腾出空间），最后才问 mheap 要新页。</p>
-<blockquote>
-<p>[!important] 批量交换<br>mcentral 的操作粒度是<strong>整个 span</strong>，不是单个对象。mcache 一次换走一整个 span（可能有几十上百个空闲 slot），后续分配都在本地完成。这就是摊销锁开销的关键。</p>
-</blockquote>
+<div class="markdown-alert markdown-alert-important">
+<p class="markdown-alert-title"><svg class="octicon octicon-report mr-2" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
+<p><strong>批量交换</strong>：mcentral 的操作粒度是<strong>整个 span</strong>，不是单个对象。mcache 一次换走一整个 span（可能有几十上百个空闲 slot），后续分配都在本地完成。这就是摊销锁开销的关键。</p>
+</div>
 <p>那如果 mcentral 也没有可用的 span 呢？请求继续上升到最后一层。</p>
 <p><strong>mheap：全局堆管理器。</strong> mheap 是整个体系的最终后盾，全局唯一的堆管理器，管理着所有 arena、所有 mcentral、以及页分配器（<code>src/runtime/mheap.go</code>）：</p>
 <pre><code class="highlight go"><span class="keyword">var</span> mheap_ mheap
@@ -617,29 +642,29 @@
 <td>68 个 size class 完整表</td>
 </tr>
 </tbody></table>
-<blockquote>
-<p>[!tip] 阅读建议<br>从 <code>mallocgc</code> 函数开始，顺着调用链走：<code>mallocgc</code> → <code>mcache.nextFree</code> → <code>mcache.refill</code> → <code>mcentral.cacheSpan</code> → <code>mheap.alloc</code>。遇到不认识的结构体再跳到对应文件，这样每个概念都有上下文，比孤立阅读结构体定义有效得多。</p>
-</blockquote>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><svg class="octicon octicon-light-bulb mr-2" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p><strong>阅读建议</strong>：从 <code>mallocgc</code> 函数开始，顺着调用链走：<code>mallocgc</code> → <code>mcache.nextFree</code> → <code>mcache.refill</code> → <code>mcentral.cacheSpan</code> → <code>mheap.alloc</code>。遇到不认识的结构体再跳到对应文件，这样每个概念都有上下文，比孤立阅读结构体定义有效得多。</p>
+</div>
 
                                   </div>
                                   
                                     <div class="prev-or-next">
                                       <div class="post-foot-next">
                                         
-                                          <a href="/2024/06/13/%E7%AE%80%E6%B4%81%E7%9A%84%E6%9E%B6%E6%9E%84/" target="_self">
-                                            <i class="iconfont icon-chevronleft"></i>
-                                            <span>
-                                              Prev
+                                          <a href="/2024/06/13/%E7%AE%80%E6%B4%81%E7%9A%84%E6%9E%B6%E6%9E%84/" target="_self"
+                                            class="prev-next-link prev-next-link-left">
+                                            <span class="prev-next-icon" aria-hidden="true">
+                                              <i class="iconfont icon-chevronleft"></i>
+                                            </span>
+                                            <span class="prev-next-body">
+                                              <span class="prev-next-label">
+                                                Prev
+                                              </span>
+                                              <span class="prev-next-title">简洁的架构</span>
                                             </span>
                                           </a>
                                           
-                                      </div>
-                                      <div class="post-attach">
-                                        <span class="post-pubtime">
-                                          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-                                          2026-04-21 23:50:00
-                                        </span>
-                                        
                                       </div>
                                       <div class="post-foot-prev">
                                         
@@ -663,6 +688,7 @@
                                     
                               </div>
                               
+
             
   <div class="footer">
     <div class="social">
@@ -901,6 +927,18 @@
         searchFunc(path, 'search-input', 'search-result');
     }
   </script>
+
+
+
+
+          
+  <button class="tools-bar-item" id="switch-font" aria-label="切换到衬线字体" aria-pressed="false" type="button">
+    <span class="font-switch-aa" id="font-icon" aria-hidden="true">Aa</span>
+  </button>
+
+  
+<script src="/js/fontswitch.js"></script>
+
 
 
 

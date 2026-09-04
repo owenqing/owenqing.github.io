@@ -212,7 +212,7 @@
     font-kerning: normal;
     font-variant-east-asian: proportional-width;
     word-break: break-word;
-    text-align: justify;
+    text-align: left;
     padding: 20px 0;
 }
 

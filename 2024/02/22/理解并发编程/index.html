@@ -22,9 +22,20 @@
                   </title>
 
                   
-                    <link rel="apple-touch-icon" href="/images/ai.jpg">
-                    <link rel="icon" href="/images/ai.jpg">
+                    <link rel="apple-touch-icon" href="/images/apple-touch-icon-code.png">
+                    <link rel="icon" href="/images/favicon-code.png">
                     
+
+                      
+                        <!-- 提前应用字体选择，避免首屏字体闪烁 -->
+                        <script>
+                          (function() {
+                            var mode = localStorage.getItem('font-mode');
+                            if (mode !== 'serif') { mode = 'sans'; }
+                            document.documentElement.setAttribute('font-mode', mode);
+                          })();
+                        </script>
+                        
 
                       <!-- Font preconnect for faster loading -->
                       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,15 +43,24 @@
                       <!-- Noto Sans SC for harmonious CJK/Latin mixing -->
                       <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap"
                         rel="stylesheet">
+                      
+                        <!-- Noto Serif SC for serif reading mode -->
+                        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+                          rel="stylesheet">
+                        
                       <!-- Raleway-Font (kept for legacy) -->
                       <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
 
                       <!-- hexo site css -->
                       <link rel="stylesheet" href="/css/main.css" />
-                      <link rel="stylesheet" href="/css/zen.css?v=1776786772387" />
+                      <link rel="stylesheet" href="/css/zen.css?v=1788540410705" />
                       <link rel="stylesheet" href="/css/reading.css" />
+                      
+                        <link rel="stylesheet" href="/css/font-switch.css" />
+                        
                       <link rel="stylesheet" href="/css/code-block-new.css" />
                       <link rel="stylesheet" href="/css/article.css" />
+                      <link rel="stylesheet" href="/css/callout.css" />
                       <link rel="stylesheet" href="/css/mobile-nav.css" />
                       <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
                       <!-- 代码块风格 -->
@@ -75,6 +95,7 @@
                                                   <!-- 添加header效果脚本 -->
                                                   <!-- <script defer type="text/javascript" src="/js/headerEffect.js"></script> -->
 <meta name="generator" content="Hexo 7.3.0"></head>
+
 
   <body>
     <div id="app">
@@ -263,12 +284,11 @@
                                   <div class="post-title">理解并发编程</div>
                                   <div class="post-attach">
                                     <span class="post-pubtime">
-                                      <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-                                      2026-04-16 23:00:37
+                                      <i class="iconfont icon-updatetime mr-10" title="Published"></i>
+                                      2024-02-22
                                     </span>
                                     
                                       <span class="post-tags">
-                                        <i class="iconfont icon-tags mr-10" title="Tags"></i>
                                         
                                           <span class="span--tag mr-8">
                                             <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" title="计算机"
@@ -295,17 +315,17 @@
 </ul>
 <p>总之，并发编程的目标是通过合理运用这些同步技术，编写出高效且正确的程序。</p>
 <h2 id="2-并发模型"><a href="#2-并发模型" class="headerlink" title="2. 并发模型"></a>2. 并发模型</h2><p>常见的并发模型包括多线程、多进程和协程，每种都有其独特的优势与适用场景。</p>
-<h4 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h4><ul>
+<h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><ul>
 <li>线程是操作系统调度的基本单元。在一个多核CPU环境中，多线程应用可以并行运行于不同的核心上。</li>
 <li>同一进程内的多个线程共享内存空间，使得数据交换变得简单直接。</li>
 <li>但是，当多个线程同时访问同一块内存区域时，如果没有妥善处理可见性、有序性和原子性问题，则可能导致线程安全问题。</li>
 </ul>
-<h4 id="多进程"><a href="#多进程" class="headerlink" title="多进程"></a>多进程</h4><ul>
+<h3 id="多进程"><a href="#多进程" class="headerlink" title="多进程"></a>多进程</h3><ul>
 <li>相较于多线程，多进程提供了更高级别的隔离和安全性，因为每个进程拥有独立的地址空间。</li>
 <li>这种方式避免了线程间因共享资源而可能引发的安全隐患。</li>
 <li>不过，由于需要维护额外的上下文信息，多进程模型通常会消耗更多的系统资源（如CPU时间和内存）。</li>
 </ul>
-<h4 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h4><ul>
+<h3 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h3><ul>
 <li>协程是一种轻量级的用户态“线程”，它允许程序以极低的成本创建大量并发任务。</li>
 <li>Go语言中的goroutine和Java的虚拟线程都是协程概念的具体实现。</li>
 <li>相比传统操作系统线程，协程减少了上下文切换的开销，使得单个应用程序能够支持数以万计甚至更多的并发执行单位。（在 Golang 中启动一个 goroutine 仅需约2KB的内存，而 Java 的一个线程至少也需要大约2MB。）</li>
@@ -394,32 +414,19 @@
                                       <div class="post-foot-next">
                                         
                                       </div>
-                                      <div class="post-attach">
-                                        <span class="post-pubtime">
-                                          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-                                          2026-04-16 23:00:37
-                                        </span>
-                                        
-                                          <span class="post-tags">
-                                            <i class="iconfont icon-tags mr-10" title="Tags"></i>
-                                            
-                                              <span class="span--tag mr-8">
-                                                <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" title="计算机"
-                                                  style="color: var(--post-item-text-color);">
-                                                  #计算机
-                                                </a>
-                                              </span>
-                                              
-                                          </span>
-                                          
-                                      </div>
                                       <div class="post-foot-prev">
                                         
-                                          <a href="/2024/06/13/%E7%AE%80%E6%B4%81%E7%9A%84%E6%9E%B6%E6%9E%84/" target="_self">
-                                            <span>
-                                              Next
+                                          <a href="/2024/06/13/%E7%AE%80%E6%B4%81%E7%9A%84%E6%9E%B6%E6%9E%84/" target="_self"
+                                            class="prev-next-link prev-next-link-right">
+                                            <span class="prev-next-body">
+                                              <span class="prev-next-label">
+                                                Next
+                                              </span>
+                                              <span class="prev-next-title">简洁的架构</span>
                                             </span>
-                                            <i class="iconfont icon-chevronright"></i>
+                                            <span class="prev-next-icon" aria-hidden="true">
+                                              <i class="iconfont icon-chevronright"></i>
+                                            </span>
                                           </a>
                                           
                                       </div>
@@ -442,6 +449,7 @@
                                     
                               </div>
                               
+
             
   <div class="footer">
     <div class="social">
@@ -680,6 +688,18 @@
         searchFunc(path, 'search-input', 'search-result');
     }
   </script>
+
+
+
+
+          
+  <button class="tools-bar-item" id="switch-font" aria-label="切换到衬线字体" aria-pressed="false" type="button">
+    <span class="font-switch-aa" id="font-icon" aria-hidden="true">Aa</span>
+  </button>
+
+  
+<script src="/js/fontswitch.js"></script>
+
 
 
 
