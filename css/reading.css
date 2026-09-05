@@ -304,7 +304,7 @@ body {
   top: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(to right, var(--accent), var(--accent-hover));
+  background: var(--accent-warm);
   z-index: 10000;
   transition: width 0.1s ease;
 }

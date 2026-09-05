@@ -165,6 +165,7 @@
   --text-muted: #888888;
   --accent: #6b8f71;
   --accent-hover: #5c7f64;
+  --accent-warm: #a06a3c;
 
   --code-bg: #F5F5F5;
   --code-border: #E0E0E0;
@@ -208,6 +209,7 @@
   --text-muted: #666666;
   --accent: #7a9e80;
   --accent-hover: #8aae90;
+  --accent-warm: #c89a6e;
 
   --code-bg: #2d2d2d;
   --code-border: #3d3d3d;

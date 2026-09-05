@@ -165,6 +165,7 @@
   --text-muted: #888888;
   --accent: #6b8f71;
   --accent-hover: #5c7f64;
+  --accent-warm: #a06a3c;
 
   --code-bg: #F5F5F5;
   --code-border: #E0E0E0;
@@ -208,6 +209,7 @@
   --text-muted: #666666;
   --accent: #7a9e80;
   --accent-hover: #8aae90;
+  --accent-warm: #c89a6e;
 
   --code-bg: #2d2d2d;
   --code-border: #3d3d3d;
@@ -4064,7 +4066,7 @@ body {
   top: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(to right, var(--accent), var(--accent-hover));
+  background: var(--accent-warm);
   z-index: 10000;
   transition: width 0.1s ease;
 }
@@ -6081,6 +6083,37 @@ pre:has(> code.highlight) .operator {
     order: 2;
     font-size: 1.75rem !important;
     width: 100%;
+  }
+}
+
+/* ---------- 首页开场白 ---------- */
+.home-intro {
+  margin: 0.8rem 0 3.2rem;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  color: var(--accent-warm) !important;
+}
+
+.home-intro + .home-moments {
+  margin-top: 0 !important;
+}
+
+/* 首页交互统一为暖赭，文章标题悬停 */
+.index .post-item .title a:hover,
+.index .post-item .title a:focus-visible {
+  color: var(--accent-warm) !important;
+}
+
+/* 小屏开场白收紧 */
+@media (max-width: 640px) {
+  .home-intro {
+    margin-top: 0.6rem;
+    margin-bottom: 2.8rem;
+    font-size: 1.6rem;
   }
 }
 

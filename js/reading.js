@@ -8,8 +8,12 @@
 
   /* ========================================
      1. 阅读进度条
+     只出现在文章详情页（#post-details），
+     首页 / 归档 / 标签等列表页不显示。
   ======================================== */
   function initReadingProgress() {
+    if (!document.querySelector('.post-details')) return;
+
     const progressBar = document.createElement('div');
     progressBar.className = 'reading-progress';
     progressBar.style.width = '0%';
