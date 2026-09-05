@@ -308,10 +308,7 @@
 <li>worker 处理完消费逻辑向 Committer 标记消费状态</li>
 <li>Committer 定期按顺序提交已消费的 offset (不重、不漏、更不能跳过没有标记消费的 offset 信息)</li>
 </ol>
-<h3 id="并发模式"><a href="#并发模式" class="headerlink" title="并发模式"></a>并发模式</h3><blockquote>
-<p>Do not communicate by sharing memory; instead, share memory by communicating.</p>
-</blockquote>
-<h4 id="基于消息通信-Lock-Free"><a href="#基于消息通信-Lock-Free" class="headerlink" title="基于消息通信 (Lock Free)"></a>基于消息通信 (Lock Free)</h4><p>基于通信的并发模型，是程序世界对实现世界的模拟。现实世界是一个并发的世界。如进入一家早餐店就餐，顾客、厨师、服务员各自在做各自的事情，但是又通过信息的传递紧密的联系在一起。基于通信的并发非常自然而且无锁，遇到复杂的并发场景时可以考虑使用这种模型。Erlang 中的 Actor 模型与 Golang 中的 CSP 模型都是基于消息通信的。两个模型的侧重点有些微不同，Actor 模型强调的是对象内部的队列，CSP 模型强调对象之间的队列。</p>
+<h3 id="并发模式"><a href="#并发模式" class="headerlink" title="并发模式"></a>并发模式</h3><h4 id="基于消息通信-Lock-Free"><a href="#基于消息通信-Lock-Free" class="headerlink" title="基于消息通信 (Lock Free)"></a>基于消息通信 (Lock Free)</h4><p>基于通信的并发模型，是程序世界对实现世界的模拟。现实世界是一个并发的世界。如进入一家早餐店就餐，顾客、厨师、服务员各自在做各自的事情，但是又通过信息的传递紧密的联系在一起。基于通信的并发非常自然而且无锁，遇到复杂的并发场景时可以考虑使用这种模型。Erlang 中的 Actor 模型与 Golang 中的 CSP 模型都是基于消息通信的。两个模型的侧重点有些微不同，Actor 模型强调的是对象内部的队列，CSP 模型强调对象之间的队列。</p>
 <p><strong>Actor 模型</strong> </p>
 <ol>
 <li>Dispatcher、Worker、Committer 内部都存在队列</li>
