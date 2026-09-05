@@ -29,6 +29,10 @@
 :root[font-mode="serif"] .markdown-body,
 :root[font-mode="serif"] .post-title,
 :root[font-mode="serif"] .content-title,
+:root[font-mode="serif"] .home-moments-title,
+:root[font-mode="serif"] .moment-day,
+:root[font-mode="serif"] .moment-date,
+:root[font-mode="serif"] .moment-text,
 :root[font-mode="serif"] .post-item .title,
 :root[font-mode="serif"] .tag-details .post-item > a,
 :root[font-mode="serif"] .category-details .post-item > a {
@@ -45,10 +49,16 @@
   font-weight: 400 !important;
 }
 
-/* 亮色模式下正文颜色向纯黑靠近一点 */
+/* 亮色模式下衬线正文/标题墨色统一压深，避免细笔画发淡 */
 :root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body,
-:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body strong {
-  color: #1f1f1f !important;
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body strong,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h1,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h2,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h3,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h4,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h5,
+:root[font-mode="serif"]:not([color-mode="dark"]) .post-title {
+  color: #161616 !important;
 }
 
 /* 暗色模式适配 */

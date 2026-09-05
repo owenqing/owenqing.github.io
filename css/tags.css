@@ -1,0 +1,57 @@
+/**
+ * Zen Tags Overview
+ * /tags/ 与文章列表同宽、同顶部节奏；标签降为安静的文字链接。
+ */
+
+.container.tag-index {
+  width: min(750px, 92vw) !important;
+  padding-top: 4rem !important;
+  margin-bottom: 0;
+}
+
+.tag-index .tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 1.4rem 2.8rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none;
+}
+
+.tag-index .tag-list li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 1.7rem;
+  line-height: 1.5;
+}
+
+.tag-index .tag-list li .tag-list-link {
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--text-secondary) !important;
+  font-weight: 400;
+  text-decoration: none !important;
+  transition: color 0.18s ease;
+}
+
+.tag-index .tag-list li .tag-list-link:hover,
+.tag-index .tag-list li .tag-list-link.active {
+  color: var(--accent) !important;
+  background: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.tag-index .tag-list-count {
+  padding: 0 !important;
+  color: var(--text-muted) !important;
+  font-size: 1.2rem !important;
+  font-variant-numeric: tabular-nums;
+}

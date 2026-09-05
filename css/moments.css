@@ -1,0 +1,195 @@
+/**
+ * Zen Moments — 闪念
+ * 首页「最近闪念」与 /moments/ 归档：
+ * 无卡片、时间分组，图片跟随文字流。
+ */
+
+/* 归档容器与首页列表同宽 */
+.container.moment-index {
+  width: min(750px, 92vw) !important;
+  padding-top: 4rem !important;
+}
+
+/* ---------- 首页闪念区 ---------- */
+.home-moments {
+  margin: 5.5rem 0 0;
+  padding-bottom: 3.4rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.home-moments-title {
+  margin: 0 0 2.2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+/* 条目：文字为主，日期做微标签 */
+.moment-item {
+  margin: 0;
+}
+
+.moment-stream .moment-item + .moment-item {
+  margin-top: 2.8rem;
+}
+
+.moment-date {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.moment-time {
+  margin-left: 0.5rem;
+  opacity: 0.75;
+}
+
+.moment-text {
+  font-size: 1.6rem;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary);
+  overflow-wrap: break-word;
+}
+
+.moment-text p {
+  margin: 0;
+}
+
+.moment-text p + p {
+  margin-top: 0.8em;
+}
+
+.moment-text a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.moment-text a:hover {
+  border-bottom-color: currentColor;
+}
+
+.moment-text code {
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* ---------- 图片 ---------- */
+.moment-images {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+.moment-images--one {
+  display: block;
+  max-width: min(52rem, 100%);
+}
+
+.moment-images--two {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.moment-images--multi {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.moment-image {
+  display: block;
+  line-height: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.moment-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.moment-images--one .moment-image,
+.moment-images--one img {
+  height: auto;
+  object-fit: initial;
+}
+
+.moment-images--two img {
+  aspect-ratio: 4 / 3;
+}
+
+.moment-images--multi img {
+  aspect-ratio: 1 / 1;
+}
+
+.moment-image:hover img {
+  opacity: 0.88;
+}
+
+:root[color-mode="dark"] .moment-image img {
+  border: 1px solid var(--border-light);
+}
+
+/* ---------- 归档页 ---------- */
+.moment-day {
+  margin: 4.2rem 0 0;
+  padding-bottom: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.moment-day:first-child {
+  margin-top: 0;
+}
+
+.moment-day + .moment-item {
+  margin-top: 2.6rem;
+}
+
+/* 全部闪念入口 */
+.moment-more {
+  display: inline-block;
+  margin-top: 2.8rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.moment-more:hover {
+  color: var(--accent);
+}
+
+.moment-empty {
+  margin-top: 4rem;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* 小屏：留白稍微收紧 */
+@media (max-width: 640px) {
+  .home-moments {
+    margin-top: 4rem;
+    padding-bottom: 2.6rem;
+  }
+
+  .moment-stream .moment-item + .moment-item {
+    margin-top: 2.4rem;
+  }
+}

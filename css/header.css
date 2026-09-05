@@ -1,0 +1,160 @@
+/**
+ * Zen Header
+ * 收敛旧主题残留：单层导航、与正文同宽、安静的状态反馈、
+ * 移动端菜单按钮适配亮 / 暗模式。
+ */
+
+/* Header 高度固定为 62px，和 body padding / 移动端下拉菜单对齐 */
+.header {
+  padding: 0 !important;
+}
+
+.navbar {
+  max-width: 860px !important;
+  height: 62px !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center !important;
+}
+
+/* 站名 */
+.blog-title {
+  margin: 0 1.2rem 0 0 !important;
+  color: var(--text-main) !important;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.blog-title:hover {
+  color: var(--accent) !important;
+}
+
+/* 标题 + 导航作为一个整体居中 */
+.nav-menu {
+  position: static;
+  margin-left: 2.4rem !important;
+  gap: 0;
+  white-space: nowrap;
+}
+
+.navbar ul li {
+  margin: 0 1.2rem !important;
+}
+
+.navbar ul li a {
+  position: relative;
+  padding: 8px 10px !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  color: var(--text-secondary) !important;
+  font-size: 1.5rem;
+  font-weight: 400 !important;
+  letter-spacing: 0;
+  text-decoration: none !important;
+  transform: none !important;
+  transition: color 0.18s ease !important;
+}
+
+/* 旧主题的白色光晕 / 胶囊残留不再需要 */
+.navbar ul li a:hover::before {
+  display: none !important;
+}
+
+/* 安静的当前页 / 悬停信号：文字加深 + 一条 moss 细线 */
+.navbar ul li a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 1.8em;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.navbar ul li a:hover,
+.navbar ul li.active a {
+  color: var(--text-main) !important;
+  background: transparent !important;
+  transform: none !important;
+}
+
+.navbar ul li a:hover::after,
+.navbar ul li.active a::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* 暗色模式：旧的 GitHub 蓝统一换成 zen moss */
+[color-mode="dark"] .navbar ul li a {
+  color: var(--text-secondary) !important;
+}
+
+[color-mode="dark"] .navbar ul li a:hover,
+[color-mode="dark"] .navbar ul li.active a {
+  color: var(--text-main) !important;
+  background: transparent !important;
+}
+
+[color-mode="dark"] .navbar ul li a::after {
+  background: var(--accent) !important;
+}
+
+/* 移动端：菜单按钮在亮色底上清晰可见 */
+.nav-toggle {
+  background: transparent !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: 10px;
+}
+
+.nav-toggle:hover,
+.nav-toggle.active {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+.hamburger {
+  background-color: var(--text-secondary) !important;
+}
+
+[color-mode="dark"] .nav-toggle {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+[color-mode="dark"] .nav-toggle:hover,
+[color-mode="dark"] .nav-toggle.active {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* 移动端下拉菜单与 62px header 对齐 */
+@media (max-width: 768px) {
+  .nav-menu {
+    position: fixed !important;
+    left: 0;
+    right: 0;
+    top: 62px !important;
+    max-height: calc(100vh - 62px) !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+
+  [color-mode="dark"] .nav-menu li a {
+    color: var(--text-secondary) !important;
+  }
+
+  [color-mode="dark"] .nav-menu li a:hover,
+  [color-mode="dark"] .nav-menu li.active a {
+    color: var(--accent) !important;
+    background: rgba(122, 158, 128, 0.12) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-menu {
+    top: 62px !important;
+    max-height: calc(100vh - 62px) !important;
+  }
+}

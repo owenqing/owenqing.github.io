@@ -1,0 +1,210 @@
+/**
+ * Zen Article Lists
+ * 首页 / 归档 / 标签详情 / 分类详情的文章列表：
+ * 去卡片化，纸面发丝线分隔，标题常规字重，日期安静对齐在右侧。
+ */
+
+/* 列表页容器统一收窄到阅读栏宽度 */
+.container.index,
+.container.archives,
+.container.tag-details,
+.container.category-details {
+  width: min(750px, 92vw) !important;
+}
+
+.container.archives,
+.container.tag-details,
+.container.category-details {
+  padding-top: 4rem !important;
+}
+
+/* 列表容器 */
+.index .post-list,
+.archives .post-list {
+  padding: 0 !important;
+}
+
+.tag-details .post-list,
+.category-details .post-list {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.index .post-list {
+  flex: 1;
+}
+
+/* 列表条目：取消卡片，改为发丝线分隔的排版行 */
+.index .post-item,
+.archives .post-item,
+.tag-details .post-item,
+.category-details .post-item {
+  display: flex !important;
+  flex-direction: row;
+  align-items: baseline !important;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 0 !important;
+  padding: 2.4rem 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+/* 最后一条不再补发丝线 */
+.index .post-list > .post-item:last-child,
+.archives .post-list > .post-item:last-child,
+.tag-details .post-list:last-of-type .post-item,
+.category-details .post-list:last-of-type .post-item {
+  border-bottom: none !important;
+}
+
+/* 标题：回到常规字重，不让列表显得“黑” */
+.index .post-item .title,
+.archives .post-item .title {
+  order: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 !important;
+  font-size: 2rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
+  color: var(--text-main) !important;
+}
+
+/* 标签/分类模板里标题是直接链接，保持同样的排版 */
+.tag-details .post-item > a,
+.category-details .post-item > a {
+  order: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-decoration: none;
+  font-size: 2rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
+  color: var(--text-main) !important;
+}
+
+.index .post-item .title a,
+.archives .post-item .title a,
+.tag-details .post-item > a,
+.category-details .post-item > a {
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.index .post-item .title a:hover,
+.archives .post-item .title a:hover,
+.tag-details .post-item > a:hover,
+.category-details .post-item > a:hover {
+  color: var(--accent);
+}
+
+/* 日期：右端安静对齐 */
+.index .post-item .time-m-d,
+.archives .post-item .time-m-d,
+.tag-details .post-item .time-m-d,
+.category-details .post-item .time-m-d {
+  order: 2;
+  flex: 0 0 auto;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 1.3rem !important;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--text-muted) !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* 页头/年份标题：降为安静的次级标签 */
+.archives .content-title,
+.tag-details .content-title,
+.category-details .content-title {
+  margin: 0 0 1.2rem !important;
+}
+
+.archives .content-title h2,
+.tag-details .content-title h2,
+.category-details .content-title h2 {
+  margin: 0 !important;
+  font-size: 1.4rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary) !important;
+}
+
+/* 暗色模式适配 */
+:root[color-mode="dark"] .index .post-item .time-m-d,
+:root[color-mode="dark"] .archives .post-item .time-m-d,
+:root[color-mode="dark"] .tag-details .post-item .time-m-d,
+:root[color-mode="dark"] .category-details .post-item .time-m-d {
+  color: #8b949e !important;
+}
+
+/* 分页：去掉胶囊，保持安静 */
+.index .post-navigation,
+.tag-details .post-navigation,
+.category-details .post-navigation {
+  margin-top: 3rem;
+  padding: 0 !important;
+  font-size: 1.3rem !important;
+  color: var(--text-muted) !important;
+}
+
+.index .page-num,
+.tag-details .page-num,
+.category-details .page-num {
+  padding: 0 !important;
+  background: transparent !important;
+  letter-spacing: 0.1em;
+  color: inherit !important;
+}
+
+.index .post-navigation a,
+.tag-details .post-navigation a,
+.category-details .post-navigation a {
+  color: var(--text-secondary);
+}
+
+.index .post-navigation a:hover,
+.tag-details .post-navigation a:hover,
+.category-details .post-navigation a:hover {
+  color: var(--accent);
+}
+
+/* 小屏：日期回到标题上方，条目间距稍收 */
+@media (max-width: 640px) {
+  .index .post-item,
+  .archives .post-item,
+  .tag-details .post-item,
+  .category-details .post-item {
+    align-items: flex-start !important;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 2rem 0 !important;
+  }
+
+  .index .post-item .time-m-d,
+  .archives .post-item .time-m-d,
+  .tag-details .post-item .time-m-d,
+  .category-details .post-item .time-m-d {
+    order: 1;
+    font-size: 1.25rem !important;
+  }
+
+  .index .post-item .title,
+  .archives .post-item .title,
+  .tag-details .post-item > a,
+  .category-details .post-item > a {
+    order: 2;
+    font-size: 1.75rem !important;
+    width: 100%;
+  }
+}

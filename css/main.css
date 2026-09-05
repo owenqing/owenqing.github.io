@@ -181,12 +181,22 @@
   --space-xl: 2rem;
   --space-2xl: 3rem;
 
-  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 
   --content-width: min(750px, 92vw);
-  --line-height: 1.8;
-  --paragraph-spacing: 1.5em;
+
+  /* Typography scale — html root = 10px */
+  --font-size-body: 1.7rem;
+  --font-size-body-mobile: 1.6rem;
+  --font-size-page-title: 2.8rem;
+  --font-size-page-title-mobile: 2.3rem;
+  --line-height: 1.75;
+  --line-height-heading: 1.3;
+  --letter-spacing-body: 0;
+  --letter-spacing-heading: -0.01em;
+  --paragraph-spacing: 1.2em;
 }
 
 /* 6. Reading 暗色语义变量 */
@@ -211,7 +221,7 @@
 /* 7. 字体切换 */
 :root {
   --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia,
-    "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", SimSun, serif;
+    "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", serif;
 }
 
 /* Add dark mode styles at the beginning of the file */
@@ -1438,11 +1448,6 @@ a:hover {
   border-bottom: 1px solid #30363d;
 }
 
-:root[color-mode="dark"] .header.scrolled {
-  background: rgba(22, 27, 34, 0.98);
-  backdrop-filter: blur(10px);
-}
-
 .container {
   flex: 1 0 auto;
   width: 50%;
@@ -1452,7 +1457,6 @@ a:hover {
 }
 
 .index .post-list,
-.friend-index .friend-list,
 .archives .post-list,
 .tag-index .tag-list,
 .about-index .markdown-body {
@@ -1473,7 +1477,6 @@ a:hover {
   }
 
   .index .post-list,
-  .friend-index .friend-list,
   .archives .post-list,
   .tag-index .tag-list,
   .about-index .markdown-body {
@@ -1553,7 +1556,6 @@ a:hover {
 @media (max-width: 1200px) and (min-width: 887px) {
 
   .index .post-list,
-  .friend-index .friend-list,
   .archives .post-list,
   .tag-index .tag-list,
   .about-index .markdown-body {
@@ -1911,16 +1913,6 @@ a:hover {
 
 .category-list .category-list-item .category-list-child {
   padding-left: 30px;
-}
-
-.friend-list-item {
-  font-size: 1.6rem;
-  padding: 10px;
-}
-
-.friend-list-item .nickname {
-  padding-right: 10px;
-  color: var(--color-text-a)
 }
 
 .post-details .post-title {
@@ -3173,11 +3165,11 @@ html body .container.tag-index {
 [color-mode="light"] body {
     background-color: var(--bg-primary) !important;
     color: var(--text-main) !important;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font-body);
     font-weight: 400;
-    font-size: 1.7rem;
-    letter-spacing: 0.02em;
-    line-height: 1.8;
+    font-size: var(--font-size-body);
+    letter-spacing: var(--letter-spacing-body);
+    line-height: var(--line-height);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -3197,16 +3189,6 @@ html body .container.tag-index {
     -webkit-backdrop-filter: blur(12px) !important;
     box-shadow: none !important;
     border-bottom: 1px solid var(--zen-border) !important;
-}
-
-.header::before,
-.header::after,
-.blog-title::before,
-.blog-title::after,
-.blog-title .outer-orbit,
-.blog-title .electron,
-.blog-title .electron-yellow {
-    display: none !important;
 }
 
 .navbar {
@@ -3279,7 +3261,6 @@ html body .container.tag-index {
 }
 
 .index .post-list,
-.friend-index .friend-list,
 .archives .post-list,
 .tag-index .tag-list,
 .about-index .markdown-body {
@@ -3320,8 +3301,8 @@ html body .container.tag-index {
 }
 
 .post-item .title {
-    font-weight: 400 !important;
-    letter-spacing: 0.02em !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.01em !important;
     color: var(--text-main) !important;
     margin: 0;
 }
@@ -3342,11 +3323,11 @@ html body .container.tag-index {
 /* Markdown typography for meditation-friendly reading */
 .markdown-body {
     color: var(--text-main) !important;
-    line-height: 1.8 !important;
+    line-height: var(--line-height) !important;
     font-weight: 400 !important;
-    font-size: 1.7rem !important;
-    letter-spacing: 0.02em !important;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: var(--font-size-body) !important;
+    letter-spacing: var(--letter-spacing-body) !important;
+    font-family: var(--font-body) !important;
     background: transparent !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -3366,52 +3347,59 @@ html body .container.tag-index {
 .markdown-body h5,
 .markdown-body h6 {
     color: var(--text-main) !important;
-    margin-top: 1.5em !important;
-    margin-bottom: 1em !important;
+    margin-top: 1.6em !important;
+    margin-bottom: 0.6em !important;
     border-bottom: 0 !important;
-    letter-spacing: -0.01em;
-    line-height: 1.3;
+    letter-spacing: var(--letter-spacing-heading);
+    line-height: var(--line-height-heading);
 }
 
 .markdown-body h1 {
-    font-size: 1.65em !important;
-    font-weight: 600 !important;
+    font-size: 1.5em !important;
+    font-weight: 700 !important;
+    margin-top: 1.2em !important;
+    margin-bottom: 0.8em !important;
     padding-bottom: 0.3em;
     border-bottom: 1px solid var(--zen-border) !important;
 }
 
 .markdown-body h2 {
-    font-size: 1.4em !important;
+    font-size: 1.35em !important;
     font-weight: 600 !important;
+    margin-top: 2.2em !important;
+    margin-bottom: 0.6em !important;
     padding-bottom: 0.3em;
     border-bottom: 1px solid var(--zen-border) !important;
 }
 
 .markdown-body h3 {
-    font-size: 1.25em !important;
+    font-size: 1.18em !important;
     font-weight: 600 !important;
+    margin-top: 2em !important;
+    margin-bottom: 0.5em !important;
 }
 
 .markdown-body h4 {
-    font-size: 1.15em !important;
-    font-weight: 500 !important;
+    font-size: 1.08em !important;
+    font-weight: 600 !important;
+    margin-top: 1.8em !important;
+    margin-bottom: 0.4em !important;
 }
 
 .markdown-body h5 {
     font-size: 1em !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
 }
 
 .markdown-body h6 {
-    font-size: 1em !important;
+    font-size: 0.92em !important;
     font-weight: 500 !important;
     color: var(--text-muted) !important;
 }
 
 .markdown-body p {
-    margin-bottom: 1.5em !important;
+    margin-bottom: var(--paragraph-spacing) !important;
     margin-top: 0 !important;
-    letter-spacing: 0.02em;
     word-break: break-word;
 }
 
@@ -3425,7 +3413,7 @@ html body .container.tag-index {
 .markdown-body ul,
 .markdown-body ol {
     margin-top: 0 !important;
-    margin-bottom: 1.5em !important;
+    margin-bottom: var(--paragraph-spacing) !important;
     padding-left: 2em !important;
 }
 
@@ -3466,7 +3454,7 @@ html body .container.tag-index {
     border-radius: 8px !important;
     /* overflow: auto !important; */
     margin-top: 0 !important;
-    margin-bottom: 1.5em !important;
+    margin-bottom: var(--paragraph-spacing) !important;
     font-size: 0.85em !important;
     border: none !important;
     box-shadow: none !important;
@@ -3541,11 +3529,11 @@ html body .container.tag-index {
 
 .post-title {
     font-weight: 600 !important;
-    font-size: 2.2rem !important;
-    line-height: 1.4 !important;
+    font-size: var(--font-size-page-title) !important;
+    line-height: 1.3 !important;
     text-align: center !important;
     color: var(--text-main) !important;
-    letter-spacing: -0.01em;
+    letter-spacing: var(--letter-spacing-heading);
     margin: 0 0 1rem;
 }
 
@@ -3556,14 +3544,45 @@ html body .container.tag-index {
     align-items: center;
     gap: 8px;
     margin-top: 6px;
+    margin-bottom: 1rem !important;
+    padding-bottom: 0.5rem !important;
     font-size: 1.4rem !important;
-    color: var(--text-muted) !important;
+    color: var(--text-secondary) !important;
 }
 
 .post-details .post-attach .post-pubtime i {
     font-size: 1.4rem !important;
-    color: var(--text-muted) !important;
+    color: var(--text-secondary) !important;
     font-weight: 400;
+}
+
+/* 小屏排版：让正文真正降一档，而不是继续沿用桌面 17px */
+@media (max-width: 640px) {
+    .markdown-body {
+        font-size: var(--font-size-body-mobile) !important;
+        line-height: 1.7 !important;
+    }
+
+    .markdown-body h1 {
+        font-size: 1.4em !important;
+    }
+
+    .markdown-body h2 {
+        font-size: 1.28em !important;
+    }
+
+    .markdown-body h3 {
+        font-size: 1.12em !important;
+    }
+
+    .markdown-body h4 {
+        font-size: 1.05em !important;
+    }
+
+    .post-title {
+        font-size: var(--font-size-page-title-mobile) !important;
+        line-height: 1.35 !important;
+    }
 }
 
 /* 表格样式 */
@@ -4545,6 +4564,10 @@ html {
 :root[font-mode="serif"] .markdown-body,
 :root[font-mode="serif"] .post-title,
 :root[font-mode="serif"] .content-title,
+:root[font-mode="serif"] .home-moments-title,
+:root[font-mode="serif"] .moment-day,
+:root[font-mode="serif"] .moment-date,
+:root[font-mode="serif"] .moment-text,
 :root[font-mode="serif"] .post-item .title,
 :root[font-mode="serif"] .tag-details .post-item > a,
 :root[font-mode="serif"] .category-details .post-item > a {
@@ -4561,10 +4584,16 @@ html {
   font-weight: 400 !important;
 }
 
-/* 亮色模式下正文颜色向纯黑靠近一点 */
+/* 亮色模式下衬线正文/标题墨色统一压深，避免细笔画发淡 */
 :root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body,
-:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body strong {
-  color: #1f1f1f !important;
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body strong,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h1,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h2,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h3,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h4,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body h5,
+:root[font-mode="serif"]:not([color-mode="dark"]) .post-title {
+  color: #161616 !important;
 }
 
 /* 暗色模式适配 */
@@ -4885,7 +4914,6 @@ pre:has(> code.highlight) .operator {
   color: var(--color-text-sub);
   margin-bottom: 2em;
   padding-bottom: 1em;
-  border-bottom: 1px solid var(--color-border-light);
 }
 
 .post-attach .post-pubtime,
@@ -4947,40 +4975,25 @@ pre:has(> code.highlight) .operator {
   line-height: 1.7;
 }
 
-/* 引用块 - Notion Quote 简洁风格 */
+/* 引用块 - Zen Quote：纸感细线，次级墨色，内部排版保持语义 */
 .markdown-body blockquote {
   margin: 1.5em 0 !important;
-  padding: 0 1em !important;
-  border-left: 3px solid #d1d1d1 !important; /* 柔和灰色边条 */
+  padding: 0 0 0 1.2em !important;
+  border-left: 2px solid var(--zen-greige) !important; /* 柔和的暖灰边条 */
   background: transparent !important; /* 无背景，融入页面 */
-  color: var(--color-text-md-content) !important;
+  color: var(--text-secondary) !important;
   font-style: normal !important;
   border-radius: 0 !important;
-  font-size: inherit !important;
-  line-height: inherit !important;
-  font-family: inherit !important;
-  letter-spacing: inherit !important;
-  font-weight: inherit !important;
-  text-align: left !important;
-}
-
-/* 移除 blockquote 内部所有元素的特殊样式，完全继承正文 - 使用 !important */
-.markdown-body blockquote *,
-.markdown-body blockquote p,
-.markdown-body blockquote span,
-.markdown-body blockquote strong,
-.markdown-body blockquote em {
-  font-family: inherit !important;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  line-height: inherit !important;
-  letter-spacing: inherit !important;
-  color: inherit !important;
   text-align: left !important;
 }
 
 .markdown-body blockquote p {
-  margin: 0 !important;
+  margin: 0 0 0.6em !important;
+  color: inherit;
+}
+
+.markdown-body blockquote p:last-child {
+  margin-bottom: 0 !important;
 }
 
 .markdown-body blockquote > :first-child {
@@ -5124,16 +5137,11 @@ pre:has(> code.highlight) .operator {
   color: var(--color-text-md-title);
 }
 
-/* 暗色模式 - blockquote - Notion Quote 简洁风格 */
+/* 暗色模式 - blockquote - Zen Quote */
 :root[color-mode="dark"] .markdown-body blockquote {
-  border-left-color: var(--color-block-md-quote-border) !important;
-  background: var(--bg-block-md-quote) !important;
-  color: var(--color-block-md-quote) !important;
-}
-
-:root[color-mode="dark"] .markdown-body blockquote *,
-:root[color-mode="dark"] .markdown-body blockquote p {
-  color: inherit !important;
+  border-left-color: #3d3d3d !important;
+  background: transparent !important;
+  color: #a0a0a0 !important;
 }
 
 :root[color-mode="dark"] .markdown-body blockquote a {
@@ -5863,5 +5871,631 @@ pre:has(> code.highlight) .operator {
   .search-title {
     padding-left: 1rem;
   }
+}
+
+/**
+ * Zen Article Lists
+ * 首页 / 归档 / 标签详情 / 分类详情的文章列表：
+ * 去卡片化，纸面发丝线分隔，标题常规字重，日期安静对齐在右侧。
+ */
+
+/* 列表页容器统一收窄到阅读栏宽度 */
+.container.index,
+.container.archives,
+.container.tag-details,
+.container.category-details {
+  width: min(750px, 92vw) !important;
+}
+
+.container.archives,
+.container.tag-details,
+.container.category-details {
+  padding-top: 4rem !important;
+}
+
+/* 列表容器 */
+.index .post-list,
+.archives .post-list {
+  padding: 0 !important;
+}
+
+.tag-details .post-list,
+.category-details .post-list {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.index .post-list {
+  flex: 1;
+}
+
+/* 列表条目：取消卡片，改为发丝线分隔的排版行 */
+.index .post-item,
+.archives .post-item,
+.tag-details .post-item,
+.category-details .post-item {
+  display: flex !important;
+  flex-direction: row;
+  align-items: baseline !important;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 0 !important;
+  padding: 2.4rem 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+/* 最后一条不再补发丝线 */
+.index .post-list > .post-item:last-child,
+.archives .post-list > .post-item:last-child,
+.tag-details .post-list:last-of-type .post-item,
+.category-details .post-list:last-of-type .post-item {
+  border-bottom: none !important;
+}
+
+/* 标题：回到常规字重，不让列表显得“黑” */
+.index .post-item .title,
+.archives .post-item .title {
+  order: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 !important;
+  font-size: 2rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
+  color: var(--text-main) !important;
+}
+
+/* 标签/分类模板里标题是直接链接，保持同样的排版 */
+.tag-details .post-item > a,
+.category-details .post-item > a {
+  order: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-decoration: none;
+  font-size: 2rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
+  color: var(--text-main) !important;
+}
+
+.index .post-item .title a,
+.archives .post-item .title a,
+.tag-details .post-item > a,
+.category-details .post-item > a {
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.index .post-item .title a:hover,
+.archives .post-item .title a:hover,
+.tag-details .post-item > a:hover,
+.category-details .post-item > a:hover {
+  color: var(--accent);
+}
+
+/* 日期：右端安静对齐 */
+.index .post-item .time-m-d,
+.archives .post-item .time-m-d,
+.tag-details .post-item .time-m-d,
+.category-details .post-item .time-m-d {
+  order: 2;
+  flex: 0 0 auto;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 1.3rem !important;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--text-muted) !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* 页头/年份标题：降为安静的次级标签 */
+.archives .content-title,
+.tag-details .content-title,
+.category-details .content-title {
+  margin: 0 0 1.2rem !important;
+}
+
+.archives .content-title h2,
+.tag-details .content-title h2,
+.category-details .content-title h2 {
+  margin: 0 !important;
+  font-size: 1.4rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary) !important;
+}
+
+/* 暗色模式适配 */
+:root[color-mode="dark"] .index .post-item .time-m-d,
+:root[color-mode="dark"] .archives .post-item .time-m-d,
+:root[color-mode="dark"] .tag-details .post-item .time-m-d,
+:root[color-mode="dark"] .category-details .post-item .time-m-d {
+  color: #8b949e !important;
+}
+
+/* 分页：去掉胶囊，保持安静 */
+.index .post-navigation,
+.tag-details .post-navigation,
+.category-details .post-navigation {
+  margin-top: 3rem;
+  padding: 0 !important;
+  font-size: 1.3rem !important;
+  color: var(--text-muted) !important;
+}
+
+.index .page-num,
+.tag-details .page-num,
+.category-details .page-num {
+  padding: 0 !important;
+  background: transparent !important;
+  letter-spacing: 0.1em;
+  color: inherit !important;
+}
+
+.index .post-navigation a,
+.tag-details .post-navigation a,
+.category-details .post-navigation a {
+  color: var(--text-secondary);
+}
+
+.index .post-navigation a:hover,
+.tag-details .post-navigation a:hover,
+.category-details .post-navigation a:hover {
+  color: var(--accent);
+}
+
+/* 小屏：日期回到标题上方，条目间距稍收 */
+@media (max-width: 640px) {
+  .index .post-item,
+  .archives .post-item,
+  .tag-details .post-item,
+  .category-details .post-item {
+    align-items: flex-start !important;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 2rem 0 !important;
+  }
+
+  .index .post-item .time-m-d,
+  .archives .post-item .time-m-d,
+  .tag-details .post-item .time-m-d,
+  .category-details .post-item .time-m-d {
+    order: 1;
+    font-size: 1.25rem !important;
+  }
+
+  .index .post-item .title,
+  .archives .post-item .title,
+  .tag-details .post-item > a,
+  .category-details .post-item > a {
+    order: 2;
+    font-size: 1.75rem !important;
+    width: 100%;
+  }
+}
+
+/**
+ * Zen Moments — 闪念
+ * 首页「最近闪念」与 /moments/ 归档：
+ * 无卡片、时间分组，图片跟随文字流。
+ */
+
+/* 归档容器与首页列表同宽 */
+.container.moment-index {
+  width: min(750px, 92vw) !important;
+  padding-top: 4rem !important;
+}
+
+/* ---------- 首页闪念区 ---------- */
+.home-moments {
+  margin: 5.5rem 0 0;
+  padding-bottom: 3.4rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.home-moments-title {
+  margin: 0 0 2.2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+/* 条目：文字为主，日期做微标签 */
+.moment-item {
+  margin: 0;
+}
+
+.moment-stream .moment-item + .moment-item {
+  margin-top: 2.8rem;
+}
+
+.moment-date {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.moment-time {
+  margin-left: 0.5rem;
+  opacity: 0.75;
+}
+
+.moment-text {
+  font-size: 1.6rem;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary);
+  overflow-wrap: break-word;
+}
+
+.moment-text p {
+  margin: 0;
+}
+
+.moment-text p + p {
+  margin-top: 0.8em;
+}
+
+.moment-text a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.moment-text a:hover {
+  border-bottom-color: currentColor;
+}
+
+.moment-text code {
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* ---------- 图片 ---------- */
+.moment-images {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+.moment-images--one {
+  display: block;
+  max-width: min(52rem, 100%);
+}
+
+.moment-images--two {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.moment-images--multi {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.moment-image {
+  display: block;
+  line-height: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.moment-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.moment-images--one .moment-image,
+.moment-images--one img {
+  height: auto;
+  object-fit: initial;
+}
+
+.moment-images--two img {
+  aspect-ratio: 4 / 3;
+}
+
+.moment-images--multi img {
+  aspect-ratio: 1 / 1;
+}
+
+.moment-image:hover img {
+  opacity: 0.88;
+}
+
+:root[color-mode="dark"] .moment-image img {
+  border: 1px solid var(--border-light);
+}
+
+/* ---------- 归档页 ---------- */
+.moment-day {
+  margin: 4.2rem 0 0;
+  padding-bottom: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.moment-day:first-child {
+  margin-top: 0;
+}
+
+.moment-day + .moment-item {
+  margin-top: 2.6rem;
+}
+
+/* 全部闪念入口 */
+.moment-more {
+  display: inline-block;
+  margin-top: 2.8rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.moment-more:hover {
+  color: var(--accent);
+}
+
+.moment-empty {
+  margin-top: 4rem;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* 小屏：留白稍微收紧 */
+@media (max-width: 640px) {
+  .home-moments {
+    margin-top: 4rem;
+    padding-bottom: 2.6rem;
+  }
+
+  .moment-stream .moment-item + .moment-item {
+    margin-top: 2.4rem;
+  }
+}
+
+/**
+ * Zen Header
+ * 收敛旧主题残留：单层导航、与正文同宽、安静的状态反馈、
+ * 移动端菜单按钮适配亮 / 暗模式。
+ */
+
+/* Header 高度固定为 62px，和 body padding / 移动端下拉菜单对齐 */
+.header {
+  padding: 0 !important;
+}
+
+.navbar {
+  max-width: 860px !important;
+  height: 62px !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center !important;
+}
+
+/* 站名 */
+.blog-title {
+  margin: 0 1.2rem 0 0 !important;
+  color: var(--text-main) !important;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.blog-title:hover {
+  color: var(--accent) !important;
+}
+
+/* 标题 + 导航作为一个整体居中 */
+.nav-menu {
+  position: static;
+  margin-left: 2.4rem !important;
+  gap: 0;
+  white-space: nowrap;
+}
+
+.navbar ul li {
+  margin: 0 1.2rem !important;
+}
+
+.navbar ul li a {
+  position: relative;
+  padding: 8px 10px !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  color: var(--text-secondary) !important;
+  font-size: 1.5rem;
+  font-weight: 400 !important;
+  letter-spacing: 0;
+  text-decoration: none !important;
+  transform: none !important;
+  transition: color 0.18s ease !important;
+}
+
+/* 旧主题的白色光晕 / 胶囊残留不再需要 */
+.navbar ul li a:hover::before {
+  display: none !important;
+}
+
+/* 安静的当前页 / 悬停信号：文字加深 + 一条 moss 细线 */
+.navbar ul li a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 1.8em;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.navbar ul li a:hover,
+.navbar ul li.active a {
+  color: var(--text-main) !important;
+  background: transparent !important;
+  transform: none !important;
+}
+
+.navbar ul li a:hover::after,
+.navbar ul li.active a::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* 暗色模式：旧的 GitHub 蓝统一换成 zen moss */
+[color-mode="dark"] .navbar ul li a {
+  color: var(--text-secondary) !important;
+}
+
+[color-mode="dark"] .navbar ul li a:hover,
+[color-mode="dark"] .navbar ul li.active a {
+  color: var(--text-main) !important;
+  background: transparent !important;
+}
+
+[color-mode="dark"] .navbar ul li a::after {
+  background: var(--accent) !important;
+}
+
+/* 移动端：菜单按钮在亮色底上清晰可见 */
+.nav-toggle {
+  background: transparent !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: 10px;
+}
+
+.nav-toggle:hover,
+.nav-toggle.active {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+.hamburger {
+  background-color: var(--text-secondary) !important;
+}
+
+[color-mode="dark"] .nav-toggle {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+[color-mode="dark"] .nav-toggle:hover,
+[color-mode="dark"] .nav-toggle.active {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* 移动端下拉菜单与 62px header 对齐 */
+@media (max-width: 768px) {
+  .nav-menu {
+    position: fixed !important;
+    left: 0;
+    right: 0;
+    top: 62px !important;
+    max-height: calc(100vh - 62px) !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+
+  [color-mode="dark"] .nav-menu li a {
+    color: var(--text-secondary) !important;
+  }
+
+  [color-mode="dark"] .nav-menu li a:hover,
+  [color-mode="dark"] .nav-menu li.active a {
+    color: var(--accent) !important;
+    background: rgba(122, 158, 128, 0.12) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-menu {
+    top: 62px !important;
+    max-height: calc(100vh - 62px) !important;
+  }
+}
+
+/**
+ * Zen Tags Overview
+ * /tags/ 与文章列表同宽、同顶部节奏；标签降为安静的文字链接。
+ */
+
+.container.tag-index {
+  width: min(750px, 92vw) !important;
+  padding-top: 4rem !important;
+  margin-bottom: 0;
+}
+
+.tag-index .tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 1.4rem 2.8rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none;
+}
+
+.tag-index .tag-list li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 1.7rem;
+  line-height: 1.5;
+}
+
+.tag-index .tag-list li .tag-list-link {
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--text-secondary) !important;
+  font-weight: 400;
+  text-decoration: none !important;
+  transition: color 0.18s ease;
+}
+
+.tag-index .tag-list li .tag-list-link:hover,
+.tag-index .tag-list li .tag-list-link.active {
+  color: var(--accent) !important;
+  background: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.tag-index .tag-list-count {
+  padding: 0 !important;
+  color: var(--text-muted) !important;
+  font-size: 1.2rem !important;
+  font-variant-numeric: tabular-nums;
 }
 

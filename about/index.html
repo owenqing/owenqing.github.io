@@ -37,19 +37,13 @@
                         })();
                       </script>
 
-                      <!-- Font preconnect for faster loading -->
-                      <link rel="preconnect" href="https://fonts.googleapis.com">
-                      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                      <!-- Noto Sans SC for harmonious CJK/Latin mixing -->
-                      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap"
-                        rel="stylesheet">
                       
-                        <!-- Noto Serif SC for serif reading mode -->
+                        <!-- Noto Serif SC — serif reading mode -->
+                        <link rel="preconnect" href="https://fonts.googleapis.com">
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                         <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
                           rel="stylesheet">
                         
-                      <!-- Raleway-Font (kept for legacy) -->
-                      <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
 
                       <!-- hexo site css -->
                       <link rel="stylesheet" href="/css/main.css" />
@@ -81,80 +75,71 @@
 
   <body>
     <div id="app">
-      <div class="header"
-  style="position:fixed !important; top:0 !important; left:0 !important; right:0 !important; width:100% !important;">
-  <div class="navbar">
-    <nav class="navbar">
-      <a href="/" class="blog-title">
-        <span class="outer-orbit"></span>
-        <span class="electron"></span>
-        <span class="electron-yellow"></span>
-        owenqing posts
-      </a>
+      <div class="header">
+  <nav class="navbar" aria-label="主导航">
+    <a href="/" class="blog-title">owenqing posts</a>
 
-      <!-- Mobile menu toggle button -->
-      <button class="nav-toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-menu">
-        <span class="hamburger" aria-hidden="true"></span>
-        <span class="hamburger" aria-hidden="true"></span>
-        <span class="hamburger" aria-hidden="true"></span>
-      </button>
+    <!-- Mobile menu toggle button -->
+    <button class="nav-toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-menu">
+      <span class="hamburger" aria-hidden="true"></span>
+      <span class="hamburger" aria-hidden="true"></span>
+      <span class="hamburger" aria-hidden="true"></span>
+    </button>
 
-      <ul class="nav-menu" id="nav-menu" role="menubar">
+    <ul class="nav-menu" id="nav-menu" role="menubar">
+      
         
           
-            <li class="active">
-              <a href="/">
-                
-                    Home
-              </a>
-            </li>
+          <li class="">
+            <a href="/">
+              
+                  首页
+            </a>
+          </li>
+          
             
-              
-          
-              
-          
-              
-          
-            <li class="">
-              <a href="/tags/">
-                
-                    Tags
-              </a>
-            </li>
+        
             
-              
-          
-            <li class="">
-              <a href="/friends/">
-                
-                    Friends
-              </a>
-            </li>
+        
             
-              
+        
           
-            <li class="active">
-              <a href="/about/">
-                
-                    About
-              </a>
-            </li>
-            
+          <li class="">
+            <a href="/tags/">
               
-      </ul>
-    </nav>
-  </div>
+                  标签
+            </a>
+          </li>
+          
+            
+        
+          
+          <li class="">
+            <a href="/moments/">
+              
+                  闪念
+            </a>
+          </li>
+          
+            
+        
+          
+          <li class="active">
+            <a href="/about/">
+              
+                  关于
+            </a>
+          </li>
+          
+            
+    </ul>
+  </nav>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
-    const headerEl = document.querySelector('.header');
-    const isPostPage = document.querySelector('.post-details') !== null;
-    if (headerEl && isPostPage) {
-      headerEl.classList.add('on-post');
-    }
 
     if (navToggle && navMenu) {
       navToggle.addEventListener('click', function (e) {
@@ -217,9 +202,10 @@
   });
 </script>
 
+
         <div class="flex-container">
           <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
-<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+<!-- 同时为「标签tag」，「分类categories」，「闪念moments」，「关于about」页面的承载页面，具体展示取决于page.type -->
 
 
   <!-- LaTex Display -->

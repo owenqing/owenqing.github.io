@@ -47,7 +47,6 @@
   color: var(--color-text-sub);
   margin-bottom: 2em;
   padding-bottom: 1em;
-  border-bottom: 1px solid var(--color-border-light);
 }
 
 .post-attach .post-pubtime,
@@ -109,40 +108,25 @@
   line-height: 1.7;
 }
 
-/* 引用块 - Notion Quote 简洁风格 */
+/* 引用块 - Zen Quote：纸感细线，次级墨色，内部排版保持语义 */
 .markdown-body blockquote {
   margin: 1.5em 0 !important;
-  padding: 0 1em !important;
-  border-left: 3px solid #d1d1d1 !important; /* 柔和灰色边条 */
+  padding: 0 0 0 1.2em !important;
+  border-left: 2px solid var(--zen-greige) !important; /* 柔和的暖灰边条 */
   background: transparent !important; /* 无背景，融入页面 */
-  color: var(--color-text-md-content) !important;
+  color: var(--text-secondary) !important;
   font-style: normal !important;
   border-radius: 0 !important;
-  font-size: inherit !important;
-  line-height: inherit !important;
-  font-family: inherit !important;
-  letter-spacing: inherit !important;
-  font-weight: inherit !important;
-  text-align: left !important;
-}
-
-/* 移除 blockquote 内部所有元素的特殊样式，完全继承正文 - 使用 !important */
-.markdown-body blockquote *,
-.markdown-body blockquote p,
-.markdown-body blockquote span,
-.markdown-body blockquote strong,
-.markdown-body blockquote em {
-  font-family: inherit !important;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  line-height: inherit !important;
-  letter-spacing: inherit !important;
-  color: inherit !important;
   text-align: left !important;
 }
 
 .markdown-body blockquote p {
-  margin: 0 !important;
+  margin: 0 0 0.6em !important;
+  color: inherit;
+}
+
+.markdown-body blockquote p:last-child {
+  margin-bottom: 0 !important;
 }
 
 .markdown-body blockquote > :first-child {
@@ -286,16 +270,11 @@
   color: var(--color-text-md-title);
 }
 
-/* 暗色模式 - blockquote - Notion Quote 简洁风格 */
+/* 暗色模式 - blockquote - Zen Quote */
 :root[color-mode="dark"] .markdown-body blockquote {
-  border-left-color: var(--color-block-md-quote-border) !important;
-  background: var(--bg-block-md-quote) !important;
-  color: var(--color-block-md-quote) !important;
-}
-
-:root[color-mode="dark"] .markdown-body blockquote *,
-:root[color-mode="dark"] .markdown-body blockquote p {
-  color: inherit !important;
+  border-left-color: #3d3d3d !important;
+  background: transparent !important;
+  color: #a0a0a0 !important;
 }
 
 :root[color-mode="dark"] .markdown-body blockquote a {
