@@ -110,130 +110,130 @@ pre:has(> code.highlight) .copy-btn.copied {
   opacity: 1;
 }
 
-/* 语法高亮 - 柔和风格 */
+/* 语法高亮 - Zen Code（低饱和暖调） */
 .markdown-body pre:has(> code.highlight) .comment,
 pre:has(> code.highlight) .comment {
-  color: #787774;
+  color: #8f8d87;
   font-style: italic;
 }
 
 .markdown-body pre:has(> code.highlight) .keyword,
 pre:has(> code.highlight) .keyword {
-  color: #d73a49;
+  color: #93621c;
   font-weight: 600;
 }
 
 .markdown-body pre:has(> code.highlight) .string,
 pre:has(> code.highlight) .string {
-  color: #22863a;
+  color: #527b59;
 }
 
 .markdown-body pre:has(> code.highlight) .number,
 pre:has(> code.highlight) .number {
-  color: #005cc5;
+  color: #3d6c92;
 }
 
 .markdown-body pre:has(> code.highlight) .title,
 .markdown-body pre:has(> code.highlight) .function,
 pre:has(> code.highlight) .title,
 pre:has(> code.highlight) .function {
-  color: #6f42c1;
+  color: #6b568f;
 }
 
 .markdown-body pre:has(> code.highlight) .built_in,
 .markdown-body pre:has(> code.highlight) .class,
 pre:has(> code.highlight) .built_in,
 pre:has(> code.highlight) .class {
-  color: #005cc5;
+  color: #36727c;
 }
 
 .markdown-body pre:has(> code.highlight) .variable,
 pre:has(> code.highlight) .variable {
-  color: #24292e;
+  color: #3f3e3a;
 }
 
 .markdown-body pre:has(> code.highlight) .operator,
 pre:has(> code.highlight) .operator {
-  color: #d73a49;
+  color: #6e6a61;
 }
 
-/* 暗色模式 - GitHub Dark Modern */
+/* 暗色模式 - Zen Dark */
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight),
 :root[color-mode="dark"] pre:has(> code.highlight) {
-  background: #161b22;
-  border-color: #30363d;
+  background: #1d1d1b;
+  border-color: #3a3a36;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight)::before,
 :root[color-mode="dark"] pre:has(> code.highlight)::before {
-  background: #161b22;
-  border-bottom-color: #30363d;
-  color: #8b949e;
+  background: #1d1d1b;
+  border-bottom-color: #3a3a36;
+  color: #8f8d87;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) code.highlight,
 :root[color-mode="dark"] pre:has(> code.highlight) code.highlight {
-  color: #c9d1d9;
+  color: #e8e4dc;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .copy-btn,
 :root[color-mode="dark"] pre:has(> code.highlight) .copy-btn {
-  color: #c9d1d9;
-  background: #21262d;
-  border-color: #30363d;
+  color: #e8e4dc;
+  background: #262624;
+  border-color: #3a3a36;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .copy-btn:hover,
 :root[color-mode="dark"] pre:has(> code.highlight) .copy-btn:hover {
-  background: #30363d;
-  border-color: #8b949e;
+  background: #33332f;
+  border-color: #8f8d87;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .copy-btn.copied,
 :root[color-mode="dark"] pre:has(> code.highlight) .copy-btn.copied {
-  color: #58a6ff;
-  background: rgba(88, 166, 255, 0.15);
-  border-color: #58a6ff;
+  color: #9fbea4;
+  background: rgba(122, 158, 128, 0.18);
+  border-color: #9fbea4;
 }
 
-/* 暗色语法高亮 */
+/* 暗色语法高亮 - Zen Code */
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .comment,
 :root[color-mode="dark"] pre:has(> code.highlight) .comment {
-  color: #9b9a97;
+  color: #8f8d87;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .keyword,
 :root[color-mode="dark"] pre:has(> code.highlight) .keyword {
-  color: #ff7b72;
+  color: #d4a35c;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .string,
 :root[color-mode="dark"] pre:has(> code.highlight) .string {
-  color: #a5d6ff;
+  color: #93b394;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .number,
 :root[color-mode="dark"] pre:has(> code.highlight) .number {
-  color: #79c0ff;
+  color: #86aed6;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .title,
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .function,
 :root[color-mode="dark"] pre:has(> code.highlight) .title,
 :root[color-mode="dark"] pre:has(> code.highlight) .function {
-  color: #d2a8ff;
+  color: #b3a3d6;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .built_in,
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .class,
 :root[color-mode="dark"] pre:has(> code.highlight) .built_in,
 :root[color-mode="dark"] pre:has(> code.highlight) .class {
-  color: #ffa657;
+  color: #6fb3bd;
 }
 
 :root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .variable,
 :root[color-mode="dark"] pre:has(> code.highlight) .variable {
-  color: #c9d1d9;
+  color: #e8e4dc;
 }
 
 /* 移动端适配 */
