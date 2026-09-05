@@ -26,16 +26,16 @@
                     <link rel="icon" href="/images/favicon-code.png">
                     
 
-                      
-                        <!-- 提前应用字体选择，避免首屏字体闪烁 -->
-                        <script>
-                          (function() {
-                            var mode = localStorage.getItem('font-mode');
-                            if (mode !== 'serif') { mode = 'sans'; }
-                            document.documentElement.setAttribute('font-mode', mode);
-                          })();
-                        </script>
-                        
+                      <!-- 提前应用配色与字体偏好，避免首屏闪烁 -->
+                      <script>
+                        (function() {
+                          var colorMode = localStorage.getItem('color-mode');
+                          document.documentElement.setAttribute('color-mode', colorMode === 'dark' ? 'dark' : 'light');
+
+                          var fontMode = localStorage.getItem('font-mode');
+                          document.documentElement.setAttribute('font-mode', fontMode === 'serif' ? 'serif' : 'sans');
+                        })();
+                      </script>
 
                       <!-- Font preconnect for faster loading -->
                       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,15 +53,6 @@
 
                       <!-- hexo site css -->
                       <link rel="stylesheet" href="/css/main.css" />
-                      <link rel="stylesheet" href="/css/zen.css?v=1788540410705" />
-                      <link rel="stylesheet" href="/css/reading.css" />
-                      
-                        <link rel="stylesheet" href="/css/font-switch.css" />
-                        
-                      <link rel="stylesheet" href="/css/code-block-new.css" />
-                      <link rel="stylesheet" href="/css/article.css" />
-                      <link rel="stylesheet" href="/css/callout.css" />
-                      <link rel="stylesheet" href="/css/mobile-nav.css" />
                       <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
                       <!-- 代码块风格 -->
                       
@@ -85,15 +76,6 @@
 
                                               
 
-                                                  <script>
-                                                    (function() {
-                                                      const mode = localStorage.getItem('color-mode') || 'light';
-                                                      document.documentElement.setAttribute('color-mode', mode);
-                                                    })();
-                                                  </script>
-
-                                                  <!-- 添加header效果脚本 -->
-                                                  <!-- <script defer type="text/javascript" src="/js/headerEffect.js"></script> -->
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 
@@ -255,19 +237,6 @@
 
 
     
-
-      
-        <!-- clipboard -->
-
-  
-    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
-  
-  
-<script src="/js/codeCopy.js"></script>
-
-
-
-          
 
             
 
@@ -435,18 +404,6 @@
                                 </div>
                                 
 
-                                  
-                                    <div class="comments-container">
-                                      
-
-
-
-
-
-
-
-                                    </div>
-                                    
                               </div>
                               
 
@@ -496,9 +453,12 @@
 <script src="/js/reading.js"></script>
 
 
-  <!-- 代码块复制功能 -->
   
+    <!-- 代码块复制功能 -->
+    
 <script src="/js/code-copy.js"></script>
+
+  
 
         </div>
 
@@ -671,7 +631,7 @@
         error: function(xhr, status, error) {
           $resultContent.innerHTML = ""
           if (xhr.status === 404) {
-            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<span></ul>";
           } else {
             $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
           }

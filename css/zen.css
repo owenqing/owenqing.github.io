@@ -4,30 +4,6 @@
   Palette: off-white (paper), greige, soft ink, moss green accents.
 */
 
-:root {
-    --zen-paper: #F9F8F6;
-    /* 米白 */
-    --zen-greige: #d9d3c7;
-    /* 灰褐 */
-    --zen-ink: #2D2D2D;
-    /* 浅墨（柔和深灰） */
-    --zen-ink-sub: #4a4a4a;
-    --zen-moss: #6b8f71;
-    /* 苔绿（点缀） */
-    --zen-border: rgba(0, 0, 0, 0.08);
-    --zen-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --zen-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.06);
-
-    /* Extended palette */
-    --bg-primary: #F9F8F6;
-    --bg-card: #FFFFFF;
-    --text-main: #2D2D2D;
-    --text-secondary: #666666;
-    --text-muted: #888888;
-    --accent: #9C9C8B;
-    --code-bg: #F0F0F0;
-}
-
 [color-mode="light"] body {
     background-color: var(--bg-primary) !important;
     color: var(--text-main) !important;

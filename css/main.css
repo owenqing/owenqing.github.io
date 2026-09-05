@@ -1,3 +1,219 @@
+/**
+ * Zen Design Tokens
+ * 颜色、字体、间距、阴影等全局变量的唯一来源。
+ * 暂时保留旧主题变量名，保证组件样式无需一次改完；
+ * 后续重构会逐步迁移到更简短的语义变量。
+ */
+
+/* 1. 默认变量（原 base.css，未被模式覆盖时兜底） */
+:root {
+  --bg-body: #FFFFFF;
+  --color-text-base: #2c3e50;
+  --color-text-a: #808080;
+  --color-text-a-hover: #6190e8;
+  --color-text-a-active: #6190e8;
+  --color-text-sub: #666666;
+  --bg-content-search: #f5f6f7;
+  --bg-content: #ffffff;
+  --color-divider-md-border: #ebedf0;
+  --color-text-md-title: #222;
+  --color-text-md-content: #222;
+  --color-text-md-code: #c7254e;
+  --bg-text-md-code: #f8f5ec;
+  --bg-block-md-quote: #f8f8f8;
+  --color-block-md-quote: #6a737d;
+  --bg-block-md-pre: #f8f8f8;
+  --color-text-md-pre: #555;
+  --bg-block-md-table: #ffffff;
+  --bg-block-md-table-2: #f8f8f8;
+  --color-border-md-table: #e5e5e5;
+  --post-item-shadow: rgba(0, 0, 0, 0.05);
+  --post-item-hover-shadow: rgba(0, 0, 0, 0.1);
+  --post-item-bg: #ffffff;
+  --post-item-border: #ebedf0;
+  --post-item-hover-border: #6190e8;
+  --post-time-bg: #f5f6f7;
+  --post-time-color: #666666;
+  --post-title-color: #222;
+  --post-item-text-color: #222;
+}
+
+/* 2. 亮色模式（原 color-scheme.css） */
+:root[color-mode="light"] {
+  --bg-body: #fafafa;
+  --bg-content: #ffffff;
+  --bg-content-search: #f5f5f5;
+  --bg-card: #ffffff;
+
+  --color-text-base: #1a1a1a;
+  --color-text-a: #555555;
+  --color-text-a-hover: #2563eb;
+  --color-text-a-active: #1d4ed8;
+  --color-text-sub: #6b7280;
+
+  --color-text-md-title: #111827;
+  --color-text-md-content: #374151;
+  --color-text-md-code: #dc2626;
+  --bg-text-md-code: #f3f4f6;
+
+  --bg-block-md-quote: #f9fafb;
+  --color-block-md-quote: #4b5563;
+  --color-block-md-quote-border: #d1d5db;
+
+  --color-divider-md-border: #e5e7eb;
+  --color-border-light: rgba(0, 0, 0, 0.08);
+
+  --bg-block-md-pre: #f8f9fa;
+  --color-text-md-pre: #374151;
+
+  --bg-block-md-table: #ffffff;
+  --bg-block-md-table-2: #f9fafb;
+  --color-border-md-table: #e5e7eb;
+  --bg-table-md-th: #f3f4f6;
+  --bg-table-md-tr: #f9fafb;
+
+  --post-item-shadow: rgba(0, 0, 0, 0.04);
+  --post-item-hover-shadow: rgba(0, 0, 0, 0.08);
+  --post-item-bg: #ffffff;
+  --post-item-border: #e5e7eb;
+  --post-item-hover-border: #2563eb;
+  --post-time-bg: #f3f4f6;
+  --post-time-color: #6b7280;
+  --post-item-text-color: #374151;
+  --post-title-color: #111827;
+
+  --footer-text-color: #6b7280;
+  --bg-footer-start: #f9fafb;
+  --bg-footer-end: #f3f4f6;
+}
+
+/* 3. 暗色模式（原 color-scheme.css；会被后面的 reading.css 变量覆盖同名项） */
+:root[color-mode="dark"] {
+  --bg-body: #0d1117;
+  --bg-content: #161b22;
+  --bg-content-search: #21262d;
+  --bg-card: #161b22;
+
+  --color-text-base: #c9d1d9;
+  --color-text-a: #8b949e;
+  --color-text-a-hover: #58a6ff;
+  --color-text-a-active: #79c0ff;
+  --color-text-sub: #6e7681;
+
+  --color-text-md-title: #e6edf3;
+  --color-text-md-content: #c9d1d9;
+  --color-text-md-code: #ff7b72;
+  --bg-text-md-code: #21262d;
+
+  --bg-block-md-quote: #161b22;
+  --color-block-md-quote: #8b949e;
+  --color-block-md-quote-border: #30363d;
+
+  --color-divider-md-border: #21262d;
+  --color-border-light: rgba(240, 246, 252, 0.1);
+
+  --bg-block-md-pre: #161b22;
+  --color-text-md-pre: #c9d1d9;
+
+  --bg-block-md-table: #0d1117;
+  --bg-block-md-table-2: #161b22;
+  --color-border-md-table: #30363d;
+  --bg-table-md-th: #21262d;
+  --bg-table-md-tr: #161b22;
+
+  --post-item-shadow: rgba(0, 0, 0, 0.3);
+  --post-item-hover-shadow: rgba(0, 0, 0, 0.4);
+  --post-item-bg: #161b22;
+  --post-item-border: #30363d;
+  --post-item-hover-border: #58a6ff;
+  --post-time-bg: #21262d;
+  --post-time-color: #8b949e;
+  --post-item-text-color: #c9d1d9;
+  --post-title-color: #e6edf3;
+
+  --footer-text-color: #8b949e;
+  --bg-footer-start: #161b22;
+  --bg-footer-end: #0d1117;
+}
+
+/* 4. Zen 基础色（原 zen.css，提供额外的 zen 命名空间变量） */
+:root {
+  --zen-paper: #F9F8F6;
+  --zen-greige: #d9d3c7;
+  --zen-ink: #2D2D2D;
+  --zen-ink-sub: #4a4a4a;
+  --zen-moss: #6b8f71;
+  --zen-border: rgba(0, 0, 0, 0.08);
+  --zen-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --zen-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  --bg-primary: #F9F8F6;
+  --bg-card: #FFFFFF;
+  --text-main: #2D2D2D;
+  --text-secondary: #666666;
+  --text-muted: #888888;
+  --accent: #9C9C8B;
+  --code-bg: #F0F0F0;
+}
+
+/* 5. Reading 语义色与间距（最终覆盖 zen.css 的同名默认变量） */
+:root {
+  --bg-primary: #F9F8F6;
+  --bg-card: #FFFFFF;
+  --text-main: #2D2D2D;
+  --text-secondary: #666666;
+  --text-muted: #888888;
+  --accent: #6b8f71;
+  --accent-hover: #5c7f64;
+
+  --code-bg: #F5F5F5;
+  --code-border: #E0E0E0;
+
+  --border-light: rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --content-width: min(750px, 92vw);
+  --line-height: 1.8;
+  --paragraph-spacing: 1.5em;
+}
+
+/* 6. Reading 暗色语义变量 */
+:root[color-mode="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-card: #252525;
+  --text-main: #e4e4e4;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666666;
+  --accent: #7a9e80;
+  --accent-hover: #8aae90;
+
+  --code-bg: #2d2d2d;
+  --code-border: #3d3d3d;
+
+  --border-light: rgba(255, 255, 255, 0.08);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* 7. 字体切换 */
+:root {
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia,
+    "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", SimSun, serif;
+}
+
 /* Add dark mode styles at the beginning of the file */
 :root[color-mode="dark"] .highlight pre,
 :root[color-mode="dark"] .highlight .code pre {
@@ -842,78 +1058,10 @@ figure table .gutter {
   border-bottom-color: #eee;
 }
 
-/* valine comments style sheets */
-
-.comments-container {
-  color: var(--color-text-a);
-}
-
-.comments-container .vwrap {
-  color: var(--color-text-a);
-}
-
-.vheader input::-webkit-input-placeholder, .vheader input {
-  color: var(--color-text-a) !important;
-}
-
-.vedit textarea::-webkit-input-placeholder, .vedit textarea {
-  color: var(--color-text-a) !important;
-}
-
-.vicon {
-  fill: var(--color-text-a) !important;
-}
-
-.vbtn {
-  color: var(--color-text-a) !important;
-}
-
-.vcontent p {
-  color: var(--color-text-a) !important;
-}
-
-
-#waline-comments {
-  --waline-font-size: 16px;
-}
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-/* 全局变量定义 */
-:root {
-  --bg-body: #FFFFFF;
-  --color-text-base: #2c3e50;
-  --color-text-a: #808080;
-  --color-text-a-hover: #6190e8;
-  --color-text-a-active: #6190e8;
-  --color-text-sub: #666666;
-  --bg-content-search: #f5f6f7;
-  --bg-content: #ffffff;
-  --color-divider-md-border: #ebedf0;
-  --color-text-md-title: #222;
-  --color-text-md-content: #222;
-  --color-text-md-code: #c7254e;
-  --bg-text-md-code: #f8f5ec;
-  --bg-block-md-quote: #f8f8f8;
-  --color-block-md-quote: #6a737d;
-  --bg-block-md-pre: #f8f8f8;
-  --color-text-md-pre: #555;
-  --bg-block-md-table: #ffffff;
-  --bg-block-md-table-2: #f8f8f8;
-  --color-border-md-table: #e5e5e5;
-  --post-item-shadow: rgba(0, 0, 0, 0.05);
-  --post-item-hover-shadow: rgba(0, 0, 0, 0.1);
-  --post-item-bg: #ffffff;
-  --post-item-border: #ebedf0;
-  --post-item-hover-border: #6190e8;
-  --post-time-bg: #f5f6f7;
-  --post-time-color: #666666;
-  --post-title-color: #222;
-  --post-item-text-color: #222;
 }
 
 html,
@@ -2566,122 +2714,6 @@ html body .container.tag-index {
   color: var(--color-text-a-hover, #4a9eff);
 }
 
-/* Modern Light Scheme - Clean & Minimal */
-:root[color-mode="light"] {
-  /* 背景色 */
-  --bg-body: #fafafa;
-  --bg-content: #ffffff;
-  --bg-content-search: #f5f5f5;
-  --bg-card: #ffffff;
-
-  /* 文字颜色 */
-  --color-text-base: #1a1a1a;
-  --color-text-a: #555555;
-  --color-text-a-hover: #2563eb;
-  --color-text-a-active: #1d4ed8;
-  --color-text-sub: #6b7280;
-
-  /* Markdown 内容 */
-  --color-text-md-title: #111827;
-  --color-text-md-content: #374151;
-  --color-text-md-code: #dc2626;
-  --bg-text-md-code: #f3f4f6;
-
-  /* 引用块 */
-  --bg-block-md-quote: #f9fafb;
-  --color-block-md-quote: #4b5563;
-  --color-block-md-quote-border: #d1d5db;
-
-  /* 分割线 & 边框 */
-  --color-divider-md-border: #e5e7eb;
-  --color-border-light: rgba(0, 0, 0, 0.08);
-
-  /* 代码块 */
-  --bg-block-md-pre: #f8f9fa;
-  --color-text-md-pre: #374151;
-
-  /* 表格 */
-  --bg-block-md-table: #ffffff;
-  --bg-block-md-table-2: #f9fafb;
-  --color-border-md-table: #e5e7eb;
-  --bg-table-md-th: #f3f4f6;
-  --bg-table-md-tr: #f9fafb;
-
-  /* 文章列表 */
-  --post-item-shadow: rgba(0, 0, 0, 0.04);
-  --post-item-hover-shadow: rgba(0, 0, 0, 0.08);
-  --post-item-bg: #ffffff;
-  --post-item-border: #e5e7eb;
-  --post-item-hover-border: #2563eb;
-  --post-time-bg: #f3f4f6;
-  --post-time-color: #6b7280;
-  --post-item-text-color: #374151;
-  --post-title-color: #111827;
-
-  /* 页脚 */
-  --footer-text-color: #6b7280;
-  --bg-footer-start: #f9fafb;
-  --bg-footer-end: #f3f4f6;
-}
-
-/* Modern Dark Scheme - Inspired by GitHub Dark & Notion */
-:root[color-mode="dark"] {
-  /* 背景色 - 深蓝灰色调 */
-  --bg-body: #0d1117;
-  --bg-content: #161b22;
-  --bg-content-search: #21262d;
-  --bg-card: #161b22;
-
-  /* 文字颜色 - 柔和的灰白色 */
-  --color-text-base: #c9d1d9;
-  --color-text-a: #8b949e;
-  --color-text-a-hover: #58a6ff;
-  --color-text-a-active: #79c0ff;
-  --color-text-sub: #6e7681;
-
-  /* Markdown 内容 */
-  --color-text-md-title: #e6edf3;
-  --color-text-md-content: #c9d1d9;
-  --color-text-md-code: #ff7b72;
-  --bg-text-md-code: #21262d;
-
-  /* 引用块 - Notion 风格 */
-  --bg-block-md-quote: #161b22;
-  --color-block-md-quote: #8b949e;
-  --color-block-md-quote-border: #30363d;
-
-  /* 分割线 & 边框 */
-  --color-divider-md-border: #21262d;
-  --color-border-light: rgba(240, 246, 252, 0.1);
-
-  /* 代码块 */
-  --bg-block-md-pre: #161b22;
-  --color-text-md-pre: #c9d1d9;
-
-  /* 表格 */
-  --bg-block-md-table: #0d1117;
-  --bg-block-md-table-2: #161b22;
-  --color-border-md-table: #30363d;
-  --bg-table-md-th: #21262d;
-  --bg-table-md-tr: #161b22;
-
-  /* 文章列表 - 卡片化设计 */
-  --post-item-shadow: rgba(0, 0, 0, 0.3);
-  --post-item-hover-shadow: rgba(0, 0, 0, 0.4);
-  --post-item-bg: #161b22;
-  --post-item-border: #30363d;
-  --post-item-hover-border: #58a6ff;
-  --post-time-bg: #21262d;
-  --post-time-color: #8b949e;
-  --post-item-text-color: #c9d1d9;
-  --post-title-color: #e6edf3;
-
-  /* 页脚 */
-  --footer-text-color: #8b949e;
-  --bg-footer-start: #161b22;
-  --bg-footer-end: #0d1117;
-}
-
 .footer {
   width: 100%;
   padding: 10px 0;
@@ -3100,19 +3132,6 @@ html body .container.tag-index {
 .ml-30 {
   margin-left: 30px;
 }
-.v[data-class="v"] .vwrap .vheader .vinput:focus {
-  border-bottom-color: #808080 !important;
-}
-.v[data-class="v"] .vbtn:active,
-.v[data-class="v"] .vbtn:hover {
-  border-color: #808080 !important;
-}
-.v[data-class="v"] .vcards .vcard .vh .vmeta .vat {
-  color: #808080 !important;
-}
-.v[data-class="v"] a {
-  color: #808080 !important;
-}
 .fancybox-progress {
   background: #808080 !important;
 }
@@ -3145,3 +3164,2704 @@ html body .container.tag-index {
 .markdown-body h6 .headerlink::before {
   color: #808080;
 }
+/*
+  Zen Minimal Theme Overrides
+  A calm, uncluttered aesthetic with generous whitespace and muted tones.
+  Palette: off-white (paper), greige, soft ink, moss green accents.
+*/
+
+[color-mode="light"] body {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-main) !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
+    font-size: 1.7rem;
+    letter-spacing: 0.02em;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+
+/* Reduce global ornamentation */
+* {
+    text-shadow: none !important;
+    box-sizing: border-box;
+}
+
+/* Header: frosted glass effect for better readability on scroll */
+.header {
+    background: rgba(249, 248, 246, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
+
+.header::before,
+.header::after,
+.blog-title::before,
+.blog-title::after,
+.blog-title .outer-orbit,
+.blog-title .electron,
+.blog-title .electron-yellow {
+    display: none !important;
+}
+
+.navbar {
+    max-width: 860px !important;
+    padding: 0 16px !important;
+    margin: 0 auto;
+}
+
+.blog-title {
+    padding-left: 0 !important;
+    margin: 0 18px 0 0 !important;
+    color: var(--zen-ink) !important;
+    font-weight: 500 !important;
+    font-size: 2.0rem !important;
+}
+
+/* Dark mode for header - frosted glass effect */
+[color-mode="dark"] .header {
+    background: rgba(22, 27, 34, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom-color: #30363d !important;
+}
+
+/* Dark mode for blog-title */
+[color-mode="dark"] .blog-title {
+    color: #e6edf3 !important;
+}
+
+.navbar ul li {
+    margin: 0 12px !important;
+}
+
+.navbar ul li a {
+    color: var(--text-secondary) !important;
+    padding: 6px 10px !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    transition: none !important;
+    font-weight: 400 !important;
+}
+
+.navbar ul li a:hover,
+.navbar ul li.active a {
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+    transform: none !important;
+}
+
+/* Dark mode for navbar links */
+[color-mode="dark"] .navbar ul li a {
+    color: #c9d1d9 !important;
+}
+
+[color-mode="dark"] .navbar ul li a:hover,
+[color-mode="dark"] .navbar ul li.active a {
+    color: #58a6ff !important;
+}
+
+/* Layout breathing space */
+.container {
+    max-width: 860px !important;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+/* 文章页面需要更宽的容器 */
+.container.post-details {
+    max-width: 1400px !important;
+}
+
+.index .post-list,
+.friend-index .friend-list,
+.archives .post-list,
+.tag-index .tag-list,
+.about-index .markdown-body {
+    padding: 0 8px !important;
+}
+
+/* Homepage/post list cards: zen minimal */
+.post-item {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--zen-border) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease !important;
+    padding: 20px 24px !important;
+}
+
+/* Dark mode for post-item */
+[color-mode="dark"] .post-item {
+    background: #161b22 !important;
+    border-color: #30363d !important;
+}
+
+.post-item:hover {
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.post-item .time-m-d {
+    background: transparent !important;
+    color: var(--zen-ink-sub) !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+
+/* Dark mode for post-item time */
+[color-mode="dark"] .post-item .time-m-d {
+    color: #8b949e !important;
+}
+
+.post-item .title {
+    font-weight: 400 !important;
+    letter-spacing: 0.02em !important;
+    color: var(--text-main) !important;
+    margin: 0;
+}
+
+/* Dark mode for post-item title */
+[color-mode="dark"] .post-item .title {
+    color: #c9d1d9 !important;
+}
+
+/* Footer: minimal and quiet */
+.footer {
+    background: transparent !important;
+    border-top: 1px solid var(--zen-border) !important;
+    color: var(--zen-ink-sub) !important;
+    padding: 20px 0;
+}
+
+/* Markdown typography for meditation-friendly reading */
+.markdown-body {
+    color: var(--text-main) !important;
+    line-height: 1.8 !important;
+    font-weight: 400 !important;
+    font-size: 1.7rem !important;
+    letter-spacing: 0.02em !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    background: transparent !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    font-variant-east-asian: proportional-width;
+    word-break: break-word;
+    text-align: left;
+    padding: 20px 0;
+}
+
+/* 标题样式 - 层级优化：文章标题 > h1 > h2 > h3 > h4 > 正文 */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+    color: var(--text-main) !important;
+    margin-top: 1.5em !important;
+    margin-bottom: 1em !important;
+    border-bottom: 0 !important;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.markdown-body h1 {
+    font-size: 1.65em !important;
+    font-weight: 600 !important;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
+
+.markdown-body h2 {
+    font-size: 1.4em !important;
+    font-weight: 600 !important;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--zen-border) !important;
+}
+
+.markdown-body h3 {
+    font-size: 1.25em !important;
+    font-weight: 600 !important;
+}
+
+.markdown-body h4 {
+    font-size: 1.15em !important;
+    font-weight: 500 !important;
+}
+
+.markdown-body h5 {
+    font-size: 1em !important;
+    font-weight: 500 !important;
+}
+
+.markdown-body h6 {
+    font-size: 1em !important;
+    font-weight: 500 !important;
+    color: var(--text-muted) !important;
+}
+
+.markdown-body p {
+    margin-bottom: 1.5em !important;
+    margin-top: 0 !important;
+    letter-spacing: 0.02em;
+    word-break: break-word;
+}
+
+/* 中英文混排优化 */
+.markdown-body p en,
+.markdown-body span[lang="en"] {
+    margin: 0 0.1em;
+}
+
+/* 列表样式优化 */
+.markdown-body ul,
+.markdown-body ol {
+    margin-top: 0 !important;
+    margin-bottom: 1.5em !important;
+    padding-left: 2em !important;
+}
+
+.markdown-body li {
+    margin-bottom: 0.25em !important;
+}
+
+.markdown-body ul li {
+    list-style-type: disc !important;
+}
+
+.markdown-body ol li {
+    list-style-type: decimal !important;
+}
+
+.markdown-body li p {
+    margin-top: 0.5em !important;
+    margin-bottom: 0.5em !important;
+}
+
+.markdown-body ol li {
+    padding-left: 0.5em !important;
+}
+
+/* 技术术语样式 */
+.markdown-body code {
+    background-color: var(--code-bg) !important;
+    color: var(--text-main) !important;
+    padding: 0.2em 0.4em !important;
+    border-radius: 3px !important;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+    font-size: 0.85em !important;
+}
+
+.markdown-body pre {
+    background-color: var(--code-bg) !important;
+    padding: 1em !important;
+    border-radius: 8px !important;
+    /* overflow: auto !important; */
+    margin-top: 0 !important;
+    margin-bottom: 1.5em !important;
+    font-size: 0.85em !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.markdown-body pre code {
+    background: transparent !important;
+    padding: 0 !important;
+    font-size: 0.85em !important;
+    display: block;
+    overflow-x: auto;
+}
+
+.markdown-body a {
+    color: var(--zen-moss) !important;
+    border-bottom: 1px solid rgba(107, 143, 113, 0.25) !important;
+}
+
+.markdown-body a:hover {
+    color: #5c7f64 !important;
+    border-bottom-color: rgba(107, 143, 113, 0.4) !important;
+}
+
+.markdown-body blockquote {
+    background: rgba(217, 211, 199, 0.25) !important;
+    border-left: 3px solid var(--zen-greige) !important;
+    color: var(--zen-ink-sub) !important;
+    font-style: normal !important;
+    padding: 0 1em !important;
+    margin: 0 0 1.5em !important;
+    border-radius: 0 8px 8px 0;
+}
+
+.markdown-body hr {
+    height: 0.25em;
+    padding: 0;
+    margin: 1.5em 0;
+    background-color: var(--zen-border);
+    border: 0;
+}
+
+/* Article reading area */
+.container.post-details,
+.post-content {
+    background: var(--bg-primary) !important;
+}
+
+.post-content {
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.03) !important;
+    border-radius: 8px !important;
+    padding: 24px !important;
+    background: var(--bg-card) !important;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .post-content {
+        padding: 16px !important;
+    }
+}
+
+/* Remove ornaments inside reading area */
+.markdown-body img {
+    box-shadow: none !important;
+    margin-top: 1.5em !important;
+    margin-bottom: 1.5em !important;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.post-title {
+    font-weight: 600 !important;
+    font-size: 2.2rem !important;
+    line-height: 1.4 !important;
+    text-align: center !important;
+    color: var(--text-main) !important;
+    letter-spacing: -0.01em;
+    margin: 0 0 1rem;
+}
+
+/* Subtitle (time) */
+.post-details .post-attach {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 1.4rem !important;
+    color: var(--text-muted) !important;
+}
+
+.post-details .post-attach .post-pubtime i {
+    font-size: 1.4rem !important;
+    color: var(--text-muted) !important;
+    font-weight: 400;
+}
+
+/* 表格样式 */
+.markdown-body table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    border-radius: 8px;
+}
+
+.markdown-body table th {
+    font-weight: 600;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+    padding: 6px 13px;
+    border: 1px solid var(--zen-border);
+}
+
+.markdown-body table tr {
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--zen-border);
+}
+
+.markdown-body table tr:nth-child(2n) {
+    background-color: var(--bg-primary);
+}
+
+/* 代码高亮区域样式 - 由 code-block-new.css 接管 */
+
+/* ==================== 文章页暗色模式适配 ==================== */
+
+/* 文章页背景和容器 */
+[color-mode="dark"] .container.post-details,
+[color-mode="dark"] .post-content {
+    background: transparent !important;
+}
+
+[color-mode="dark"] .post-content {
+    border-color: #30363d !important;
+}
+
+/* 文章标题 */
+[color-mode="dark"] .post-title {
+    color: #e6edf3 !important;
+}
+
+/* Markdown 正文 */
+[color-mode="dark"] .markdown-body {
+    color: #c9d1d9 !important;
+}
+
+/* Markdown 标题 */
+[color-mode="dark"] .markdown-body h1,
+[color-mode="dark"] .markdown-body h2,
+[color-mode="dark"] .markdown-body h3,
+[color-mode="dark"] .markdown-body h4,
+[color-mode="dark"] .markdown-body h5,
+[color-mode="dark"] .markdown-body h6 {
+    color: #e6edf3 !important;
+    border-bottom-color: #30363d !important;
+}
+
+[color-mode="dark"] .markdown-body h6 {
+    color: #8b949e !important;
+}
+
+/* 强调文字 */
+[color-mode="dark"] .markdown-body strong {
+    color: #e6edf3 !important;
+}
+
+/* 引用块 - Notion 风格 */
+[color-mode="dark"] .markdown-body blockquote {
+    background: transparent !important;
+    border-left-color: #30363d !important;
+    color: #8b949e !important;
+}
+
+/* 链接 - GitHub 蓝 */
+[color-mode="dark"] .markdown-body a {
+    color: #58a6ff !important;
+    border-bottom-color: rgba(88, 166, 255, 0.3) !important;
+}
+
+[color-mode="dark"] .markdown-body a:hover {
+    color: #79c0ff !important;
+    border-bottom-color: rgba(121, 192, 255, 0.5) !important;
+}
+
+/* 代码 - 行内 */
+[color-mode="dark"] .markdown-body code {
+    background-color: #21262d !important;
+    color: #ff7b72 !important;
+}
+
+/* 代码块 */
+[color-mode="dark"] .markdown-body pre {
+    background-color: #161b22 !important;
+    border: 1px solid #30363d !important;
+}
+
+/* 分割线 */
+[color-mode="dark"] .markdown-body hr {
+    background-color: #30363d !important;
+}
+
+/* 表格 */
+[color-mode="dark"] .markdown-body table th,
+[color-mode="dark"] .markdown-body table td {
+    border-color: #30363d !important;
+}
+
+[color-mode="dark"] .markdown-body table th {
+    background-color: #21262d !important;
+}
+
+[color-mode="dark"] .markdown-body table tr {
+    background-color: #161b22 !important;
+}
+
+[color-mode="dark"] .markdown-body table tr:nth-child(2n) {
+    background-color: #0d1117 !important;
+}
+
+/* 文章元信息 */
+[color-mode="dark"] .post-details .post-attach {
+    color: #8b949e !important;
+}
+
+[color-mode="dark"] .post-details .post-attach .post-pubtime i {
+    color: #8b949e !important;
+}
+
+/* 列表 */
+[color-mode="dark"] .markdown-body ul li,
+[color-mode="dark"] .markdown-body ol li {
+    color: #c9d1d9 !important;
+}
+
+/* 图片 */
+[color-mode="dark"] .markdown-body img {
+    opacity: 0.95;
+}
+
+/* ==================== 工具栏按钮暗色模式适配 ==================== */
+
+/* 工具栏按钮背景 */
+[color-mode="dark"] .tools-bar .tools-bar-item {
+    background: #161b22 !important;
+    border-color: #30363d !important;
+}
+
+/* 工具栏按钮图标颜色 */
+[color-mode="dark"] .tools-bar .tools-bar-item a,
+[color-mode="dark"] .tools-bar .tools-bar-item i {
+    color: #c9d1d9 !important;
+}
+
+/* 工具栏按钮悬停效果 */
+[color-mode="dark"] .tools-bar .tools-bar-item:hover {
+    border-color: #58a6ff !important;
+}
+
+[color-mode="dark"] .tools-bar .tools-bar-item:hover a,
+[color-mode="dark"] .tools-bar .tools-bar-item:hover i {
+    color: #58a6ff !important;
+}
+
+/**
+ * Reading Experience Optimization
+ * 博客阅读体验优化样式
+ * 包含：视觉层次、间距优化、阅读模式、交互反馈
+ */
+
+/* ========================================
+   2. 基础排版优化
+======================================== */
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-main);
+  background-color: var(--bg-primary);
+  line-height: var(--line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 内容容器 */
+.markdown-body {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  font-size: 1.7rem;
+  letter-spacing: 0.01em;
+}
+
+/* ========================================
+   3. 标题层次优化
+======================================== */
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: var(--text-main);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+  scroll-margin-top: 80px; /* 为固定 header 预留空间 */
+}
+
+.markdown-body h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  text-align: center;
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 2px solid var(--border-light);
+}
+
+.markdown-body h2 {
+  font-size: 1.6em;
+  font-weight: 600;
+  margin-top: var(--space-2xl);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.markdown-body h3 {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.markdown-body h4 {
+  font-size: 1.15em;
+  font-weight: 600;
+}
+
+.markdown-body h5,
+.markdown-body h6 {
+  font-size: 1em;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* 标题锚点链接 */
+.markdown-body h1 .headerlink,
+.markdown-body h2 .headerlink,
+.markdown-body h3 .headerlink,
+.markdown-body h4 .headerlink,
+.markdown-body h5 .headerlink,
+.markdown-body h6 .headerlink {
+  opacity: 0;
+  margin-left: 0.5em;
+  text-decoration: none;
+  color: var(--text-muted);
+  transition: opacity 0.2s ease;
+}
+
+.markdown-body h1:hover .headerlink,
+.markdown-body h2:hover .headerlink,
+.markdown-body h3:hover .headerlink,
+.markdown-body h4:hover .headerlink,
+.markdown-body h5:hover .headerlink,
+.markdown-body h6:hover .headerlink {
+  opacity: 1;
+}
+
+/* ========================================
+   4. 段落和文本优化
+======================================== */
+
+.markdown-body p {
+  margin-bottom: var(--paragraph-spacing);
+  text-align: left;
+  word-break: break-word;
+}
+
+/* 强调文本 */
+.markdown-body strong {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.markdown-body em {
+  font-style: italic;
+}
+
+/* ========================================
+   5. 链接样式优化
+======================================== */
+
+.markdown-body a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.markdown-body a:hover {
+  color: var(--accent-hover);
+  border-bottom-color: var(--accent);
+}
+
+/* 外部链接标识 */
+.markdown-body a[href^="http"]::after {
+  content: "↗";
+  font-size: 0.75em;
+  margin-left: 0.2em;
+  opacity: 0.6;
+}
+
+/* ========================================
+   6. 列表样式优化
+======================================== */
+
+.markdown-body ul,
+.markdown-body ol {
+  margin-bottom: var(--paragraph-spacing);
+  padding-left: 1.5em;
+}
+
+.markdown-body li {
+  margin-bottom: 0.5em;
+  line-height: 1.7;
+}
+
+.markdown-body li > p {
+  margin-bottom: 0.5em;
+}
+
+.markdown-body ul li {
+  list-style-type: disc;
+}
+
+.markdown-body ul li li {
+  list-style-type: circle;
+}
+
+.markdown-body ol li {
+  list-style-type: decimal;
+}
+
+/* 任务列表 */
+.markdown-body input[type="checkbox"] {
+  margin-right: 0.5em;
+  cursor: default;
+}
+
+/* ========================================
+   7. 引用块样式
+======================================== */
+
+.markdown-body blockquote {
+  margin: var(--space-xl) 0;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  color: var(--text-secondary);
+  font-style: normal;
+  box-shadow: var(--shadow-sm);
+}
+
+.markdown-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body blockquote blockquote {
+  margin: var(--space-md) 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ========================================
+   8. 表格样式
+======================================== */
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-lg) 0;
+  font-size: 0.95em;
+  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--border-light);
+  text-align: left;
+}
+
+.markdown-body table th {
+  background: var(--bg-card);
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.markdown-body table tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+:root[color-mode="dark"] .markdown-body table tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ========================================
+   10. 图片样式
+======================================== */
+
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: var(--space-lg) 0;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.markdown-body img:hover {
+  transform: scale(1.01);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 图片说明 */
+.markdown-body figcaption {
+  text-align: center;
+  font-size: 0.9em;
+  color: var(--text-muted);
+  margin-top: -0.5em;
+  margin-bottom: var(--space-lg);
+}
+
+/* ========================================
+   11. 分割线样式
+======================================== */
+
+.markdown-body hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-light), transparent);
+  margin: var(--space-2xl) 0;
+}
+
+/* 装饰性分割线 */
+.markdown-body hr.decorative {
+  height: auto;
+  background: transparent;
+  text-align: center;
+  margin: var(--space-2xl) 0;
+}
+
+.markdown-body hr.decorative::before {
+  content: "• • •";
+  color: var(--text-muted);
+  letter-spacing: 1em;
+}
+
+/* ========================================
+   12. 阅读进度条
+======================================== */
+
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--accent), var(--accent-hover));
+  z-index: 10000;
+  transition: width 0.1s ease;
+}
+
+/* ========================================
+   13. 回到顶部按钮优化
+   注：按钮位于 .tools-bar 容器内，使用 flex 布局
+======================================== */
+
+/* 工具栏内的回到顶部按钮 - 跟随 flex 布局 */
+.tools-bar .back-to-top {
+  position: static;
+  width: 44px;
+  height: 44px;
+  display: none;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.tools-bar .back-to-top.visible {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tools-bar .back-to-top:hover {
+  transform: scale(1) translateY(-2px);
+}
+
+/* 独立定位的回到顶部按钮（如果不在工具栏内使用） */
+.back-to-top:not(.tools-bar-item) {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  z-index: 999;
+}
+
+.back-to-top:not(.tools-bar-item).visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:not(.tools-bar-item):hover {
+  background: var(--accent);
+  color: white;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.back-to-top svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ========================================
+   14. 目录样式优化
+======================================== */
+
+.post-catalog {
+  position: sticky;
+  top: 100px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.post-catalog .title {
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.post-catalog .toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-catalog .toc-item {
+  margin: 0;
+}
+
+.post-catalog .toc-link {
+  display: block;
+  padding: 0.4em 0.6em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 0.9em;
+  border-left: 2px solid transparent;
+}
+
+.post-catalog .toc-link:hover {
+  color: var(--accent);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.post-catalog .toc-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: rgba(107, 143, 113, 0.08);
+}
+
+/* 目录层级 */
+.post-catalog .toc-item.level-2 { padding-left: 0; }
+.post-catalog .toc-item.level-3 { padding-left: 1em; }
+.post-catalog .toc-item.level-4 { padding-left: 2em; }
+
+/* ========================================
+   15. 文章卡片样式
+======================================== */
+
+.post-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.post-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+
+.post-item .time-m-d {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.post-item .title {
+  font-size: 1.25em;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.post-item .title a {
+  color: var(--text-main);
+  text-decoration: none;
+  border: none;
+}
+
+.post-item .title a:hover {
+  color: var(--accent);
+}
+
+/* ========================================
+   16. 暗色模式切换按钮样式
+======================================== */
+
+.theme-toggle {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle:hover {
+  background: var(--accent);
+  color: white;
+  transform: rotate(15deg);
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  position: absolute;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle .icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0);
+}
+
+.theme-toggle .icon-moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+:root[color-mode="dark"] .theme-toggle .icon-sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+:root[color-mode="dark"] .theme-toggle .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0);
+}
+
+/* ========================================
+   17. 平滑滚动
+======================================== */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   18. 选中文字样式
+======================================== */
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+::-moz-selection {
+  background: var(--accent);
+  color: white;
+}
+
+/* ========================================
+   19. 打印样式
+======================================== */
+
+@media print {
+  .header,
+  .tools-bar,
+  .post-catalog,
+  .reading-progress,
+  .back-to-top {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+    padding-top: 0;
+  }
+
+  .markdown-body {
+    max-width: 100%;
+  }
+
+  .markdown-body a {
+    color: black;
+    text-decoration: underline;
+  }
+
+  .markdown-body a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+}
+
+/* ========================================
+   20. 移动端适配
+======================================== */
+
+@media (max-width: 768px) {
+  :root {
+    --content-width: 100%;
+  }
+
+  .markdown-body {
+    font-size: 1.6rem;
+    padding: 0 var(--space-md);
+  }
+
+  .markdown-body h1 {
+    font-size: 1.8em;
+  }
+
+  .markdown-body h2 {
+    font-size: 1.4em;
+  }
+
+  .markdown-body h3 {
+    font-size: 1.2em;
+  }
+
+  .post-catalog {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 50vh;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 998;
+  }
+
+  .post-catalog.open {
+    transform: translateY(0);
+  }
+
+  .post-item {
+    padding: var(--space-md);
+  }
+
+  .tools-bar .back-to-top {
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-to-top:not(.tools-bar-item) {
+    width: 40px;
+    height: 40px;
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .markdown-body {
+    font-size: 1.5rem;
+  }
+
+  .markdown-body h1 {
+    font-size: 1.6em;
+  }
+
+  .markdown-body blockquote {
+    padding: var(--space-sm) var(--space-md);
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* ========================================
+   21. 文章页首尾微调
+======================================== */
+
+/* 文章标题 */
+.post-title {
+  font-size: clamp(2.4rem, 4vw, 3rem) !important;
+}
+
+/* 底部上一篇/下一篇 */
+.prev-or-next .post-foot-next,
+.prev-or-next .post-foot-prev {
+  white-space: normal;
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 48%;
+}
+
+.prev-or-next .post-foot-next a,
+.prev-or-next .post-foot-prev a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 100%;
+  padding: 0.6rem 0;
+  color: inherit;
+}
+
+.prev-or-next .prev-next-link-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.prev-or-next .prev-next-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-light);
+  border-radius: 50%;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.prev-or-next .prev-next-icon i {
+  margin: 0;
+  font-size: 1.3rem;
+  opacity: 1;
+}
+
+.prev-or-next .prev-next-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.prev-or-next .prev-next-label {
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+.prev-or-next .prev-next-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prev-or-next .post-foot-next a:hover .prev-next-icon,
+.prev-or-next .post-foot-prev a:hover .prev-next-icon {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.prev-or-next .post-foot-next a:hover .prev-next-title,
+.prev-or-next .post-foot-prev a:hover .prev-next-title {
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .prev-or-next .post-foot-next,
+  .prev-or-next .post-foot-prev {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .prev-or-next .post-foot-next a,
+  .prev-or-next .post-foot-prev a {
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
+
+/**
+ * Font Switch
+ * 默认保持现有无衬线字体；切到 font-mode="serif" 时，
+ * 正文与标题使用类似 Notion 的衬线字体。
+ * 导航、工具栏、搜索、页脚以及代码块仍保持原有字体。
+ */
+
+/* Aa 按钮图标 */
+.font-switch-aa {
+  display: inline-block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-text-a, #808080);
+  transition: color 0.3s ease;
+}
+
+/* 处于衬线模式时，按钮上的 Aa 也同步变为衬线 */
+:root[font-mode="serif"] .font-switch-aa {
+  font-family: var(--font-serif);
+}
+
+.tools-bar .tools-bar-item:hover .font-switch-aa {
+  color: var(--color-text-a-hover, #6190e8);
+}
+
+/* 正文与标题切换到衬线 */
+:root[font-mode="serif"] .markdown-body,
+:root[font-mode="serif"] .post-title,
+:root[font-mode="serif"] .content-title,
+:root[font-mode="serif"] .post-item .title,
+:root[font-mode="serif"] .tag-details .post-item > a,
+:root[font-mode="serif"] .category-details .post-item > a {
+  font-family: var(--font-serif) !important;
+}
+
+/* 衬线正文加重一档，避免细笔画显得发淡 */
+:root[font-mode="serif"] .markdown-body {
+  font-weight: 500 !important;
+}
+
+:root[font-mode="serif"] .markdown-body code,
+:root[font-mode="serif"] .markdown-body pre {
+  font-weight: 400 !important;
+}
+
+/* 亮色模式下正文颜色向纯黑靠近一点 */
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body,
+:root[font-mode="serif"]:not([color-mode="dark"]) .markdown-body strong {
+  color: #1f1f1f !important;
+}
+
+/* 暗色模式适配 */
+:root[color-mode="dark"] .font-switch-aa {
+  color: #c9d1d9;
+}
+
+:root[color-mode="dark"] .tools-bar .tools-bar-item:hover .font-switch-aa {
+  color: #58a6ff;
+}
+
+/**
+ * Code Block Styles - Notion Inspired
+ * 简洁优雅的代码块样式
+ * HTML结构: <pre><code class="highlight python">...</code></pre>
+ */
+
+/* 代码块容器 - pre:has(code.highlight) */
+.markdown-body pre:has(> code.highlight),
+pre:has(> code.highlight) {
+  position: relative;
+  margin: 1.5em 0;
+  border-radius: 8px;
+  background: #f7f6f3;
+  border: 1px solid #e3e2e0;
+  overflow: hidden;
+  font-size: 14px !important;
+  padding: 0 !important;
+}
+
+/* 代码块头部 - 语言标签 */
+.markdown-body pre:has(> code.highlight)::before,
+pre:has(> code.highlight)::before {
+  content: attr(data-lang);
+  display: block;
+  padding: 8px 16px;
+  background: #f7f6f3;
+  border-bottom: 1px solid #e3e2e0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #787774;
+  text-transform: lowercase;
+  letter-spacing: 0.3px;
+}
+
+/* 没有语言时隐藏头部 */
+.markdown-body pre:has(> code.highlight.plaintext)::before,
+pre:has(> code.highlight.plaintext)::before,
+.markdown-body pre:has(> code.highlight:not([class*=" "]))::before,
+pre:has(> code.highlight:not([class*=" "]))::before {
+  content: none;
+}
+
+/* 代码内容区域 - 只有一层，无嵌套框 */
+.markdown-body pre:has(> code.highlight) > code.highlight,
+pre:has(> code.highlight) > code.highlight {
+  display: block !important;
+  padding: 16px !important;
+  background: transparent !important;
+  border: none !important;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace !important;
+  font-size: inherit !important;
+  line-height: 1.5 !important;
+  color: #37352f;
+  overflow-x: auto;
+  white-space: pre;
+  word-wrap: normal;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+/* 代码行 */
+.markdown-body pre:has(> code.highlight) .line,
+pre:has(> code.highlight) .line {
+  display: block;
+  min-height: 1.5em;
+}
+
+/* 复制按钮 - Notion 风格 */
+.markdown-body pre:has(> code.highlight) .copy-btn,
+pre:has(> code.highlight) .copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  padding: 4px 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #37352f;
+  background: #ffffff;
+  border: 1px solid #e3e2e0;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.markdown-body pre:has(> code.highlight):hover .copy-btn,
+pre:has(> code.highlight):hover .copy-btn {
+  opacity: 1;
+}
+
+.markdown-body pre:has(> code.highlight) .copy-btn:hover,
+pre:has(> code.highlight) .copy-btn:hover {
+  background: #f7f6f3;
+  border-color: #d3d1cb;
+}
+
+.markdown-body pre:has(> code.highlight) .copy-btn:active,
+pre:has(> code.highlight) .copy-btn:active {
+  background: #eeeeec;
+}
+
+.markdown-body pre:has(> code.highlight) .copy-btn.copied,
+pre:has(> code.highlight) .copy-btn.copied {
+  color: #0f7b6c;
+  background: #e7f3f0;
+  border-color: #0f7b6c;
+  opacity: 1;
+}
+
+/* 语法高亮 - 柔和风格 */
+.markdown-body pre:has(> code.highlight) .comment,
+pre:has(> code.highlight) .comment {
+  color: #787774;
+  font-style: italic;
+}
+
+.markdown-body pre:has(> code.highlight) .keyword,
+pre:has(> code.highlight) .keyword {
+  color: #d73a49;
+  font-weight: 600;
+}
+
+.markdown-body pre:has(> code.highlight) .string,
+pre:has(> code.highlight) .string {
+  color: #22863a;
+}
+
+.markdown-body pre:has(> code.highlight) .number,
+pre:has(> code.highlight) .number {
+  color: #005cc5;
+}
+
+.markdown-body pre:has(> code.highlight) .title,
+.markdown-body pre:has(> code.highlight) .function,
+pre:has(> code.highlight) .title,
+pre:has(> code.highlight) .function {
+  color: #6f42c1;
+}
+
+.markdown-body pre:has(> code.highlight) .built_in,
+.markdown-body pre:has(> code.highlight) .class,
+pre:has(> code.highlight) .built_in,
+pre:has(> code.highlight) .class {
+  color: #005cc5;
+}
+
+.markdown-body pre:has(> code.highlight) .variable,
+pre:has(> code.highlight) .variable {
+  color: #24292e;
+}
+
+.markdown-body pre:has(> code.highlight) .operator,
+pre:has(> code.highlight) .operator {
+  color: #d73a49;
+}
+
+/* 暗色模式 - GitHub Dark Modern */
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight),
+:root[color-mode="dark"] pre:has(> code.highlight) {
+  background: #161b22;
+  border-color: #30363d;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight)::before,
+:root[color-mode="dark"] pre:has(> code.highlight)::before {
+  background: #161b22;
+  border-bottom-color: #30363d;
+  color: #8b949e;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) code.highlight,
+:root[color-mode="dark"] pre:has(> code.highlight) code.highlight {
+  color: #c9d1d9;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .copy-btn,
+:root[color-mode="dark"] pre:has(> code.highlight) .copy-btn {
+  color: #c9d1d9;
+  background: #21262d;
+  border-color: #30363d;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .copy-btn:hover,
+:root[color-mode="dark"] pre:has(> code.highlight) .copy-btn:hover {
+  background: #30363d;
+  border-color: #8b949e;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .copy-btn.copied,
+:root[color-mode="dark"] pre:has(> code.highlight) .copy-btn.copied {
+  color: #58a6ff;
+  background: rgba(88, 166, 255, 0.15);
+  border-color: #58a6ff;
+}
+
+/* 暗色语法高亮 */
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .comment,
+:root[color-mode="dark"] pre:has(> code.highlight) .comment {
+  color: #9b9a97;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .keyword,
+:root[color-mode="dark"] pre:has(> code.highlight) .keyword {
+  color: #ff7b72;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .string,
+:root[color-mode="dark"] pre:has(> code.highlight) .string {
+  color: #a5d6ff;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .number,
+:root[color-mode="dark"] pre:has(> code.highlight) .number {
+  color: #79c0ff;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .title,
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .function,
+:root[color-mode="dark"] pre:has(> code.highlight) .title,
+:root[color-mode="dark"] pre:has(> code.highlight) .function {
+  color: #d2a8ff;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .built_in,
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .class,
+:root[color-mode="dark"] pre:has(> code.highlight) .built_in,
+:root[color-mode="dark"] pre:has(> code.highlight) .class {
+  color: #ffa657;
+}
+
+:root[color-mode="dark"] .markdown-body pre:has(> code.highlight) .variable,
+:root[color-mode="dark"] pre:has(> code.highlight) .variable {
+  color: #c9d1d9;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .markdown-body pre:has(> code.highlight),
+  pre:has(> code.highlight) {
+    margin: 1em 0;
+    border-radius: 6px;
+    font-size: 14px !important;
+  }
+
+  .markdown-body pre:has(> code.highlight) code.highlight,
+  pre:has(> code.highlight) code.highlight {
+    padding: 12px;
+  }
+
+  .markdown-body pre:has(> code.highlight) .copy-btn,
+  pre:has(> code.highlight) .copy-btn {
+    opacity: 1;
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+}
+
+/**
+ * Article Styles - Notion Inspired
+ * 文章页面 Notion 风格排版
+ */
+
+/* 文章容器 - 类似 Notion 的页面宽度 */
+.container.post-details {
+  max-width: 1200px;
+  width: auto;
+  margin: 0 auto;
+  padding: 40px 5vw 80px;  /* 使用vw单位，随屏幕宽度变化 */
+  background: transparent !important; /* 与页面背景融为一体 */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 大屏增加侧边空间 */
+@media (min-width: 1400px) {
+  .container.post-details {
+    max-width: 1400px;
+    padding: 40px 8vw 80px;
+  }
+}
+
+/* 文章内容区域 - 透明背景 */
+.post-content {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* 文章标题 */
+.post-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text-base);
+  margin-bottom: 0.5em;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* 文章元信息 */
+.post-attach {
+  font-size: 0.9rem;
+  color: var(--color-text-sub);
+  margin-bottom: 2em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.post-attach .post-pubtime,
+.post-attach .post-tags,
+.post-attach .post-categories {
+  margin-right: 1em;
+}
+
+/* 纯文字内容区域限制 - 舒适阅读宽度 */
+.markdown-body {
+  max-width: min(750px, 92vw);  /* 小屏时占92%视口，大屏最大750px */
+  margin: 0 auto;
+  font-size: 1.6rem;
+  line-height: 1.7;
+  color: var(--color-text-md-content);
+}
+
+/* 标题样式 - Notion 风格 */
+.markdown-body h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  margin: 1.5em 0 0.5em;
+  border-bottom: none;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-text-base);
+}
+
+.markdown-body h2 {
+  font-size: 1.6em;
+  font-weight: 600;
+  margin: 1.4em 0 0.4em;
+  border-bottom: none;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--color-text-base);
+}
+
+.markdown-body h3 {
+  font-size: 1.3em;
+  font-weight: 600;
+  margin: 1.2em 0 0.3em;
+  line-height: 1.3;
+  color: var(--color-text-base);
+}
+
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 1em 0 0.3em;
+  color: var(--color-text-base);
+}
+
+/* 段落间距 - 紧凑 */
+.markdown-body p {
+  margin: 0.5em 0;
+  line-height: 1.7;
+}
+
+/* 引用块 - Notion Quote 简洁风格 */
+.markdown-body blockquote {
+  margin: 1.5em 0 !important;
+  padding: 0 1em !important;
+  border-left: 3px solid #d1d1d1 !important; /* 柔和灰色边条 */
+  background: transparent !important; /* 无背景，融入页面 */
+  color: var(--color-text-md-content) !important;
+  font-style: normal !important;
+  border-radius: 0 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-family: inherit !important;
+  letter-spacing: inherit !important;
+  font-weight: inherit !important;
+  text-align: left !important;
+}
+
+/* 移除 blockquote 内部所有元素的特殊样式，完全继承正文 - 使用 !important */
+.markdown-body blockquote *,
+.markdown-body blockquote p,
+.markdown-body blockquote span,
+.markdown-body blockquote strong,
+.markdown-body blockquote em {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  color: inherit !important;
+  text-align: left !important;
+}
+
+.markdown-body blockquote p {
+  margin: 0 !important;
+}
+
+.markdown-body blockquote > :first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* blockquote 内部的链接 */
+.markdown-body blockquote a {
+  color: #0f7b6c;
+}
+
+.markdown-body blockquote a:hover {
+  border-bottom-color: #0f7b6c;
+}
+
+/* 列表 - 减少缩进 */
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.markdown-body li {
+  margin: 0.3em 0;
+  line-height: 1.7;
+}
+
+.markdown-body li > p {
+  margin: 0.3em 0;
+}
+
+/* 链接 - Notion 绿色 */
+.markdown-body a {
+  color: #0f7b6c;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.markdown-body a:hover {
+  border-bottom-color: #0f7b6c;
+  color: #0f7b6c;
+}
+
+/* 强调文本 */
+.markdown-body strong {
+  font-weight: 600;
+  color: var(--color-text-base);
+}
+
+.markdown-body em {
+  font-style: italic;
+}
+
+/* 代码 - 行内 */
+.markdown-body code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.9em;
+  padding: 0.2em 0.4em;
+  background: #f1f1ef;
+  border-radius: 3px;
+  color: #eb5757;
+}
+
+/* 分隔线 */
+.markdown-body hr {
+  border: none;
+  border-top: 1px solid #e3e2e0;
+  margin: 2em 0;
+}
+
+/* 图片 */
+.markdown-body img {
+  max-width: 100%;
+  border-radius: 4px;
+  margin: 1em 0;
+}
+
+/* 表格 - 允许突破内容宽度限制 */
+.markdown-body table {
+  width: 100%;
+  max-width: 100%;
+  margin: 1em 0;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 8px 12px;
+  border: 1px solid #e3e2e0;
+  text-align: left;
+}
+
+.markdown-body table th {
+  background: #f7f6f3;
+  font-weight: 600;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background: #fafafa;
+}
+
+/* 代码块 - 允许突破内容宽度限制 */
+.markdown-body .highlight {
+  max-width: 100%;
+  margin: 1.5em 0;
+}
+
+/* 任务列表复选框 */
+.markdown-body input[type="checkbox"] {
+  margin-right: 0.5em;
+}
+
+/* 暗色模式 - 现代风格 */
+:root[color-mode="dark"] .container.post-details,
+:root[color-mode="dark"] .post-content {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+:root[color-mode="dark"] .post-title {
+  color: var(--color-text-md-title);
+}
+
+:root[color-mode="dark"] .markdown-body {
+  color: var(--color-text-md-content);
+}
+
+:root[color-mode="dark"] .markdown-body h1,
+:root[color-mode="dark"] .markdown-body h2,
+:root[color-mode="dark"] .markdown-body h3,
+:root[color-mode="dark"] .markdown-body h4,
+:root[color-mode="dark"] .markdown-body h5,
+:root[color-mode="dark"] .markdown-body h6 {
+  color: var(--color-text-md-title);
+}
+
+/* 暗色模式 - blockquote - Notion Quote 简洁风格 */
+:root[color-mode="dark"] .markdown-body blockquote {
+  border-left-color: var(--color-block-md-quote-border) !important;
+  background: var(--bg-block-md-quote) !important;
+  color: var(--color-block-md-quote) !important;
+}
+
+:root[color-mode="dark"] .markdown-body blockquote *,
+:root[color-mode="dark"] .markdown-body blockquote p {
+  color: inherit !important;
+}
+
+:root[color-mode="dark"] .markdown-body blockquote a {
+  color: var(--color-text-a-hover) !important;
+  border-bottom-color: var(--color-text-a-hover) !important;
+}
+
+:root[color-mode="dark"] .markdown-body blockquote a:hover {
+  opacity: 0.8;
+}
+
+:root[color-mode="dark"] .markdown-body code {
+  background: var(--bg-text-md-code);
+  color: var(--color-text-md-code);
+}
+
+:root[color-mode="dark"] .markdown-body a {
+  color: var(--color-text-a-hover);
+}
+
+:root[color-mode="dark"] .markdown-body a:hover {
+  border-bottom-color: var(--color-text-a-hover);
+  color: var(--color-text-a-active);
+}
+
+:root[color-mode="dark"] .markdown-body hr {
+  border-top-color: var(--color-divider-md-border);
+}
+
+:root[color-mode="dark"] .markdown-body table th,
+:root[color-mode="dark"] .markdown-body table td {
+  border-color: var(--color-border-md-table);
+}
+
+:root[color-mode="dark"] .markdown-body table th {
+  background: var(--bg-table-md-th);
+}
+
+:root[color-mode="dark"] .markdown-body table tr:nth-child(2n) {
+  background: var(--bg-table-md-tr);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .container.post-details {
+    padding: 20px;
+  }
+
+  .post-title {
+    font-size: 2rem;
+  }
+
+  .markdown-body {
+    max-width: min(750px, 92vw);
+    font-size: 1.5rem;
+  }
+
+  .markdown-body h1 {
+    font-size: 1.8em;
+  }
+
+  .markdown-body h2 {
+    font-size: 1.4em;
+  }
+
+  .markdown-body h3 {
+    font-size: 1.2em;
+  }
+}
+
+/* 平板适配 */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .container.post-details {
+    padding: 30px 40px;
+  }
+
+  .markdown-body {
+    max-width: 100%;
+  }
+}
+
+/**
+ * Markdown Alerts - Notion-style Callouts
+ * GitHub alert syntax: > [!NOTE] / > [!TIP] / > [!IMPORTANT] / ...
+ */
+
+.markdown-body .markdown-alert {
+  margin: 1.5em 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.markdown-body .markdown-alert .markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px !important;
+  font-size: 0.92em !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+}
+
+.markdown-body .markdown-alert .markdown-alert-title::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.markdown-body .markdown-alert .markdown-alert-title svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.markdown-body .markdown-alert p {
+  margin: 0 0 0.5em !important;
+  line-height: 1.75 !important;
+}
+
+.markdown-body .markdown-alert p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* ---- Light mode palette ---- */
+
+.markdown-body .markdown-alert-note {
+  background: #eef5fc;
+  border-color: #cfe1f2;
+}
+
+.markdown-body .markdown-alert-note .markdown-alert-title {
+  color: #2e6fb8;
+}
+
+.markdown-body .markdown-alert-tip {
+  background: #eef7ef;
+  border-color: #cfe6d2;
+}
+
+.markdown-body .markdown-alert-tip .markdown-alert-title {
+  color: #3b8a4e;
+}
+
+.markdown-body .markdown-alert-important {
+  background: #fbf4e7;
+  border-color: #eed9b0;
+}
+
+.markdown-body .markdown-alert-important .markdown-alert-title {
+  color: #b07a16;
+}
+
+.markdown-body .markdown-alert-warning,
+.markdown-body .markdown-alert-caution {
+  background: #fdf0ec;
+  border-color: #f0c9bc;
+}
+
+.markdown-body .markdown-alert-warning .markdown-alert-title,
+.markdown-body .markdown-alert-caution .markdown-alert-title {
+  color: #c34e2e;
+}
+
+/* ---- Dark mode palette ---- */
+
+:root[color-mode="dark"] .markdown-body .markdown-alert-note {
+  background: rgba(56, 109, 162, 0.18);
+  border-color: rgba(93, 153, 213, 0.35);
+}
+
+:root[color-mode="dark"] .markdown-body .markdown-alert-note .markdown-alert-title {
+  color: #86b7e8;
+}
+
+:root[color-mode="dark"] .markdown-body .markdown-alert-tip {
+  background: rgba(64, 148, 83, 0.16);
+  border-color: rgba(104, 187, 121, 0.35);
+}
+
+:root[color-mode="dark"] .markdown-body .markdown-alert-tip .markdown-alert-title {
+  color: #8cd19a;
+}
+
+:root[color-mode="dark"] .markdown-body .markdown-alert-important {
+  background: rgba(177, 122, 28, 0.16);
+  border-color: rgba(215, 160, 64, 0.35);
+}
+
+:root[color-mode="dark"] .markdown-body .markdown-alert-important .markdown-alert-title {
+  color: #e0b35f;
+}
+
+:root[color-mode="dark"] .markdown-body .markdown-alert-warning,
+:root[color-mode="dark"] .markdown-body .markdown-alert-caution {
+  background: rgba(190, 78, 44, 0.18);
+  border-color: rgba(226, 121, 87, 0.35);
+}
+
+:root[color-mode="dark"] .markdown-body .markdown-alert-warning .markdown-alert-title,
+:root[color-mode="dark"] .markdown-body .markdown-alert-caution .markdown-alert-title {
+  color: #eb957c;
+}
+
+/**
+ * Mobile Navigation Styles
+ * 移动端导航菜单样式
+ */
+
+/* 移动端菜单切换按钮 */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  z-index: 10000;
+}
+
+.nav-toggle:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.nav-toggle.active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.hamburger {
+  width: 20px;
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-toggle.active .hamburger:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.nav-toggle.active .hamburger:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.active .hamburger:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* 桌面端导航 */
+@media (min-width: 769px) {
+  .nav-menu {
+    display: flex !important;
+    flex-direction: row;
+    position: static;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+    opacity: 1;
+    padding: 0;
+  }
+}
+
+/* 移动端样式 */
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 62px;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-150%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 0;
+    z-index: 999;
+    overflow-y: auto;
+    max-height: calc(100vh - 62px);
+    border-radius: 0 0 16px 16px;
+  }
+
+  .nav-menu-active {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .nav-menu li {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-menu li a {
+    display: block;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    color: #333;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+  }
+
+  .nav-menu li a:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--accent, #6b8f71);
+  }
+
+  .nav-menu li.active a {
+    background: rgba(107, 143, 113, 0.1);
+    color: var(--accent, #6b8f71);
+    font-weight: 500;
+  }
+
+  /* 触摸友好的点击区域 */
+  .nav-menu li a::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+  }
+
+  /* 暗色模式适配 */
+  :root[color-mode="dark"] .nav-menu {
+    background: rgba(13, 17, 23, 0.98);
+    border-top: 1px solid #30363d;
+  }
+
+  :root[color-mode="dark"] .nav-menu li a {
+    color: #c9d1d9;
+  }
+
+  :root[color-mode="dark"] .nav-menu li a:hover {
+    background: rgba(88, 166, 255, 0.1);
+    color: #58a6ff;
+  }
+
+  :root[color-mode="dark"] .nav-menu li.active a {
+    background: rgba(88, 166, 255, 0.15);
+    color: #58a6ff;
+  }
+
+  /* 防止背景滚动 */
+  body.nav-open {
+    overflow: hidden;
+  }
+}
+
+/* 超窄屏幕处理 */
+@media (max-width: 480px) {
+  .nav-menu {
+    top: 58px;
+    max-height: calc(100vh - 58px);
+  }
+
+  .nav-toggle {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+
+  .hamburger {
+    width: 18px;
+  }
+}
+
+/* 目录按钮移动端样式 */
+#btn-catalog {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  #btn-catalog {
+    display: flex;
+    position: fixed;
+    bottom: 80px;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+    background: var(--bg-card, #fff);
+    border: 1px solid var(--border-light, rgba(0, 0, 0, 0.1));
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 998;
+    transition: all 0.3s ease;
+  }
+
+  #btn-catalog:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #btn-catalog i {
+    font-size: 1.5rem;
+    color: var(--text-main, #333);
+  }
+
+  .post-catalog {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 60vh;
+    background: var(--bg-card, #fff);
+    border-radius: 16px 16px 0 0;
+    border: none;
+    border-top: 1px solid var(--border-light, rgba(0, 0, 0, 0.1));
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 1rem;
+    z-index: 997;
+  }
+
+  .post-catalog.visible {
+    transform: translateY(0);
+  }
+
+  .post-catalog .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-light, rgba(0, 0, 0, 0.1));
+  }
+
+  .post-catalog .title::after {
+    content: '✕';
+    font-size: 1.2rem;
+    color: var(--text-muted, #888);
+    cursor: pointer;
+  }
+
+  .catalog-content {
+    max-height: calc(60vh - 60px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 工具栏移动端适配 */
+@media (max-width: 768px) {
+  .tools-bar {
+    right: 1rem;
+    bottom: 1rem;
+    gap: 10px;
+  }
+
+  .tools-bar .tools-bar-item {
+    width: 42px;
+    height: 42px;
+  }
+
+  .tools-bar .tools-bar-item i {
+    font-size: 1.3rem;
+  }
+}
+
+/* 超小屏幕适配 */
+@media (max-width: 480px) {
+  .tools-bar {
+    right: 0.8rem;
+    bottom: 0.8rem;
+    gap: 8px;
+  }
+
+  .tools-bar .tools-bar-item {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* 文章内容移动端优化 */
+@media (max-width: 768px) {
+  .markdown-body {
+    font-size: 1.6rem;
+  }
+
+  .markdown-body pre {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    border-radius: 0;
+  }
+
+  .post-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .post-title {
+    font-size: 1.75rem;
+    padding: 0 0.5rem;
+  }
+}
+
+/* 平板适配 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    width: 80%;
+    max-width: 800px;
+  }
+
+  .post-catalog {
+    width: 200px;
+    right: 20px;
+  }
+}
+
+/**
+ * Zen Search Modal
+ * 统一搜索弹层的视觉：柔和遮罩 + 单张圆角卡片
+ */
+
+.search-overlay {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14vh 1.5rem 2rem;
+  background-color: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.search-overlay.hidden {
+  background-color: transparent;
+}
+
+.search-content {
+  position: relative;
+  top: auto;
+  width: min(680px, 100%);
+  margin: 0;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+  opacity: 1;
+  transform: translateY(0);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  z-index: 999;
+}
+
+.search-overlay.hidden .search-content {
+  top: auto;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.search-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 54px;
+  padding: 0 0.75rem 0 1.2rem;
+  background-color: transparent;
+  border-bottom: 1px solid var(--border-light);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.search-title .search-icon-input {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+.search-title .search-icon-input i {
+  font-size: 1.6rem;
+}
+
+.search-input {
+  height: 100%;
+  line-height: 54px;
+  color: var(--text-main);
+  font-size: 1.6rem;
+  caret-color: var(--accent);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+.search-close-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.search-close-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-main);
+}
+
+.search-close-icon i {
+  font-size: 1.4rem;
+}
+
+.search-result {
+  max-height: min(52vh, 430px);
+  margin: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.search-result ul {
+  margin: 0;
+  padding: 8px;
+}
+
+.search-result-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.search-result-list li {
+  margin: 0;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-light);
+  border-radius: 10px;
+  list-style: none;
+}
+
+.search-result-list li:last-child {
+  border-bottom: none;
+}
+
+.search-result-list li:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.search-result-title {
+  display: block;
+  color: var(--text-main);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.search-result-list li:hover .search-result-title {
+  color: var(--accent);
+}
+
+.search-result-abstract {
+  padding: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+.search-keyword {
+  padding: 0 2px;
+  border-radius: 3px;
+  background-color: rgba(107, 143, 113, 0.16);
+  color: var(--accent);
+  font-style: normal;
+}
+
+.local-search-empty {
+  display: block;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 1.35rem;
+  text-align: center;
+}
+
+/* 暗色模式 */
+:root[color-mode="dark"] .search-overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+}
+
+:root[color-mode="dark"] .search-close-icon:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+:root[color-mode="dark"] .search-result-list li:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 480px) {
+  .search-overlay {
+    padding: 10vh 0.75rem 1rem;
+  }
+
+  .search-title {
+    padding-left: 1rem;
+  }
+}
+

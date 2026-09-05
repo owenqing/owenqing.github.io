@@ -1,0 +1,215 @@
+/**
+ * Zen Design Tokens
+ * 颜色、字体、间距、阴影等全局变量的唯一来源。
+ * 暂时保留旧主题变量名，保证组件样式无需一次改完；
+ * 后续重构会逐步迁移到更简短的语义变量。
+ */
+
+/* 1. 默认变量（原 base.css，未被模式覆盖时兜底） */
+:root {
+  --bg-body: #FFFFFF;
+  --color-text-base: #2c3e50;
+  --color-text-a: #808080;
+  --color-text-a-hover: #6190e8;
+  --color-text-a-active: #6190e8;
+  --color-text-sub: #666666;
+  --bg-content-search: #f5f6f7;
+  --bg-content: #ffffff;
+  --color-divider-md-border: #ebedf0;
+  --color-text-md-title: #222;
+  --color-text-md-content: #222;
+  --color-text-md-code: #c7254e;
+  --bg-text-md-code: #f8f5ec;
+  --bg-block-md-quote: #f8f8f8;
+  --color-block-md-quote: #6a737d;
+  --bg-block-md-pre: #f8f8f8;
+  --color-text-md-pre: #555;
+  --bg-block-md-table: #ffffff;
+  --bg-block-md-table-2: #f8f8f8;
+  --color-border-md-table: #e5e5e5;
+  --post-item-shadow: rgba(0, 0, 0, 0.05);
+  --post-item-hover-shadow: rgba(0, 0, 0, 0.1);
+  --post-item-bg: #ffffff;
+  --post-item-border: #ebedf0;
+  --post-item-hover-border: #6190e8;
+  --post-time-bg: #f5f6f7;
+  --post-time-color: #666666;
+  --post-title-color: #222;
+  --post-item-text-color: #222;
+}
+
+/* 2. 亮色模式（原 color-scheme.css） */
+:root[color-mode="light"] {
+  --bg-body: #fafafa;
+  --bg-content: #ffffff;
+  --bg-content-search: #f5f5f5;
+  --bg-card: #ffffff;
+
+  --color-text-base: #1a1a1a;
+  --color-text-a: #555555;
+  --color-text-a-hover: #2563eb;
+  --color-text-a-active: #1d4ed8;
+  --color-text-sub: #6b7280;
+
+  --color-text-md-title: #111827;
+  --color-text-md-content: #374151;
+  --color-text-md-code: #dc2626;
+  --bg-text-md-code: #f3f4f6;
+
+  --bg-block-md-quote: #f9fafb;
+  --color-block-md-quote: #4b5563;
+  --color-block-md-quote-border: #d1d5db;
+
+  --color-divider-md-border: #e5e7eb;
+  --color-border-light: rgba(0, 0, 0, 0.08);
+
+  --bg-block-md-pre: #f8f9fa;
+  --color-text-md-pre: #374151;
+
+  --bg-block-md-table: #ffffff;
+  --bg-block-md-table-2: #f9fafb;
+  --color-border-md-table: #e5e7eb;
+  --bg-table-md-th: #f3f4f6;
+  --bg-table-md-tr: #f9fafb;
+
+  --post-item-shadow: rgba(0, 0, 0, 0.04);
+  --post-item-hover-shadow: rgba(0, 0, 0, 0.08);
+  --post-item-bg: #ffffff;
+  --post-item-border: #e5e7eb;
+  --post-item-hover-border: #2563eb;
+  --post-time-bg: #f3f4f6;
+  --post-time-color: #6b7280;
+  --post-item-text-color: #374151;
+  --post-title-color: #111827;
+
+  --footer-text-color: #6b7280;
+  --bg-footer-start: #f9fafb;
+  --bg-footer-end: #f3f4f6;
+}
+
+/* 3. 暗色模式（原 color-scheme.css；会被后面的 reading.css 变量覆盖同名项） */
+:root[color-mode="dark"] {
+  --bg-body: #0d1117;
+  --bg-content: #161b22;
+  --bg-content-search: #21262d;
+  --bg-card: #161b22;
+
+  --color-text-base: #c9d1d9;
+  --color-text-a: #8b949e;
+  --color-text-a-hover: #58a6ff;
+  --color-text-a-active: #79c0ff;
+  --color-text-sub: #6e7681;
+
+  --color-text-md-title: #e6edf3;
+  --color-text-md-content: #c9d1d9;
+  --color-text-md-code: #ff7b72;
+  --bg-text-md-code: #21262d;
+
+  --bg-block-md-quote: #161b22;
+  --color-block-md-quote: #8b949e;
+  --color-block-md-quote-border: #30363d;
+
+  --color-divider-md-border: #21262d;
+  --color-border-light: rgba(240, 246, 252, 0.1);
+
+  --bg-block-md-pre: #161b22;
+  --color-text-md-pre: #c9d1d9;
+
+  --bg-block-md-table: #0d1117;
+  --bg-block-md-table-2: #161b22;
+  --color-border-md-table: #30363d;
+  --bg-table-md-th: #21262d;
+  --bg-table-md-tr: #161b22;
+
+  --post-item-shadow: rgba(0, 0, 0, 0.3);
+  --post-item-hover-shadow: rgba(0, 0, 0, 0.4);
+  --post-item-bg: #161b22;
+  --post-item-border: #30363d;
+  --post-item-hover-border: #58a6ff;
+  --post-time-bg: #21262d;
+  --post-time-color: #8b949e;
+  --post-item-text-color: #c9d1d9;
+  --post-title-color: #e6edf3;
+
+  --footer-text-color: #8b949e;
+  --bg-footer-start: #161b22;
+  --bg-footer-end: #0d1117;
+}
+
+/* 4. Zen 基础色（原 zen.css，提供额外的 zen 命名空间变量） */
+:root {
+  --zen-paper: #F9F8F6;
+  --zen-greige: #d9d3c7;
+  --zen-ink: #2D2D2D;
+  --zen-ink-sub: #4a4a4a;
+  --zen-moss: #6b8f71;
+  --zen-border: rgba(0, 0, 0, 0.08);
+  --zen-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --zen-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  --bg-primary: #F9F8F6;
+  --bg-card: #FFFFFF;
+  --text-main: #2D2D2D;
+  --text-secondary: #666666;
+  --text-muted: #888888;
+  --accent: #9C9C8B;
+  --code-bg: #F0F0F0;
+}
+
+/* 5. Reading 语义色与间距（最终覆盖 zen.css 的同名默认变量） */
+:root {
+  --bg-primary: #F9F8F6;
+  --bg-card: #FFFFFF;
+  --text-main: #2D2D2D;
+  --text-secondary: #666666;
+  --text-muted: #888888;
+  --accent: #6b8f71;
+  --accent-hover: #5c7f64;
+
+  --code-bg: #F5F5F5;
+  --code-border: #E0E0E0;
+
+  --border-light: rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --content-width: min(750px, 92vw);
+  --line-height: 1.8;
+  --paragraph-spacing: 1.5em;
+}
+
+/* 6. Reading 暗色语义变量 */
+:root[color-mode="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-card: #252525;
+  --text-main: #e4e4e4;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666666;
+  --accent: #7a9e80;
+  --accent-hover: #8aae90;
+
+  --code-bg: #2d2d2d;
+  --code-border: #3d3d3d;
+
+  --border-light: rgba(255, 255, 255, 0.08);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* 7. 字体切换 */
+:root {
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia,
+    "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", SimSun, serif;
+}

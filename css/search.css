@@ -1,0 +1,191 @@
+/**
+ * Zen Search Modal
+ * 统一搜索弹层的视觉：柔和遮罩 + 单张圆角卡片
+ */
+
+.search-overlay {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14vh 1.5rem 2rem;
+  background-color: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.search-overlay.hidden {
+  background-color: transparent;
+}
+
+.search-content {
+  position: relative;
+  top: auto;
+  width: min(680px, 100%);
+  margin: 0;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+  opacity: 1;
+  transform: translateY(0);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  z-index: 999;
+}
+
+.search-overlay.hidden .search-content {
+  top: auto;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.search-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 54px;
+  padding: 0 0.75rem 0 1.2rem;
+  background-color: transparent;
+  border-bottom: 1px solid var(--border-light);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.search-title .search-icon-input {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+.search-title .search-icon-input i {
+  font-size: 1.6rem;
+}
+
+.search-input {
+  height: 100%;
+  line-height: 54px;
+  color: var(--text-main);
+  font-size: 1.6rem;
+  caret-color: var(--accent);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+.search-close-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.search-close-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-main);
+}
+
+.search-close-icon i {
+  font-size: 1.4rem;
+}
+
+.search-result {
+  max-height: min(52vh, 430px);
+  margin: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.search-result ul {
+  margin: 0;
+  padding: 8px;
+}
+
+.search-result-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.search-result-list li {
+  margin: 0;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-light);
+  border-radius: 10px;
+  list-style: none;
+}
+
+.search-result-list li:last-child {
+  border-bottom: none;
+}
+
+.search-result-list li:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.search-result-title {
+  display: block;
+  color: var(--text-main);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.search-result-list li:hover .search-result-title {
+  color: var(--accent);
+}
+
+.search-result-abstract {
+  padding: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+.search-keyword {
+  padding: 0 2px;
+  border-radius: 3px;
+  background-color: rgba(107, 143, 113, 0.16);
+  color: var(--accent);
+  font-style: normal;
+}
+
+.local-search-empty {
+  display: block;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 1.35rem;
+  text-align: center;
+}
+
+/* 暗色模式 */
+:root[color-mode="dark"] .search-overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+}
+
+:root[color-mode="dark"] .search-close-icon:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+:root[color-mode="dark"] .search-result-list li:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 480px) {
+  .search-overlay {
+    padding: 10vh 0.75rem 1rem;
+  }
+
+  .search-title {
+    padding-left: 1rem;
+  }
+}

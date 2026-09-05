@@ -27,44 +27,7 @@
   }
 
   /* ========================================
-     2. 回到顶部按钮
-  ======================================== */
-  function initBackToTop() {
-    let backToTop = document.querySelector('.back-to-top');
-
-    if (!backToTop) {
-      backToTop = document.createElement('button');
-      backToTop.className = 'back-to-top';
-      backToTop.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 15l-6-6-6 6"/>
-        </svg>
-      `;
-      backToTop.setAttribute('aria-label', '回到顶部');
-      document.body.appendChild(backToTop);
-    }
-
-    function toggleVisibility() {
-      if (window.scrollY > 300) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
-    }
-
-    backToTop.addEventListener('click', function () {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
-
-    window.addEventListener('scroll', throttle(toggleVisibility, 100), { passive: true });
-    toggleVisibility();
-  }
-
-  /* ========================================
-     3. 目录高亮当前章节
+     2. 目录高亮当前章节
   ======================================== */
   function initTocHighlight() {
     const toc = document.querySelector('.post-catalog');
@@ -115,7 +78,7 @@
   }
 
   /* ========================================
-     4. 图片懒加载
+     3. 图片懒加载
   ======================================== */
   function initLazyImages() {
     const images = document.querySelectorAll('.markdown-body img:not([loading])');
@@ -143,7 +106,7 @@
   }
 
   /* ========================================
-     6. 图片点击放大
+     4. 图片点击放大
   ======================================== */
   function initImageZoom() {
     const images = document.querySelectorAll('.markdown-body img');
@@ -162,7 +125,7 @@
   }
 
   /* ========================================
-     7. 平滑滚动到锚点
+     5. 平滑滚动到锚点
   ======================================== */
   function initSmoothAnchor() {
     document.addEventListener('click', function (e) {
@@ -189,7 +152,7 @@
   }
 
   /* ========================================
-     8. 键盘快捷键
+     6. 键盘快捷键
   ======================================== */
   function initKeyboardShortcuts() {
     document.addEventListener('keydown', function (e) {
@@ -213,7 +176,7 @@
   }
 
   /* ========================================
-     9. 阅读时间估计
+     7. 阅读时间估计
   ======================================== */
   function initReadingTime() {
     const content = document.querySelector('.markdown-body');
@@ -260,7 +223,6 @@
   ======================================== */
   function init() {
     initReadingProgress();
-    initBackToTop();
     initTocHighlight();
     initLazyImages();
     initImageZoom();
@@ -275,4 +237,3 @@
     init();
   }
 })();
-

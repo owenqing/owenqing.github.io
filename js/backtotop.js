@@ -16,7 +16,9 @@
    */
   function toggleVisibility() {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    backToTopBtn.classList.toggle('hidden', scrollTop <= SHOW_THRESHOLD);
+    const shouldShow = scrollTop > SHOW_THRESHOLD;
+    backToTopBtn.classList.toggle('visible', shouldShow);
+    backToTopBtn.classList.toggle('hidden', !shouldShow);
   }
 
   /**
