@@ -1,0 +1,92 @@
+/**
+ * Zen About
+ * /about/ 与标签页保持同一阅读栏宽与顶部节奏，
+ * 正文直接使用文章排版，不做卡片化。
+ */
+
+.container.about-index {
+  width: min(750px, 92vw) !important;
+  padding-top: 4rem !important;
+  margin-bottom: 0;
+}
+
+.about-index .markdown-body {
+  max-width: none !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.about-index .markdown-body > :first-child {
+  margin-top: 0;
+}
+
+.about-index .markdown-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- 关于页版式 ---------- */
+.about-page {
+  padding: 0;
+  text-align: center;
+}
+
+/* 主句：安静的大号衬线，不抢整页的呼吸 */
+.about-page .about-lead {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--text-main);
+  text-align: center;
+}
+
+/* 暖赭发丝线：分隔“主句”与“正在做的事” */
+.about-page .about-rule {
+  display: block;
+  width: 4.2rem;
+  height: 1px;
+  margin: 3.2rem auto;
+  background: var(--accent-warm);
+}
+
+.about-page .about-line {
+  margin: 0;
+  font-size: 1.7rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.about-page .about-line + .about-line {
+  margin-top: 0.3rem;
+}
+
+/* 进行中的状态：小字暖赭，安静但留有温度 */
+.about-page .about-status {
+  margin: 3.2rem 0 0;
+  font-size: 1.3rem;
+  line-height: 1.7;
+  letter-spacing: 0.05em;
+  color: var(--accent-warm);
+  text-align: center;
+}
+
+/* 小屏：主句与间距略微收紧 */
+@media (max-width: 640px) {
+  .about-page .about-lead {
+    font-size: 2.4rem;
+    line-height: 1.45;
+  }
+
+  .about-page .about-rule {
+    margin: 2.7rem auto;
+  }
+
+  .about-page .about-status {
+    margin-top: 2.7rem;
+  }
+}

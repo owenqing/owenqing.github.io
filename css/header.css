@@ -28,7 +28,7 @@
 }
 
 .blog-title:hover {
-  color: var(--accent) !important;
+  color: var(--accent-warm) !important;
 }
 
 /* 标题 + 导航作为一个整体居中 */
@@ -89,6 +89,24 @@
   transform: translateX(-50%) scaleX(1);
 }
 
+/* 悬停信号用暖赭；当前页（active）保持 moss，不被 hover 覆盖 */
+.navbar ul li a:hover {
+  color: var(--accent-warm) !important;
+}
+
+.navbar ul li a:hover::after {
+  background: var(--accent-warm) !important;
+}
+
+.navbar ul li.active a:hover {
+  color: var(--text-main) !important;
+  background: transparent !important;
+}
+
+.navbar ul li.active a:hover::after {
+  background: var(--accent) !important;
+}
+
 /* 暗色模式：旧的 GitHub 蓝统一换成 zen moss */
 [color-mode="dark"] .navbar ul li a {
   color: var(--text-secondary) !important;
@@ -104,29 +122,57 @@
   background: var(--accent) !important;
 }
 
+[color-mode="dark"] .navbar ul li a:hover {
+  color: var(--accent-warm) !important;
+}
+
+[color-mode="dark"] .navbar ul li a:hover::after {
+  background: var(--accent-warm) !important;
+}
+
+[color-mode="dark"] .navbar ul li.active a:hover {
+  color: var(--text-main) !important;
+  background: transparent !important;
+}
+
+[color-mode="dark"] .navbar ul li.active a:hover::after {
+  background: var(--accent) !important;
+}
+
 /* 移动端：菜单按钮在亮色底上清晰可见 */
 .nav-toggle {
   background: transparent !important;
   border: 1px solid var(--border-light) !important;
-  border-radius: 10px;
+  border-radius: 50% !important;
 }
 
 .nav-toggle:hover,
 .nav-toggle.active {
-  background: rgba(0, 0, 0, 0.04) !important;
+  background: rgba(160, 106, 60, 0.06) !important;
+  border-color: rgba(160, 106, 60, 0.4) !important;
+}
+
+.nav-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(160, 106, 60, 0.16);
 }
 
 .hamburger {
   background-color: var(--text-secondary) !important;
 }
 
+.nav-toggle.active .hamburger {
+  background-color: var(--accent-warm) !important;
+}
+
 [color-mode="dark"] .nav-toggle {
-  border-color: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
 }
 
 [color-mode="dark"] .nav-toggle:hover,
 [color-mode="dark"] .nav-toggle.active {
-  background: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(200, 154, 110, 0.08) !important;
+  border-color: rgba(200, 154, 110, 0.4) !important;
 }
 
 /* 移动端下拉菜单与 62px header 对齐 */
@@ -137,18 +183,62 @@
     right: 0;
     top: 62px !important;
     max-height: calc(100vh - 62px) !important;
-    transform: none !important;
     margin: 0 !important;
+    padding: 0.6rem 0 1.4rem !important;
+    background: var(--bg-body) !important;
+    border-bottom: 1px solid var(--border-light) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
-  [color-mode="dark"] .nav-menu li a {
-    color: var(--text-secondary) !important;
+  .nav-menu li a {
+    display: block;
+    width: 100%;
+    padding: 1.1rem 1.5rem !important;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  [color-mode="dark"] .nav-menu li a:hover,
-  [color-mode="dark"] .nav-menu li.active a {
-    color: var(--accent) !important;
-    background: rgba(122, 158, 128, 0.12) !important;
+  .nav-menu li a:hover {
+    color: var(--accent-warm) !important;
+    background: transparent !important;
+  }
+
+  .nav-menu li.active a,
+  .nav-menu li.active a:hover {
+    color: var(--text-main) !important;
+    background: transparent !important;
+  }
+
+  .nav-menu li a:hover::after {
+    background: var(--accent-warm) !important;
+  }
+
+  .nav-menu li.active a::after,
+  .nav-menu li.active a:hover::after {
+    transform: translateX(-50%) scaleX(1);
+    background: var(--accent) !important;
+  }
+
+  .navbar .nav-menu li a::after {
+    bottom: 0.9rem;
+  }
+
+  :root[color-mode="dark"] .nav-menu {
+    background: var(--bg-body) !important;
+    border-bottom-color: var(--border-light) !important;
+  }
+
+  :root[color-mode="dark"] .nav-menu li a:hover {
+    color: var(--accent-warm) !important;
+    background: transparent !important;
+  }
+
+  :root[color-mode="dark"] .nav-menu li.active a,
+  :root[color-mode="dark"] .nav-menu li.active a:hover {
+    color: var(--text-main) !important;
+    background: transparent !important;
   }
 }
 

@@ -5362,8 +5362,8 @@ pre:has(> code.highlight) .operator {
 .nav-toggle {
   display: none;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
+  background: transparent;
+  border: 1px solid var(--border-light);
   cursor: pointer;
   padding: 8px;
   width: 40px;
@@ -5371,30 +5371,37 @@ pre:has(> code.highlight) .operator {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  transition: all 0.3s ease;
-  border-radius: 8px;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+  border-radius: 50%;
   z-index: 10000;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-toggle:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(160, 106, 60, 0.06);
+  border-color: rgba(160, 106, 60, 0.35);
 }
 
 .nav-toggle:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(160, 106, 60, 0.16);
 }
 
 .nav-toggle.active {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(160, 106, 60, 0.08);
+  border-color: rgba(160, 106, 60, 0.5);
 }
 
 .hamburger {
   width: 20px;
   height: 2px;
-  background-color: white;
-  transition: all 0.3s ease;
+  background-color: var(--text-secondary);
+  transition: background-color 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
   border-radius: 2px;
+}
+
+.nav-toggle.active .hamburger {
+  background-color: var(--accent-warm);
 }
 
 .nav-toggle.active .hamburger:nth-child(1) {
@@ -5407,6 +5414,11 @@ pre:has(> code.highlight) .operator {
 
 .nav-toggle.active .hamburger:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* 菜单打开时的暖赭晕染层，仅移动端出现 */
+.nav-scrim {
+  display: none;
 }
 
 /* 桌面端导航 */
@@ -5434,25 +5446,48 @@ pre:has(> code.highlight) .operator {
     top: 62px;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     flex-direction: column;
     align-items: center;
-    padding: 1rem 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(-150%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    transform: translateY(-1rem);
+    transition: transform 0.22s ease, opacity 0.2s ease, visibility 0s linear 0.22s;
     opacity: 0;
+    visibility: hidden;
     z-index: 999;
     overflow-y: auto;
     max-height: calc(100vh - 62px);
-    border-radius: 0 0 16px 16px;
   }
 
   .nav-menu-active {
     transform: translateY(0);
     opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .nav-scrim {
+    display: block;
+    position: fixed;
+    top: 62px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(160, 106, 60, 0.06);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+    z-index: 90;
+  }
+
+  body.nav-open .nav-scrim {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+
+  :root[color-mode="dark"] .nav-scrim {
+    background: rgba(200, 154, 110, 0.07);
   }
 
   .nav-menu li {
@@ -5460,56 +5495,6 @@ pre:has(> code.highlight) .operator {
     text-align: center;
     margin: 0;
     padding: 0;
-  }
-
-  .nav-menu li a {
-    display: block;
-    padding: 1rem 1.5rem;
-    width: 100%;
-    color: #333;
-    font-size: 1.1rem;
-    transition: all 0.2s ease;
-  }
-
-  .nav-menu li a:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: var(--accent, #6b8f71);
-  }
-
-  .nav-menu li.active a {
-    background: rgba(107, 143, 113, 0.1);
-    color: var(--accent, #6b8f71);
-    font-weight: 500;
-  }
-
-  /* 触摸友好的点击区域 */
-  .nav-menu li a::after {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: 0;
-    right: 0;
-    bottom: -5px;
-  }
-
-  /* 暗色模式适配 */
-  :root[color-mode="dark"] .nav-menu {
-    background: rgba(13, 17, 23, 0.98);
-    border-top: 1px solid #30363d;
-  }
-
-  :root[color-mode="dark"] .nav-menu li a {
-    color: #c9d1d9;
-  }
-
-  :root[color-mode="dark"] .nav-menu li a:hover {
-    background: rgba(88, 166, 255, 0.1);
-    color: #58a6ff;
-  }
-
-  :root[color-mode="dark"] .nav-menu li.active a {
-    background: rgba(88, 166, 255, 0.15);
-    color: #58a6ff;
   }
 
   /* 防止背景滚动 */
@@ -5520,11 +5505,6 @@ pre:has(> code.highlight) .operator {
 
 /* 超窄屏幕处理 */
 @media (max-width: 480px) {
-  .nav-menu {
-    top: 58px;
-    max-height: calc(100vh - 58px);
-  }
-
   .nav-toggle {
     width: 36px;
     height: 36px;
@@ -6343,7 +6323,7 @@ pre:has(> code.highlight) .operator {
 }
 
 .blog-title:hover {
-  color: var(--accent) !important;
+  color: var(--accent-warm) !important;
 }
 
 /* 标题 + 导航作为一个整体居中 */
@@ -6404,6 +6384,24 @@ pre:has(> code.highlight) .operator {
   transform: translateX(-50%) scaleX(1);
 }
 
+/* 悬停信号用暖赭；当前页（active）保持 moss，不被 hover 覆盖 */
+.navbar ul li a:hover {
+  color: var(--accent-warm) !important;
+}
+
+.navbar ul li a:hover::after {
+  background: var(--accent-warm) !important;
+}
+
+.navbar ul li.active a:hover {
+  color: var(--text-main) !important;
+  background: transparent !important;
+}
+
+.navbar ul li.active a:hover::after {
+  background: var(--accent) !important;
+}
+
 /* 暗色模式：旧的 GitHub 蓝统一换成 zen moss */
 [color-mode="dark"] .navbar ul li a {
   color: var(--text-secondary) !important;
@@ -6419,29 +6417,57 @@ pre:has(> code.highlight) .operator {
   background: var(--accent) !important;
 }
 
+[color-mode="dark"] .navbar ul li a:hover {
+  color: var(--accent-warm) !important;
+}
+
+[color-mode="dark"] .navbar ul li a:hover::after {
+  background: var(--accent-warm) !important;
+}
+
+[color-mode="dark"] .navbar ul li.active a:hover {
+  color: var(--text-main) !important;
+  background: transparent !important;
+}
+
+[color-mode="dark"] .navbar ul li.active a:hover::after {
+  background: var(--accent) !important;
+}
+
 /* 移动端：菜单按钮在亮色底上清晰可见 */
 .nav-toggle {
   background: transparent !important;
   border: 1px solid var(--border-light) !important;
-  border-radius: 10px;
+  border-radius: 50% !important;
 }
 
 .nav-toggle:hover,
 .nav-toggle.active {
-  background: rgba(0, 0, 0, 0.04) !important;
+  background: rgba(160, 106, 60, 0.06) !important;
+  border-color: rgba(160, 106, 60, 0.4) !important;
+}
+
+.nav-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(160, 106, 60, 0.16);
 }
 
 .hamburger {
   background-color: var(--text-secondary) !important;
 }
 
+.nav-toggle.active .hamburger {
+  background-color: var(--accent-warm) !important;
+}
+
 [color-mode="dark"] .nav-toggle {
-  border-color: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
 }
 
 [color-mode="dark"] .nav-toggle:hover,
 [color-mode="dark"] .nav-toggle.active {
-  background: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(200, 154, 110, 0.08) !important;
+  border-color: rgba(200, 154, 110, 0.4) !important;
 }
 
 /* 移动端下拉菜单与 62px header 对齐 */
@@ -6452,18 +6478,62 @@ pre:has(> code.highlight) .operator {
     right: 0;
     top: 62px !important;
     max-height: calc(100vh - 62px) !important;
-    transform: none !important;
     margin: 0 !important;
+    padding: 0.6rem 0 1.4rem !important;
+    background: var(--bg-body) !important;
+    border-bottom: 1px solid var(--border-light) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
-  [color-mode="dark"] .nav-menu li a {
-    color: var(--text-secondary) !important;
+  .nav-menu li a {
+    display: block;
+    width: 100%;
+    padding: 1.1rem 1.5rem !important;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  [color-mode="dark"] .nav-menu li a:hover,
-  [color-mode="dark"] .nav-menu li.active a {
-    color: var(--accent) !important;
-    background: rgba(122, 158, 128, 0.12) !important;
+  .nav-menu li a:hover {
+    color: var(--accent-warm) !important;
+    background: transparent !important;
+  }
+
+  .nav-menu li.active a,
+  .nav-menu li.active a:hover {
+    color: var(--text-main) !important;
+    background: transparent !important;
+  }
+
+  .nav-menu li a:hover::after {
+    background: var(--accent-warm) !important;
+  }
+
+  .nav-menu li.active a::after,
+  .nav-menu li.active a:hover::after {
+    transform: translateX(-50%) scaleX(1);
+    background: var(--accent) !important;
+  }
+
+  .navbar .nav-menu li a::after {
+    bottom: 0.9rem;
+  }
+
+  :root[color-mode="dark"] .nav-menu {
+    background: var(--bg-body) !important;
+    border-bottom-color: var(--border-light) !important;
+  }
+
+  :root[color-mode="dark"] .nav-menu li a:hover {
+    color: var(--accent-warm) !important;
+    background: transparent !important;
+  }
+
+  :root[color-mode="dark"] .nav-menu li.active a,
+  :root[color-mode="dark"] .nav-menu li.active a:hover {
+    color: var(--text-main) !important;
+    background: transparent !important;
   }
 }
 
@@ -6530,5 +6600,98 @@ pre:has(> code.highlight) .operator {
   color: var(--text-muted) !important;
   font-size: 1.2rem !important;
   font-variant-numeric: tabular-nums;
+}
+
+/**
+ * Zen About
+ * /about/ 与标签页保持同一阅读栏宽与顶部节奏，
+ * 正文直接使用文章排版，不做卡片化。
+ */
+
+.container.about-index {
+  width: min(750px, 92vw) !important;
+  padding-top: 4rem !important;
+  margin-bottom: 0;
+}
+
+.about-index .markdown-body {
+  max-width: none !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.about-index .markdown-body > :first-child {
+  margin-top: 0;
+}
+
+.about-index .markdown-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- 关于页版式 ---------- */
+.about-page {
+  padding: 0;
+  text-align: center;
+}
+
+/* 主句：安静的大号衬线，不抢整页的呼吸 */
+.about-page .about-lead {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--text-main);
+  text-align: center;
+}
+
+/* 暖赭发丝线：分隔“主句”与“正在做的事” */
+.about-page .about-rule {
+  display: block;
+  width: 4.2rem;
+  height: 1px;
+  margin: 3.2rem auto;
+  background: var(--accent-warm);
+}
+
+.about-page .about-line {
+  margin: 0;
+  font-size: 1.7rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.about-page .about-line + .about-line {
+  margin-top: 0.3rem;
+}
+
+/* 进行中的状态：小字暖赭，安静但留有温度 */
+.about-page .about-status {
+  margin: 3.2rem 0 0;
+  font-size: 1.3rem;
+  line-height: 1.7;
+  letter-spacing: 0.05em;
+  color: var(--accent-warm);
+  text-align: center;
+}
+
+/* 小屏：主句与间距略微收紧 */
+@media (max-width: 640px) {
+  .about-page .about-lead {
+    font-size: 2.4rem;
+    line-height: 1.45;
+  }
+
+  .about-page .about-rule {
+    margin: 2.7rem auto;
+  }
+
+  .about-page .about-status {
+    margin-top: 2.7rem;
+  }
 }
 
