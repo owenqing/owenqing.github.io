@@ -7,31 +7,7 @@
   'use strict';
 
   /* ========================================
-     1. 阅读进度条
-     只出现在文章详情页（#post-details），
-     首页 / 归档 / 标签等列表页不显示。
-  ======================================== */
-  function initReadingProgress() {
-    if (!document.querySelector('.post-details')) return;
-
-    const progressBar = document.createElement('div');
-    progressBar.className = 'reading-progress';
-    progressBar.style.width = '0%';
-    document.body.appendChild(progressBar);
-
-    function updateProgress() {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const progress = (scrollTop / docHeight) * 100;
-      progressBar.style.width = progress + '%';
-    }
-
-    window.addEventListener('scroll', throttle(updateProgress, 50), { passive: true });
-    updateProgress();
-  }
-
-  /* ========================================
-     2. 目录高亮当前章节
+     1. 目录高亮当前章节
   ======================================== */
   function initTocHighlight() {
     const toc = document.querySelector('.post-catalog');
@@ -82,7 +58,7 @@
   }
 
   /* ========================================
-     3. 图片懒加载
+     2. 图片懒加载
   ======================================== */
   function initLazyImages() {
     const images = document.querySelectorAll('.markdown-body img:not([loading])');
@@ -110,7 +86,7 @@
   }
 
   /* ========================================
-     4. 图片点击放大
+     3. 图片点击放大
   ======================================== */
   function initImageZoom() {
     const images = document.querySelectorAll('.markdown-body img');
@@ -129,7 +105,7 @@
   }
 
   /* ========================================
-     5. 平滑滚动到锚点
+     4. 平滑滚动到锚点
   ======================================== */
   function initSmoothAnchor() {
     document.addEventListener('click', function (e) {
@@ -156,7 +132,7 @@
   }
 
   /* ========================================
-     6. 键盘快捷键
+     5. 键盘快捷键
   ======================================== */
   function initKeyboardShortcuts() {
     document.addEventListener('keydown', function (e) {
@@ -180,7 +156,7 @@
   }
 
   /* ========================================
-     7. 阅读时间估计
+     6. 阅读时间估计
   ======================================== */
   function initReadingTime() {
     const content = document.querySelector('.markdown-body');
@@ -226,7 +202,6 @@
      初始化
   ======================================== */
   function init() {
-    initReadingProgress();
     initTocHighlight();
     initLazyImages();
     initImageZoom();

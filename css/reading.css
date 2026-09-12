@@ -296,21 +296,7 @@ body {
 }
 
 /* ========================================
-   12. 阅读进度条
-======================================== */
-
-.reading-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: var(--accent-warm);
-  z-index: 10000;
-  transition: width 0.1s ease;
-}
-
-/* ========================================
-   13. 回到顶部按钮优化
+   12. 回到顶部按钮优化
    注：按钮位于 .tools-bar 容器内，使用 flex 布局
 ======================================== */
 
@@ -573,7 +559,6 @@ html {
   .header,
   .tools-bar,
   .post-catalog,
-  .reading-progress,
   .back-to-top {
     display: none !important;
   }
